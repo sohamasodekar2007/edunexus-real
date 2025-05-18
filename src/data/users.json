@@ -1,1 +1,28 @@
-[]
+[
+  {
+    "id": "9419c245-f7e7-4f1a-b2b3-1181f9070291",
+    "email": "sohamasodekar51@gmail.com",
+    "password": "$2a$10$UDVQFaW.Rw4C9DGdKVjRGeYVJPIYHMdF29cu83zKi5LmueWhKedVu",
+    "name": "SOHAM",
+    "surname": "ASODEKAR",
+    "phone": "8999775843",
+    "class": "12th Grade",
+    "model": "Free",
+    "role": "User",
+    "expiry_date": "2103-05-18T14:42:05.565Z",
+    "createdAt": "2025-05-18T14:42:05.565Z",
+    "avatarUrl": "https://placehold.co/100x100.png?text=SA",
+    "totalPoints": 0,
+    "referralCode": "Z8JQI7BQ",
+    "referredByCode": null,
+    "referralStats": {
+      "referred_free": 0,
+      "referred_chapterwise": 0,
+      "referred_full_length": 0,
+      "referred_combo": 0
+    },
+    "targetYear": null,
+    "telegramId": null,
+    "telegramUsername": null
+  }
+]
