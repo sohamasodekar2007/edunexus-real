@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -262,27 +263,47 @@ Sidebar.displayName = "Sidebar"
 const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
->(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
+>(({ 
+  className, 
+  onClick, 
+  asChild = false, 
+  children, 
+  variant: explicitVariant, 
+  size: explicitSize, 
+  ...restProps 
+}, ref) => {
+  const { toggleSidebar } = useSidebar();
+
+  const functionalProps = {
+    "data-sidebar": "trigger",
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
+      onClick?.(event);
+      toggleSidebar();
+    },
+    ref: ref,
+  };
+
+  if (asChild) {
+    return (
+      <Slot {...functionalProps} {...restProps} className={className}>
+        {children}
+      </Slot>
+    );
+  }
 
   return (
     <Button
-      ref={ref}
-      data-sidebar="trigger"
-      variant="ghost"
-      size="icon"
+      variant={explicitVariant || "ghost"}
+      size={explicitSize || "icon"}
       className={cn("h-7 w-7", className)}
-      onClick={(event) => {
-        onClick?.(event)
-        toggleSidebar()
-      }}
-      {...props}
+      {...functionalProps}
+      {...restProps}
     >
       <PanelLeft />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
-  )
-})
+  );
+});
 SidebarTrigger.displayName = "SidebarTrigger"
 
 const SidebarRail = React.forwardRef<
