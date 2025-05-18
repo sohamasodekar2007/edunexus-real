@@ -4,8 +4,19 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Logo } from '@/components/icons';
 import { ArrowRight, Rocket, Target, Wand2, BarChartBig } from 'lucide-react';
+import { use } from 'react'; // ADDED
 
-export default function LandingPage() {
+export default function LandingPage({
+  params,
+  searchParams
+}: {
+  params: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  // Attempt to unwrap params and searchParams as per Next.js 15 warning
+  const _resolvedParams = use(params);
+  const _resolvedSearchParams = use(searchParams);
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Header */}
