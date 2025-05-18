@@ -36,11 +36,11 @@ import {
   TrendingUp,
   Swords,
   Mail,
-  SearchUsers,
+  Search, // Corrected Icon Name
   UserCheck,
   Users,
   GitCompareArrows,
-  MessageSquareQuestion,
+  MessageSquareQuote,
   ShieldCheck,
   MoreHorizontal,
 } from 'lucide-react';
@@ -83,14 +83,14 @@ const mainNavigationItems: NavItem[] = [
 const connectAndCompeteItems: NavItem[] = [
   { href: '/create-challenge', label: 'Create Challenge', icon: Swords },
   { href: '/challenge-invites', label: 'Challenge Invites', icon: Mail },
-  { href: '/find-friends', label: 'Find Friends', icon: SearchUsers },
+  { href: '/find-friends', label: 'Find Friends', icon: Search }, // Corrected Icon Usage
   { href: '/following', label: 'Following', icon: UserCheck },
   { href: '/followers', label: 'Followers', icon: Users },
   { href: '/compare', label: 'Compare', icon: GitCompareArrows },
 ];
 
 const aiToolsItems: NavItem[] = [
-  { href: '/doubt-solving', label: 'Doubt Solving', icon: MessageSquareQuestion },
+  { href: '/doubt-solving', label: 'Doubt Solving', icon: MessageSquareQuote },
 ];
 
 const administrationItems: NavItem[] = [
@@ -180,7 +180,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </SidebarMenuItem>
            </SidebarMenu>
         </SidebarFooter>
-      </Sidebar>>
+      </Sidebar>
       <SidebarInset className="flex-1 flex flex-col">
         <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 py-4">
           {isMobile && <SidebarTrigger asChild><Button variant="outline" size="icon"><Menu /></Button></SidebarTrigger>}
@@ -224,5 +224,3 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
-    
