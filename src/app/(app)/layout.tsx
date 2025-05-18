@@ -13,6 +13,10 @@ import {
   SidebarTrigger,
   SidebarInset,
   useSidebar,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -27,6 +31,18 @@ import {
   Settings,
   UserCircle,
   LogOut,
+  FileQuestion,
+  ClipboardCheck,
+  TrendingUp,
+  Swords,
+  Mail,
+  SearchUsers,
+  UserCheck,
+  Users,
+  GitCompareArrows,
+  MessageSquareQuestion,
+  ShieldCheck,
+  MoreHorizontal,
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { initializeLocalStorageData } from '@/lib/mock-data';
@@ -38,7 +54,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 interface NavItem {
   href: string;
@@ -47,18 +63,51 @@ interface NavItem {
   matchExact?: boolean;
 }
 
-const navItems: NavItem[] = [
+interface NavItemGroup {
+  label?: string;
+  items: NavItem[];
+  isCollapsible?: boolean; // For future use if groups can collapse
+}
+
+const mainNavigationItems: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, matchExact: true },
   { href: '/test-series', label: 'Test Series', icon: ListChecks },
-  { href: '/dpps', label: 'DPPs', icon: ClipboardList },
-  { href: '/notebook', label: 'Notebook', icon: Bookmark },
+  { href: '/dpps', label: 'DPP', icon: ClipboardList },
+  { href: '/pyq-dpps', label: 'PYQ DPPs', icon: FileQuestion },
+  { href: '/pyq-mock-tests', label: 'PYQ Mock Tests', icon: ClipboardCheck },
+  { href: '/notebook', label: 'Notebooks', icon: Bookmark },
+  { href: '/my-progress', label: 'My Progress', icon: TrendingUp },
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
+];
+
+const connectAndCompeteItems: NavItem[] = [
+  { href: '/create-challenge', label: 'Create Challenge', icon: Swords },
+  { href: '/challenge-invites', label: 'Challenge Invites', icon: Mail },
+  { href: '/find-friends', label: 'Find Friends', icon: SearchUsers },
+  { href: '/following', label: 'Following', icon: UserCheck },
+  { href: '/followers', label: 'Followers', icon: Users },
+  { href: '/compare', label: 'Compare', icon: GitCompareArrows },
+];
+
+const aiToolsItems: NavItem[] = [
+  { href: '/doubt-solving', label: 'Doubt Solving', icon: MessageSquareQuestion },
+];
+
+const administrationItems: NavItem[] = [
+  { href: '/admin-panel', label: 'Admin Panel', icon: ShieldCheck },
+];
+
+const navStructure: NavItemGroup[] = [
+  { label: 'Main Navigation', items: mainNavigationItems },
+  { label: 'Connect & Compete', items: connectAndCompeteItems },
+  { label: 'AI Tools', items: aiToolsItems },
+  { label: 'Administration', items: administrationItems },
 ];
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isMobile } = useSidebar();
+  const { isMobile, state: sidebarState } = useSidebar(); // Added sidebarState
 
   useEffect(() => {
     initializeLocalStorageData();
@@ -67,6 +116,18 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const handleLogout = () => {
     router.push('/landing');
   };
+  
+  const getActiveLabel = () => {
+    for (const group of navStructure) {
+      for (const item of group.items) {
+        if (item.matchExact ? pathname === item.href : pathname.startsWith(item.href)) {
+          return item.label;
+        }
+      }
+    }
+    return 'EduNexus'; // Default if no match
+  };
+
 
   return (
     <div className="flex min-h-screen w-full">
@@ -79,41 +140,53 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         </SidebarHeader>
         <SidebarContent>
           <ScrollArea className="h-full">
-            <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <Link href={item.href} legacyBehavior passHref>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={item.matchExact ? pathname === item.href : pathname.startsWith(item.href)}
-                      tooltip={item.label}
-                    >
-                      <a>
-                        <item.icon className="h-5 w-5" />
-                        <span>{item.label}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </Link>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            {navStructure.map((group, groupIndex) => (
+              <SidebarGroup key={group.label || `group-${groupIndex}`}>
+                {group.label && (
+                  <SidebarGroupLabel className="group-data-[collapsible=icon]:my-2 group-data-[collapsible=icon]:h-auto group-data-[collapsible=icon]:justify-center">
+                    {sidebarState === 'collapsed' ? <MoreHorizontal className="h-4 w-4" /> : group.label}
+                  </SidebarGroupLabel>
+                )}
+                <SidebarMenu>
+                  {group.items.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <Link href={item.href} legacyBehavior passHref>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={item.matchExact ? pathname === item.href : pathname.startsWith(item.href)}
+                          tooltip={item.label}
+                        >
+                          <a>
+                            <item.icon className="h-5 w-5" />
+                            <span>{item.label}</span>
+                          </a>
+                        </SidebarMenuButton>
+                      </Link>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+                {groupIndex < navStructure.length -1 && <SidebarSeparator className="my-2"/>}
+              </SidebarGroup>
+            ))}
           </ScrollArea>
         </SidebarContent>
-        {/* Optional Sidebar Footer example
-        <SidebarFooter className="p-2 border-t">
-          <SidebarMenuButton tooltip="Settings">
-            <Settings className="h-5 w-5" />
-            <span>Settings</span>
-          </SidebarMenuButton>
+         <SidebarFooter className="p-2 border-t border-sidebar-border">
+           <SidebarMenu>
+            <SidebarMenuItem>
+                <SidebarMenuButton tooltip="More Options">
+                    <MoreHorizontal className="h-5 w-5" />
+                    <span>More</span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+           </SidebarMenu>
         </SidebarFooter>
-        */}
-      </Sidebar>
+      </Sidebar>>
       <SidebarInset className="flex-1 flex flex-col">
         <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 py-4">
           {isMobile && <SidebarTrigger asChild><Button variant="outline" size="icon"><Menu /></Button></SidebarTrigger>}
           <div className="flex-1">
             <h1 className="text-xl font-semibold">
-              {navItems.find(item => item.matchExact ? pathname === item.href : pathname.startsWith(item.href))?.label || 'EduNexus'}
+              {getActiveLabel()}
             </h1>
           </div>
           <DropdownMenu>
@@ -121,7 +194,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               <Button variant="outline" size="icon" className="rounded-full">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="https://placehold.co/40x40.png" alt="User Avatar" data-ai-hint="user avatar"/>
-                  <AvatarFallback>U</AvatarFallback>
+                  <AvatarFallback>S</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
@@ -144,10 +217,12 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex-1 p-4 sm:px-6 sm:py-0 overflow-auto">
+        <main className="flex-1 p-0 sm:px-0 sm:py-0 overflow-auto bg-muted/30">
           {children}
         </main>
       </SidebarInset>
     </div>
   );
 }
+
+    
