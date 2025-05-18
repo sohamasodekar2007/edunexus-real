@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Logo } from '@/components/icons';
 import { ArrowRight, Rocket, Target, Wand2, BarChartBig } from 'lucide-react';
-import { use } from 'react'; // ADDED
+import { use } from 'react';
 
 export default function LandingPage({
   params,
@@ -40,14 +40,14 @@ export default function LandingPage({
 
       {/* Hero Section */}
       <main className="flex-1">
-        <section className="container mx-auto text-center py-16 md:py-24 px-4 md:px-6">
+        <section className="container mx-auto text-center py-12 sm:py-16 md:py-24 px-4 md:px-6">
           <div className="mb-6">
-            <Rocket className="h-16 w-16 text-primary mx-auto" />
+            <Rocket className="h-12 w-12 sm:h-16 sm:w-16 text-primary mx-auto" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
             Ace Your Competitive Exams
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
             EduNexus provides comprehensive test series, daily practice problems, and AI-powered doubt solving to help you succeed in MHT-CET, JEE, and NEET.
           </p>
           <Button size="lg" asChild>
@@ -58,18 +58,18 @@ export default function LandingPage({
         </section>
 
         {/* Features Section */}
-        <section className="bg-muted py-16 md:py-24">
+        <section className="bg-muted py-12 sm:py-16 md:py-24">
           <div className="container mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <Card className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardHeader>
-                  <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit mb-4">
-                    <Target className="h-10 w-10 text-primary" />
+                  <div className="mx-auto bg-primary/10 p-3 sm:p-4 rounded-full w-fit mb-4">
+                    <Target className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
                   </div>
-                  <CardTitle className="text-xl font-semibold">Comprehensive Test Series</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl font-semibold">Comprehensive Test Series</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription>
+                  <CardDescription className="text-sm sm:text-base">
                     Access chapter-wise and full-length mock tests designed by experts to simulate the real exam environment.
                   </CardDescription>
                 </CardContent>
@@ -77,13 +77,13 @@ export default function LandingPage({
 
               <Card className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardHeader>
-                  <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit mb-4">
-                    <Wand2 className="h-10 w-10 text-primary" />
+                  <div className="mx-auto bg-primary/10 p-3 sm:p-4 rounded-full w-fit mb-4">
+                    <Wand2 className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
                   </div>
-                  <CardTitle className="text-xl font-semibold">AI-Powered Doubt Solving</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl font-semibold">AI-Powered Doubt Solving</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription>
+                  <CardDescription className="text-sm sm:text-base">
                     Get instant, step-by-step solutions to your toughest questions with our advanced AI tutor.
                   </CardDescription>
                 </CardContent>
@@ -91,13 +91,13 @@ export default function LandingPage({
 
               <Card className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardHeader>
-                  <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit mb-4">
-                    <BarChartBig className="h-10 w-10 text-primary" />
+                  <div className="mx-auto bg-primary/10 p-3 sm:p-4 rounded-full w-fit mb-4">
+                    <BarChartBig className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
                   </div>
-                  <CardTitle className="text-xl font-semibold">Track Your Progress</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl font-semibold">Track Your Progress</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription>
+                  <CardDescription className="text-sm sm:text-base">
                     Monitor your performance, identify weak areas, and climb the leaderboard with detailed analytics.
                   </CardDescription>
                 </CardContent>
@@ -108,8 +108,8 @@ export default function LandingPage({
       </main>
 
       {/* Footer */}
-      <footer className="py-8 text-center text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} EduNexus. All rights reserved.</p>
+      <footer className="py-6 sm:py-8 text-center text-muted-foreground">
+        <p className="text-sm">&copy; {new Date().getFullYear()} EduNexus. All rights reserved.</p>
       </footer>
     </div>
   );
