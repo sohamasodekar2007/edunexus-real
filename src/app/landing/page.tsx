@@ -1,0 +1,105 @@
+
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Logo } from '@/components/icons';
+import { ArrowRight, Rocket, Target, Wand2, BarChartBig } from 'lucide-react';
+
+export default function LandingPage() {
+  return (
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
+      {/* Header */}
+      <header className="container mx-auto py-4 px-4 md:px-6">
+        <div className="flex justify-between items-center">
+          <Link href="/landing" className="flex items-center gap-2 text-primary">
+            <Logo className="h-8 w-8" />
+            <span className="font-bold text-xl">EduNexus</span>
+          </Link>
+          <nav className="space-x-2">
+            <Button variant="ghost" asChild>
+              {/* For now, Login and Sign Up can point to dashboard or a future auth page */}
+              <Link href="/dashboard">Login</Link>
+            </Button>
+            <Button asChild>
+              <Link href="/dashboard">Sign Up</Link>
+            </Button>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <main className="flex-1">
+        <section className="container mx-auto text-center py-16 md:py-24 px-4 md:px-6">
+          <div className="mb-6">
+            <Rocket className="h-16 w-16 text-primary mx-auto" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            Ace Your Competitive Exams
+          </h1>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            EduNexus provides comprehensive test series, daily practice problems, and AI-powered doubt solving to help you succeed in MHT-CET, JEE, and NEET.
+          </p>
+          <Button size="lg" asChild>
+            <Link href="/dashboard"> {/* This would typically lead to signup or dashboard if logged in */}
+              Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
+        </section>
+
+        {/* Features Section */}
+        <section className="bg-muted py-16 md:py-24">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <Card className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardHeader>
+                  <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit mb-4">
+                    <Target className="h-10 w-10 text-primary" />
+                  </div>
+                  <CardTitle className="text-xl font-semibold">Comprehensive Test Series</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Access chapter-wise and full-length mock tests designed by experts to simulate the real exam environment.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardHeader>
+                  <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit mb-4">
+                    <Wand2 className="h-10 w-10 text-primary" />
+                  </div>
+                  <CardTitle className="text-xl font-semibold">AI-Powered Doubt Solving</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Get instant, step-by-step solutions to your toughest questions with our advanced AI tutor.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardHeader>
+                  <div className="mx-auto bg-primary/10 p-4 rounded-full w-fit mb-4">
+                    <BarChartBig className="h-10 w-10 text-primary" />
+                  </div>
+                  <CardTitle className="text-xl font-semibold">Track Your Progress</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Monitor your performance, identify weak areas, and climb the leaderboard with detailed analytics.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="py-8 text-center text-muted-foreground">
+        <p>&copy; {new Date().getFullYear()} EduNexus. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+}

@@ -1,3 +1,4 @@
+
 'use client';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
@@ -67,7 +68,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         <SidebarHeader className="p-4">
           <Link href="/dashboard" className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
             <Logo className="h-8 w-8 text-primary" />
-            <span className="font-semibold text-lg group-data-[collapsible=icon]:hidden">ExamPrep Pro</span>
+            <span className="font-semibold text-lg group-data-[collapsible=icon]:hidden">EduNexus</span>
           </Link>
         </SidebarHeader>
         <SidebarContent>
@@ -106,7 +107,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           {isMobile && <SidebarTrigger asChild><Button variant="outline" size="icon"><Menu /></Button></SidebarTrigger>}
           <div className="flex-1">
             <h1 className="text-xl font-semibold">
-              {navItems.find(item => item.matchExact ? pathname === item.href : pathname.startsWith(item.href))?.label || 'ExamPrep Pro'}
+              {navItems.find(item => item.matchExact ? pathname === item.href : pathname.startsWith(item.href))?.label || 'EduNexus'}
             </h1>
           </div>
           <DropdownMenu>

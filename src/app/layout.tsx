@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ExamPrep Pro',
+  title: 'EduNexus',
   description: 'Comprehensive exam preparation platform for MHT-CET, JEE, and NEET.',
 };
 

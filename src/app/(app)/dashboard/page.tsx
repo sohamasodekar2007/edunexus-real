@@ -1,3 +1,4 @@
+
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,7 @@ export default function DashboardPage() {
   return (
     <div className="container mx-auto py-8">
       <section className="mb-12 text-center">
-        <h1 className="text-4xl font-bold mb-4 text-primary">Welcome to ExamPrep Pro!</h1>
+        <h1 className="text-4xl font-bold mb-4 text-primary">Welcome to EduNexus!</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           Your one-stop platform to ace competitive exams. Sharpen your skills with our curated test series, daily problems, and track your progress.
         </p>
