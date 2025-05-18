@@ -2,7 +2,7 @@
 'use client';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Sidebar,
   SidebarContent,
@@ -26,6 +26,7 @@ import {
   Menu,
   Settings,
   UserCircle,
+  LogOut,
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { initializeLocalStorageData } from '@/lib/mock-data';
@@ -56,11 +57,16 @@ const navItems: NavItem[] = [
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { isMobile } = useSidebar();
 
   useEffect(() => {
     initializeLocalStorageData();
   }, []);
+
+  const handleLogout = () => {
+    router.push('/landing');
+  };
 
   return (
     <div className="flex min-h-screen w-full">
@@ -122,10 +128,19 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>
+                <UserCircle className="mr-2 h-4 w-4" />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
