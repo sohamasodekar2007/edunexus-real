@@ -1,5 +1,5 @@
 // @ts-nocheck
-'use client';
+'use server'; // Corrected: This file defines Server Actions.
 import { LoginSchema, SignupSchema, type SignupFormData } from '@/lib/validationSchemas';
 import { hashPassword, verifyPassword, generateReferralCode } from '@/lib/authUtils';
 import { findUserByEmail, saveUser } from '@/lib/userDataService';
@@ -57,7 +57,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
 
   } catch (error) {
     console.error('Signup Action Error:', error);
-    return { success: false, message: error.message || 'An unexpected error occurred during signup.', error: error.message };
+    return { success: false, message: (error as Error).message || 'An unexpected error occurred during signup.', error: (error as Error).message };
   }
 }
 
@@ -87,6 +87,6 @@ export async function loginUserAction(data: { email: string, password_login: str
 
   } catch (error) {
     console.error('Login Action Error:', error);
-    return { success: false, message: error.message || 'An unexpected error occurred during login.', error: error.message };
+    return { success: false, message: (error as Error).message || 'An unexpected error occurred during login.', error: (error as Error).message };
   }
 }

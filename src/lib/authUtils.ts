@@ -1,5 +1,5 @@
 // @ts-nocheck
-'use server';
+// 'use server'; // Removed: This file contains server-side utilities, not direct Server Actions.
 import bcrypt from 'bcryptjs';
 
 const SALT_ROUNDS = 10;
