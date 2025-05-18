@@ -1,0 +1,88 @@
+'use client';
+import { useState, useEffect } from 'react';
+import type { Dpp, Question, BookmarkedQuestion } from '@/types';
+import useLocalStorage from '@/hooks/use-local-storage';
+import { mockDpps, LOCAL_STORAGE_KEYS } from '@/lib/mock-data';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Bookmark, BookCheck, CalendarDays, Edit3 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { format } from 'date-fns';
+
+export default function DppsPage() {
+  const [dpps, setDpps] = useLocalStorage<Dpp[]>(LOCAL_STORAGE_KEYS.dpps, mockDpps);
+  const [bookmarkedQuestions, setBookmarkedQuestions] = useLocalStorage<BookmarkedQuestion[]>(LOCAL_STORAGE_KEYS.bookmarkedQuestions, []);
+  const { toast } = useToast();
+
+  const toggleBookmark = (question: Question, dpp: Dpp) => {
+    const existingBookmark = bookmarkedQuestions.find(bq => bq.questionId === question.id && bq.sourceId === dpp.id && bq.sourceType === 'dpp');
+    if (existingBookmark) {
+      setBookmarkedQuestions(prev => prev.filter(bq => bq.id !== existingBookmark.id));
+      toast({ title: "Bookmark Removed", description: `"${question.text.substring(0,30)}..." removed from notebook.` });
+    } else {
+      const newBookmark: BookmarkedQuestion = {
+        id: `${dpp.id}-${question.id}-${Date.now()}`,
+        questionId: question.id,
+        questionText: question.text,
+        sourceId: dpp.id,
+        sourceType: 'dpp',
+      };
+      setBookmarkedQuestions(prev => [...prev, newBookmark]);
+      toast({ title: "Bookmarked!", description: `"${question.text.substring(0,30)}..." added to notebook.` });
+    }
+  };
+
+  const isBookmarked = (questionId: string, dppId: string) => {
+    return bookmarkedQuestions.some(bq => bq.questionId === questionId && bq.sourceId === dppId && bq.sourceType === 'dpp');
+  };
+
+  return (
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-8 text-primary">Daily Practice Problems (DPPs)</h1>
+      {dpps.length === 0 ? <p className="text-muted-foreground">No DPPs available yet. Check back soon!</p> : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {dpps.map((dpp) => (
+            <Card key={dpp.id} className="flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle>{dpp.title}</CardTitle>
+                <CardDescription className="flex flex-wrap items-center gap-2">
+                  <span className="flex items-center"><CalendarDays className="mr-1 h-4 w-4" /> {format(new Date(dpp.date), 'MMMM d, yyyy')}</span>
+                  {dpp.subject && <Badge variant="outline">{dpp.subject}</Badge>}
+                  <span>{dpp.problems.length} Problems</span>
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Stay sharp with these daily challenges.
+                </p>
+                <h4 className="font-medium mb-2">Sample Problems:</h4>
+                <ul className="space-y-2 text-sm">
+                  {dpp.problems.slice(0, 2).map(problem => (
+                    <li key={problem.id} className="flex justify-between items-start">
+                       <span className="truncate pr-2" title={problem.text}>{problem.text.substring(0,50)}{problem.text.length > 50 ? '...' : ''}</span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 shrink-0"
+                        onClick={() => toggleBookmark(problem, dpp)}
+                        aria-label={isBookmarked(problem.id, dpp.id) ? "Remove bookmark" : "Add bookmark"}
+                      >
+                        {isBookmarked(problem.id, dpp.id) ? <BookCheck className="h-4 w-4 text-primary" /> : <Bookmark className="h-4 w-4" />}
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full">
+                  <Edit3 className="mr-2 h-4 w-4" /> Start Solving
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
