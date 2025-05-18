@@ -28,11 +28,10 @@ export default function LandingPage({
           </Link>
           <nav className="space-x-2">
             <Button variant="ghost" asChild>
-              {/* For now, Login and Sign Up can point to dashboard or a future auth page */}
-              <Link href="/dashboard">Login</Link>
+              <Link href="/auth/login">Login</Link>
             </Button>
             <Button asChild>
-              <Link href="/dashboard">Sign Up</Link>
+              <Link href="/auth/signup">Sign Up</Link>
             </Button>
           </nav>
         </div>
@@ -51,7 +50,7 @@ export default function LandingPage({
             EduNexus provides comprehensive test series, daily practice problems, and AI-powered doubt solving to help you succeed in MHT-CET, JEE, and NEET.
           </p>
           <Button size="lg" asChild>
-            <Link href="/dashboard"> {/* This would typically lead to signup or dashboard if logged in */}
+            <Link href="/auth/signup">
               Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
