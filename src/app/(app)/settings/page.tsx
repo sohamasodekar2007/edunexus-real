@@ -20,13 +20,14 @@ import {
   CalendarDays,
   Info,
 } from 'lucide-react';
-import type { UserClass, User } from '@/types'; 
-import { format } from 'date-fns'; 
+import type { UserClass, User } from '@/types';
+import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileAction, getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
-const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"]; 
+const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"];
+const EMPTY_CLASS_VALUE_PLACEHOLDER = "__EMPTY_CLASS_VALUE__";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function SettingsPage() {
   const [isLoadingReferrerName, setIsLoadingReferrerName] = useState(false);
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
   const [userModel, setUserModel] = useState<string>('N/A');
-  const [isSaving, setIsSaving] = useState(false); 
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -58,7 +59,7 @@ export default function SettingsPage() {
       const storedClass = localStorage.getItem('userClass') as UserClass | null;
       const storedTargetYear = localStorage.getItem('userTargetYear');
       const storedModel = localStorage.getItem('userModel');
-      
+
       const storedReferralCode = localStorage.getItem('userReferralCode');
       const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
       const storedReferralStatsString = localStorage.getItem('userReferralStats');
@@ -70,8 +71,8 @@ export default function SettingsPage() {
       if (storedPhone) setUserPhone(storedPhone);
       if (storedAvatarFallback) setUserAvatarFallback(storedAvatarFallback);
       if (storedClass && USER_CLASSES_OPTIONS.includes(storedClass)) setUserClass(storedClass);
-      else if (storedClass === null || storedClass === '') setUserClass(''); 
-      
+      else if (storedClass === null || storedClass === '') setUserClass('');
+
       if (storedTargetYear && storedTargetYear !== 'N/A' && TARGET_EXAM_YEAR_OPTIONS.includes(storedTargetYear)) setUserTargetYear(storedTargetYear);
       else setUserTargetYear('-- Not Set --');
 
@@ -89,7 +90,7 @@ export default function SettingsPage() {
         setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
       }
       if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
-      
+
       setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
 
       if (storedUserReferredByCode && storedUserReferredByCode.trim() !== '') {
@@ -114,7 +115,7 @@ export default function SettingsPage() {
       return;
     }
     setIsSaving(true);
-    
+
     const result = await updateUserProfileAction({
       userId,
       classToUpdate: userClass,
@@ -124,7 +125,7 @@ export default function SettingsPage() {
     if (result.success) {
       toast({ title: "Success", description: result.message || "Profile updated successfully!" });
       if (typeof window !== 'undefined') {
-        localStorage.setItem('userClass', userClass || ''); 
+        localStorage.setItem('userClass', userClass || '');
         localStorage.setItem('userTargetYear', userTargetYear);
       }
     } else {
@@ -140,7 +141,7 @@ export default function SettingsPage() {
   const handleProfilePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      if (file.size > 2 * 1024 * 1024) { 
+      if (file.size > 2 * 1024 * 1024) {
         toast({ title: "File Too Large", description: "Max 2MB allowed for profile picture.", variant: "destructive" });
         return;
       }
@@ -176,7 +177,7 @@ export default function SettingsPage() {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <h1 className="text-xl font-semibold">Settings</h1>
-        <div className="w-9"></div> 
+        <div className="w-9"></div>
       </header>
 
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
@@ -224,7 +225,16 @@ export default function SettingsPage() {
             </div>
             <div>
               <Label htmlFor="academicStatus">Academic Status</Label>
-              <Select value={userClass} onValueChange={(value) => setUserClass(value as UserClass | '')}>
+              <Select
+                value={userClass === '' ? EMPTY_CLASS_VALUE_PLACEHOLDER : userClass}
+                onValueChange={(value) => {
+                  if (value === EMPTY_CLASS_VALUE_PLACEHOLDER) {
+                    setUserClass('');
+                  } else {
+                    setUserClass(value as UserClass);
+                  }
+                }}
+              >
                 <SelectTrigger id="academicStatus" className="mt-1">
                   <SelectValue placeholder="Select your class" />
                 </SelectTrigger>
@@ -232,7 +242,7 @@ export default function SettingsPage() {
                   {USER_CLASSES_OPTIONS.map(option => (
                     <SelectItem key={option} value={option}>{option}</SelectItem>
                   ))}
-                   <SelectItem value="">-- Not Set --</SelectItem>
+                  <SelectItem value={EMPTY_CLASS_VALUE_PLACEHOLDER}>-- Not Set --</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -311,7 +321,7 @@ export default function SettingsPage() {
           </div>
         </CardContent>
       </Card>
-      
+
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Subscription</CardTitle>
