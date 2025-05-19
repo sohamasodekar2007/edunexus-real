@@ -36,7 +36,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       role: 'User', // Default role
       expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString(), // Default: 2099-12-31
       createdAt: new Date().toISOString(),
-      avatarUrl: `https://placehold.co/100x100.png?text=${name.charAt(0).toUpperCase()}${surname.charAt(0).toUpperCase()}`, // Placeholder avatar
+      avatarUrl: `https://placehold.co/100x100.png?text=${name.charAt(0).toUpperCase()}`, // Placeholder avatar using first letter of first name
       totalPoints: 0,
       referralCode: newUserReferralCode,
       referredByCode: referredByCodeInput || null,
