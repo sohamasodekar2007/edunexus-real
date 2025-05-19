@@ -4,8 +4,19 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Construction, AlertTriangle, Home } from 'lucide-react';
 import { Logo } from '@/components/icons';
+import { use } from 'react'; // Import use
 
-export default function NotFoundPage() {
+export default function NotFoundPage({
+  params,
+  searchParams
+}: {
+  params: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  // Ensure params and searchParams are unwrapped before any potential enumeration
+  use(params);
+  use(searchParams);
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4 text-center">
       <Card className="w-full max-w-lg shadow-xl">
