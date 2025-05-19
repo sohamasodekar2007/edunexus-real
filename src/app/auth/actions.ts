@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 'use server';
 import pb from '@/lib/pocketbase';
@@ -19,19 +20,19 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
   try {
     const newUserReferralCode = generateReferralCode();
     const combinedName = `${name} ${surname}`.trim();
+    const avatarUrl = `https://placehold.co/100x100.png?text=${name.charAt(0).toUpperCase()}`;
+    // dataAiHint is for client-side image hints, not stored in PocketBase user record directly unless schema supports it.
 
-    // Prepare data for createUserInPocketBase, ensuring field names match expectations
     const userDataForPocketBase = {
       email: email.toLowerCase(),
-      password: password, // Use 'password' from validated form data
+      password: password,
       name: combinedName,
       phone,
       class: userClass,
       model: 'Free' as UserModel,
       role: 'User' as UserRole,
       expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0],
-      avatarUrl: `https://placehold.co/100x100.png?text=${name.charAt(0).toUpperCase()}`,
-      dataAiHint: `${name.charAt(0).toUpperCase()} avatar`,
+      avatarUrl: avatarUrl,
       totalPoints: 0,
       referralCode: newUserReferralCode,
       referredByCode: referredByCodeInput || null,
@@ -41,42 +42,56 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
         referred_full_length: 0,
         referred_combo: 0,
       },
-      targetYear: null,
+      targetYear: null, // Assuming not collected at signup currently
     };
 
     const newUser = await createUserInPocketBase(userDataForPocketBase);
     return { success: true, message: 'Signup successful! Please log in.', userId: newUser.id };
 
   } catch (error) {
-    console.error('Signup Action Error:', error); // Log the full error object
-    let errorMessage = 'An unexpected error occurred during signup.';
-    
+    console.error('Signup Action Error (Full Error Object):', error); // Logs the entire error object
+
+    let specificDetails = '';
+    let genericMessage = 'Something went wrong while processing your request.'; // Default
+
     if (error instanceof ClientResponseError) {
-        console.error('PocketBase ClientResponseError details:', JSON.stringify(error.data, null, 2));
-        // Try to get a more specific message from PocketBase's response
-        const pbErrorData = error.data.data;
-        if (pbErrorData) {
-            const fieldErrors = Object.keys(pbErrorData).map(key => {
-                if (pbErrorData[key] && pbErrorData[key].message) {
-                    return `${key}: ${pbErrorData[key].message}`;
+        // Log the structured PocketBase error data if available
+        console.error('PocketBase ClientResponseError details (error.data):', JSON.stringify(error.data, null, 2));
+        
+        // Use PocketBase's top-level message as the generic message if available
+        genericMessage = error.data?.message || genericMessage; 
+
+        const pbFieldErrors = error.data?.data; // This is where field-specific errors usually are
+        if (pbFieldErrors && typeof pbFieldErrors === 'object') {
+            specificDetails = Object.keys(pbFieldErrors).map(key => {
+                if (pbFieldErrors[key] && pbFieldErrors[key].message) {
+                    return `${key}: ${pbFieldErrors[key].message}`;
                 }
                 return null;
             }).filter(Boolean).join('; ');
-            if (fieldErrors) {
-                errorMessage = `Validation issues: ${fieldErrors}`;
-            } else if (error.data.message) {
-                errorMessage = error.data.message;
-            }
-        } else if (error.message) {
-            errorMessage = error.message;
         }
     } else if (error instanceof Error) {
-        errorMessage = error.message;
+        genericMessage = error.message || genericMessage;
     } else if (typeof error === 'string') {
-        errorMessage = error;
+        genericMessage = error || genericMessage;
     }
     
-    return { success: false, message: `Signup failed: ${errorMessage}`, error: errorMessage };
+    let finalErrorMessage = genericMessage;
+    if (specificDetails) {
+      // Prepend generic message if it's not too generic, or just use details if generic is unhelpful
+      if (genericMessage !== 'Something went wrong while processing your request.' && genericMessage !== 'Failed to create record.') {
+        finalErrorMessage = `${genericMessage}. Details: ${specificDetails}`;
+      } else {
+        finalErrorMessage = specificDetails; // Prioritize specific field errors if the generic one is too vague
+      }
+    }
+    
+    // Ensure a fallback if everything somehow ends up empty
+    if (!finalErrorMessage.trim()) {
+        finalErrorMessage = 'An unknown error occurred during signup.';
+    }
+
+    return { success: false, message: `Signup failed: ${finalErrorMessage}`, error: finalErrorMessage };
   }
 }
 
@@ -86,7 +101,7 @@ export async function loginUserAction(data: { email: string, password_login: str
   error?: string; 
   userId?: string, 
   userFullName?: string, 
-  userName?: string,
+  userName?: string, // This was intended for first name
   userModel?: UserModel | null, 
   userRole?: UserRole | null, 
   userClass?: UserClass | null, 
@@ -113,8 +128,9 @@ export async function loginUserAction(data: { email: string, password_login: str
       return { success: false, message: 'Login failed. Please check your credentials.', error: 'Invalid credentials' };
     }
 
-    const user = authData.record;
-    const userFullName = user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim(); 
+    const user = authData.record as User; // Cast to User type
+    const userFullName = user.name || 'User'; 
+    const userName = user.name?.split(' ')[0] || 'User'; // First part of full name or fallback
 
     return { 
       success: true, 
@@ -122,10 +138,10 @@ export async function loginUserAction(data: { email: string, password_login: str
       token: authData.token, 
       userId: user.id, 
       userFullName: userFullName,
-      userName: user.name || userFullName.split(' ')[0], 
-      userModel: user.model as UserModel || null,
-      userRole: user.role as UserRole || null,
-      userClass: user.class as UserClass || null,
+      userName: userName, 
+      userModel: user.model || null,
+      userRole: user.role || null,
+      userClass: user.class || null,
       userEmail: user.email,
       userPhone: user.phone || null,
       userTargetYear: user.targetYear || null,
@@ -139,7 +155,7 @@ export async function loginUserAction(data: { email: string, password_login: str
     let errorMessage = 'Invalid email or password.';
      if (error instanceof ClientResponseError) {
         if (error.status === 400) { 
-            errorMessage = 'Invalid email or password. Please try again.';
+            errorMessage = error.data?.message || 'Invalid email or password. Please try again.';
         } else {
             errorMessage = error.data?.message || 'An error occurred during login.';
         }
