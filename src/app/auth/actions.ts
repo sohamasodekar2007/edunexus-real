@@ -1,8 +1,8 @@
 
 // @ts-nocheck
 'use server';
-import pbGlobal from '@/lib/pocketbase'; // Use a different name to avoid conflict with local instance
-import PocketBase, { ClientResponseError } from 'pocketbase'; // Import PocketBase class for local admin instance
+import pbGlobal from '@/lib/pocketbase'; 
+import PocketBase, { ClientResponseError } from 'pocketbase'; 
 import { LoginSchema, SignupSchema, type SignupFormData } from '@/lib/validationSchemas';
 import { generateReferralCode } from '@/lib/authUtils';
 import { createUserInPocketBase, findUserByReferralCode, updateUserReferralStats, findUserById, updateUserInPocketBase } from '@/lib/userDataService';
@@ -10,7 +10,11 @@ import type { User, UserModel, UserRole, UserClass } from '@/types';
 
 
 // Helper function to get an admin-authenticated PocketBase instance
-async function getAdminPb() {
+async function getAdminPb(): Promise<PocketBase> {
+  if (!process.env.POCKETBASE_ADMIN_EMAIL || !process.env.POCKETBASE_ADMIN_PASSWORD) {
+    console.error("Admin PB: POCKETBASE_ADMIN_EMAIL or POCKETBASE_ADMIN_PASSWORD not set in .env file. Some operations may fail.");
+    throw new Error("POCKETBASE_ADMIN_EMAIL or POCKETBASE_ADMIN_PASSWORD not set. Admin operations cannot be performed.");
+  }
   const adminPb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
   // Avoid re-authenticating if already valid and is an admin
   if (adminPb.authStore.isValid && adminPb.authStore.model?.email === process.env.POCKETBASE_ADMIN_EMAIL) {
@@ -18,9 +22,6 @@ async function getAdminPb() {
   } else {
     try {
       // console.log("Attempting to authenticate admin PB");
-      if (!process.env.POCKETBASE_ADMIN_EMAIL || !process.env.POCKETBASE_ADMIN_PASSWORD) {
-        throw new Error("POCKETBASE_ADMIN_EMAIL or POCKETBASE_ADMIN_PASSWORD not set in .env file.");
-      }
       await adminPb.admins.authWithPassword(
         process.env.POCKETBASE_ADMIN_EMAIL!,
         process.env.POCKETBASE_ADMIN_PASSWORD!
@@ -28,7 +29,6 @@ async function getAdminPb() {
       // console.log("Admin PB authenticated successfully");
     } catch (err) {
       console.error("Failed to authenticate admin PocketBase instance:", err);
-      // Provide a more specific error message
       const specificError = err instanceof Error ? err.message : String(err);
       throw new Error(`Could not authenticate admin for server action. Please check POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD in your .env file. Details: ${specificError}`);
     }
@@ -43,12 +43,10 @@ export async function validateReferralCodeAction(code: string): Promise<{ succes
   }
   try {
     const upperCaseCode = code.trim().toUpperCase();
-    // Use global pb for reads if it doesn't require special auth for this lookup
-    const referrer = await findUserByReferralCode(upperCaseCode, pbGlobal);
+    const referrer = await findUserByReferralCode(upperCaseCode, pbGlobal); // Uses global instance for read
     if (referrer) {
       return { success: true, message: `This referral code belongs to ${referrer.name}.`, referrerName: referrer.name };
     } else {
-      // Do not show "Invalid referral code" here, as per user request
       return { success: false, message: "" };
     }
   } catch (error) {
@@ -68,28 +66,18 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
 
   let referrerToUpdateStats: User | null = null;
   let actualReferredByCodeForNewUser: string | null = null;
-  let adminPb;
-  try {
-    adminPb = await getAdminPb(); // Get admin client for potential updates later
-  } catch (adminAuthError) {
-     console.error("Admin auth failed during signup:", adminAuthError);
-     return { success: false, message: (adminAuthError as Error).message, error: (adminAuthError as Error).message };
-  }
-
-
+  
   if (referredByCodeInput && referredByCodeInput.trim() !== '') {
     const upperCaseReferredByCode = referredByCodeInput.trim().toUpperCase();
     actualReferredByCodeForNewUser = upperCaseReferredByCode; 
     try {
-      // Validate if the code belongs to an actual user
-      referrerToUpdateStats = await findUserByReferralCode(upperCaseReferredByCode, adminPb);
+      // Validate if the code belongs to an actual user using global PB for read
+      referrerToUpdateStats = await findUserByReferralCode(upperCaseReferredByCode, pbGlobal);
     } catch (e) {
       console.warn("Error looking up referral code during signup (this should not fail signup):", e);
-      // Referrer not found or error, but signup proceeds with the entered code saved
       referrerToUpdateStats = null;
     }
   }
-
 
   try {
     const newUserReferralCode = generateReferralCode();
@@ -116,19 +104,23 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       targetYear: null, 
     };
 
-    const newUser = await createUserInPocketBase(userDataForPocketBase, adminPb); 
+    // Create new user using the global, unauthenticated pbGlobal instance.
+    // This relies on PocketBase's users collection createRule being public (which is default for auth collections).
+    const newUser = await createUserInPocketBase(userDataForPocketBase, pbGlobal); 
 
     if (newUser && newUser.id && referrerToUpdateStats && referrerToUpdateStats.id) {
       try {
+        const adminPbForReferrerUpdate = await getAdminPb(); // Admin auth IS needed to update another user's record
         const currentStats = referrerToUpdateStats.referralStats || { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 };
         const newReferrerStats: User['referralStats'] = {
           ...currentStats,
           referred_free: (currentStats.referred_free || 0) + 1,
         };
-        await updateUserReferralStats(referrerToUpdateStats.id, newReferrerStats, adminPb);
+        await updateUserReferralStats(referrerToUpdateStats.id, newReferrerStats, adminPbForReferrerUpdate);
         console.log(`Referral stats updated for referrer: ${referrerToUpdateStats.name}`);
       } catch (statsError) {
-        console.error(`Failed to update referral stats for referrer ${referrerToUpdateStats.id}:`, statsError);
+        console.error(`Failed to update referral stats for referrer ${referrerToUpdateStats.id} (Admin Auth might be missing or failed):`, statsError);
+        // Signup still considered successful even if referrer update fails.
       }
     }
     
@@ -136,14 +128,12 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
 
   } catch (error) {
     console.error('Signup Action Error (Full Error Object):', error); 
-
     let specificDetails = '';
     let genericMessage = 'Something went wrong while processing your request.'; 
 
     if (error instanceof ClientResponseError) {
         console.error('PocketBase ClientResponseError details (error.data):', JSON.stringify(error.data, null, 2));
         genericMessage = error.data?.message || genericMessage; 
-
         const pbFieldErrors = error.data?.data; 
         if (pbFieldErrors && typeof pbFieldErrors === 'object') {
             specificDetails = Object.keys(pbFieldErrors).map(key => {
@@ -158,8 +148,6 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
         }
     } else if (error instanceof Error) {
         genericMessage = error.message || genericMessage;
-    } else if (typeof error === 'string') {
-        genericMessage = error || genericMessage;
     }
     
     let finalErrorMessage = genericMessage;
@@ -170,11 +158,9 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
         finalErrorMessage = specificDetails; 
       }
     }
-    
     if (!finalErrorMessage || !finalErrorMessage.trim()) {
         finalErrorMessage = 'An unknown error occurred during signup.';
     }
-
     return { success: false, message: `Signup failed: ${finalErrorMessage}`, error: finalErrorMessage };
   }
 }
@@ -208,7 +194,6 @@ export async function loginUserAction(data: { email: string, password_login: str
   const { email, password } = validation.data;
 
   try {
-    // Use the global pb instance for login, as it's a client-like operation
     const authData = await pbGlobal.collection('users').authWithPassword(email.toLowerCase(), password);
 
     if (!authData || !authData.record) {
@@ -219,14 +204,13 @@ export async function loginUserAction(data: { email: string, password_login: str
     const userFullName = user.name || 'User'; 
     const avatarUrl = user.avatar ? pbGlobal.getFileUrl(user, user.avatar as string) : null;
 
-
     return { 
       success: true, 
       message: 'Login successful!', 
       token: authData.token, 
       userId: user.id, 
       userFullName: userFullName,
-      userName: userFullName, // Assuming userName is the full name for now as per previous logic
+      userName: userFullName, 
       userModel: user.model || null,
       userRole: user.role || null,
       userClass: user.class || null,
@@ -277,13 +261,13 @@ export async function updateUserProfileAction({
   if (!userId) {
     return { success: false, message: "User ID is required.", error: "User ID missing" };
   }
-  let adminPb;
-  try {
-    adminPb = await getAdminPb();
-  } catch (adminAuthError) {
-     console.error("Admin auth failed during profile update:", adminAuthError);
-     return { success: false, message: (adminAuthError as Error).message, error: (adminAuthError as Error).message };
-  }
+  
+  // IMPORTANT: Without admin authentication or passing the user's own auth token,
+  // this action will likely fail due to PocketBase's updateRule (e.g., "@request.auth.id = id").
+  // The global pbGlobal instance used by default in updateUserInPocketBase is unauthenticated on the server.
+  // For this to work for user self-updates without admin, this server action would need
+  // to be authenticated as the user (e.g., by passing and using their auth token).
+  console.warn("updateUserProfileAction: This action is attempting to update user data without specific user authentication or admin rights. It may fail due to PocketBase permissions.");
 
   const dataForPocketBase: Partial<Pick<User, 'class' | 'targetYear'>> = {};
 
@@ -309,8 +293,9 @@ export async function updateUserProfileAction({
   }
 
   try {
-    const updatedUserRecord = await updateUserInPocketBase(userId, dataForPocketBase, adminPb);
-    return { success: true, message: "Profile updated successfully!", updatedUser: updatedUserRecord };
+    // Attempting update with pbGlobal (likely unauthenticated for this specific user on server)
+    const updatedUserRecord = await updateUserInPocketBase(userId, dataForPocketBase, pbGlobal);
+    return { success: true, message: "Profile update attempt successful (verify in DB)!", updatedUser: updatedUserRecord };
   } catch (error) {
     console.error('Update User Profile Action Error:', error);
     let errorMessage = "Failed to update profile.";
@@ -322,6 +307,8 @@ export async function updateUserProfileAction({
       }
        if (error.status === 0) {
           errorMessage = "Network Error: Could not connect to the server while updating profile.";
+        } else if (error.status === 403 || error.status === 401) {
+          errorMessage = "Permission denied. You may not have rights to update this profile. (This is expected if not using admin auth or user-specific auth in server action).";
         }
     } else if (error instanceof Error) {
       errorMessage = error.message;
@@ -337,10 +324,9 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
   const currentUserId = pbGlobal.authStore.model.id;
 
   try {
-    // Use global pb for reads
-    const currentUser = await findUserById(currentUserId, pbGlobal);
+    const currentUser = await findUserById(currentUserId, pbGlobal); // Read with global is fine
     if (currentUser && currentUser.referredByCode) {
-      const referrer = await findUserByReferralCode(currentUser.referredByCode.toUpperCase(), pbGlobal);
+      const referrer = await findUserByReferralCode(currentUser.referredByCode.toUpperCase(), pbGlobal); // Read with global
       if (referrer) {
         return { referrerName: referrer.name };
       } else {
@@ -358,21 +344,19 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
 
 export async function updateUserAvatarAction(formData: FormData): Promise<{ success: boolean; message: string; error?: string; updatedUserRecord?: any }> {
   if (!pbGlobal.authStore.isValid || !pbGlobal.authStore.model?.id) {
-    return { success: false, message: "User not authenticated.", error: "Authentication required." };
+    return { success: false, message: "User not authenticated for avatar update.", error: "Authentication required." };
   }
   const userId = pbGlobal.authStore.model.id;
   console.log(`updateUserAvatarAction: Updating avatar for user ID: ${userId}`);
-  let adminPb;
-  try {
-    adminPb = await getAdminPb();
-  } catch (adminAuthError) {
-     console.error("Admin auth failed during avatar update:", adminAuthError);
-     return { success: false, message: (adminAuthError as Error).message, error: (adminAuthError as Error).message };
-  }
+  
+  // IMPORTANT: Similar to updateUserProfileAction, this will likely fail
+  // due to PocketBase permissions if pbGlobal is used without admin or user-specific auth.
+  console.warn("updateUserAvatarAction: This action is attempting to update user avatar without specific user authentication or admin rights. It may fail due to PocketBase permissions.");
 
   try {
-    const updatedRecord = await adminPb.collection('users').update(userId, formData);
-    return { success: true, message: "Avatar updated successfully!", updatedUserRecord: updatedRecord };
+    // Attempting update with pbGlobal
+    const updatedRecord = await updateUserInPocketBase(userId, formData, pbGlobal);
+    return { success: true, message: "Avatar update attempt successful (verify in DB)!", updatedUserRecord: updatedRecord };
   } catch (error) {
     console.error('Update User Avatar Action Error:', error);
     let errorMessage = "Failed to update avatar.";
@@ -383,7 +367,9 @@ export async function updateUserAvatarAction(formData: FormData): Promise<{ succ
         errorMessage += ` Details: ${fieldErrors}`;
       }
        if (error.status === 404) {
-        errorMessage = "User record not found for avatar update. Please ensure you are logged in correctly.";
+        errorMessage = "User record not found for avatar update.";
+      } else if (error.status === 403 || error.status === 401) {
+        errorMessage = "Permission denied. You may not have rights to update this avatar. (This is expected if not using admin auth or user-specific auth in server action).";
       } else if (error.status === 0) {
         errorMessage = "Network Error: Could not connect to the server while updating avatar.";
       }
@@ -396,20 +382,19 @@ export async function updateUserAvatarAction(formData: FormData): Promise<{ succ
 
 export async function removeUserAvatarAction(): Promise<{ success: boolean; message: string; error?: string; updatedUserRecord?: any }> {
    if (!pbGlobal.authStore.isValid || !pbGlobal.authStore.model?.id) {
-    return { success: false, message: "User not authenticated.", error: "Authentication required." };
+    return { success: false, message: "User not authenticated for avatar removal.", error: "Authentication required." };
   }
   const userId = pbGlobal.authStore.model.id;
   console.log(`removeUserAvatarAction: Removing avatar for user ID: ${userId}`);
-  let adminPb;
+
+  // IMPORTANT: Similar to updateUserProfileAction, this will likely fail
+  // due to PocketBase permissions if pbGlobal is used without admin or user-specific auth.
+  console.warn("removeUserAvatarAction: This action is attempting to remove user avatar without specific user authentication or admin rights. It may fail due to PocketBase permissions.");
+
   try {
-    adminPb = await getAdminPb();
-  } catch (adminAuthError) {
-     console.error("Admin auth failed during avatar removal:", adminAuthError);
-     return { success: false, message: (adminAuthError as Error).message, error: (adminAuthError as Error).message };
-  }
-  try {
-    const updatedRecord = await adminPb.collection('users').update(userId, { 'avatar': null });
-    return { success: true, message: "Avatar removed successfully!", updatedUserRecord: updatedRecord };
+    // Attempting update with pbGlobal
+    const updatedRecord = await updateUserInPocketBase(userId, { 'avatar': null }, pbGlobal);
+    return { success: true, message: "Avatar removal attempt successful (verify in DB)!", updatedUserRecord: updatedRecord };
   } catch (error) {
     console.error('Remove User Avatar Action Error:', error);
     let errorMessage = "Failed to remove avatar.";
@@ -420,7 +405,9 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
         errorMessage += ` Details: ${fieldErrors}`;
       }
       if (error.status === 404) {
-        errorMessage = "User record not found for avatar removal. Please ensure you are logged in correctly.";
+        errorMessage = "User record not found for avatar removal.";
+      } else if (error.status === 403 || error.status === 401) {
+        errorMessage = "Permission denied. You may not have rights to remove this avatar. (This is expected if not using admin auth or user-specific auth in server action).";
       } else if (error.status === 0) {
         errorMessage = "Network Error: Could not connect to the server while removing avatar.";
       }
@@ -430,4 +417,3 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
     return { success: false, message: errorMessage, error: errorMessage };
   }
 }
-

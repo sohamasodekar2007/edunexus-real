@@ -21,8 +21,8 @@ export async function findUserByEmail(email: string, pbInstance: PocketBaseClien
       expiry_date: record.expiry_date,
       created: record.created,
       updated: record.updated,
-      avatar: record.avatar, // Keep the raw avatar field name
-      avatarUrl: record.avatar ? pbInstance.getFileUrl(record, record.avatar) : null,
+      avatar: record.avatar, 
+      avatarUrl: record.avatar ? pbInstance.getFileUrl(record, record.avatar as string) : null,
       totalPoints: record.totalPoints,
       targetYear: record.targetYear,
       referralCode: record.referralCode,
@@ -47,7 +47,7 @@ export async function findUserByEmail(email: string, pbInstance: PocketBaseClien
 
 export async function createUserInPocketBase(
   userData: Omit<User, 'id' | 'created' | 'updated' | 'collectionId' | 'collectionName' | 'username' | 'verified' | 'avatarUrl' | 'avatar'> & { password?: string },
-  pbInstance: PocketBaseClient = pbGlobal // Expect an admin-authenticated instance for creation
+  pbInstance: PocketBaseClient = pbGlobal 
 ): Promise<User> {
   try {
     const dataForPocketBase = {
@@ -60,8 +60,6 @@ export async function createUserInPocketBase(
       model: userData.model || 'Free', 
       role: userData.role || 'User',   
       expiry_date: userData.expiry_date || new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0], 
-      // avatar field is for file upload, not URL. PocketBase handles file storage.
-      // avatarUrl is derived, not stored directly.
       totalPoints: userData.totalPoints || 0,
       targetYear: userData.targetYear,
       referralCode: userData.referralCode, 
@@ -85,7 +83,7 @@ export async function createUserInPocketBase(
       created: record.created,
       updated: record.updated,
       avatar: record.avatar,
-      avatarUrl: record.avatar ? pbInstance.getFileUrl(record, record.avatar) : null,
+      avatarUrl: record.avatar ? pbInstance.getFileUrl(record, record.avatar as string) : null,
       totalPoints: record.totalPoints,
       targetYear: record.targetYear,
       referralCode: record.referralCode,
@@ -120,7 +118,7 @@ export async function findUserById(id: string, pbInstance: PocketBaseClient = pb
       created: record.created,
       updated: record.updated,
       avatar: record.avatar,
-      avatarUrl: record.avatar ? pbInstance.getFileUrl(record, record.avatar) : null,
+      avatarUrl: record.avatar ? pbInstance.getFileUrl(record, record.avatar as string) : null,
       totalPoints: record.totalPoints,
       targetYear: record.targetYear,
       referralCode: record.referralCode,
@@ -145,14 +143,11 @@ export async function findUserById(id: string, pbInstance: PocketBaseClient = pb
 
 export async function updateUserInPocketBase(
   userId: string, 
-  data: Partial<Pick<User, 'class' | 'targetYear' | 'referralStats' | 'avatar'>>, // 'avatar' can be FormData for upload or null for removal
-  pbInstance: PocketBaseClient = pbGlobal // Expect an admin-authenticated instance for updates
+  data: Partial<Pick<User, 'class' | 'targetYear' | 'referralStats' | 'avatar'>>, 
+  pbInstance: PocketBaseClient = pbGlobal 
 ): Promise<User> {
-  console.log(`userDataService.updateUserInPocketBase: Updating user ID: ${userId} with data:`, data);
+  console.log(`userDataService.updateUserInPocketBase: Updating user ID: ${userId} with data:`, data, `using instance: ${pbInstance === pbGlobal ? 'global unauthenticated' : 'provided (likely admin-auth)'}`);
   try {
-    // If data contains 'avatar' and it's FormData, it's an upload.
-    // If data contains 'avatar' and it's null, it's a removal.
-    // Otherwise, it's a regular field update.
     const record = await pbInstance.collection('users').update(userId, data);
     return {
       id: record.id,
@@ -166,7 +161,7 @@ export async function updateUserInPocketBase(
       created: record.created,
       updated: record.updated,
       avatar: record.avatar,
-      avatarUrl: record.avatar ? pbInstance.getFileUrl(record, record.avatar) : null,
+      avatarUrl: record.avatar ? pbInstance.getFileUrl(record, record.avatar as string) : null,
       totalPoints: record.totalPoints,
       targetYear: record.targetYear, 
       referralCode: record.referralCode,
@@ -206,7 +201,7 @@ export async function findUserByReferralCode(referralCode: string, pbInstance: P
       created: record.created,
       updated: record.updated,
       avatar: record.avatar,
-      avatarUrl: record.avatar ? pbInstance.getFileUrl(record, record.avatar) : null,
+      avatarUrl: record.avatar ? pbInstance.getFileUrl(record, record.avatar as string) : null,
       totalPoints: record.totalPoints,
       targetYear: record.targetYear,
       referralCode: record.referralCode,
@@ -221,6 +216,7 @@ export async function findUserByReferralCode(referralCode: string, pbInstance: P
     if (error instanceof ClientResponseError && error.status === 404) {
       return null; 
     }
+    console.error('Error finding user by referral code in PocketBase:', error);
     return null;
   }
 }
@@ -228,7 +224,6 @@ export async function findUserByReferralCode(referralCode: string, pbInstance: P
 export async function updateUserReferralStats(userId: string, newStats: User['referralStats'], pbInstance: PocketBaseClient = pbGlobal): Promise<User | null> {
   try {
     const updatedRecord = await pbInstance.collection('users').update(userId, { referralStats: newStats });
-    // Map to User type if needed, or just return the record
     return {
         id: updatedRecord.id,
         email: updatedRecord.email,
@@ -241,7 +236,7 @@ export async function updateUserReferralStats(userId: string, newStats: User['re
         created: updatedRecord.created,
         updated: updatedRecord.updated,
         avatar: updatedRecord.avatar,
-        avatarUrl: updatedRecord.avatar ? pbInstance.getFileUrl(updatedRecord, updatedRecord.avatar) : null,
+        avatarUrl: updatedRecord.avatar ? pbInstance.getFileUrl(updatedRecord, updatedRecord.avatar as string) : null,
         totalPoints: updatedRecord.totalPoints,
         targetYear: updatedRecord.targetYear,
         referralCode: updatedRecord.referralCode,
