@@ -30,7 +30,7 @@ import {
   GitCompareArrows,
   ShieldCheck,
   Bell,
-  Sparkles, // Changed from Zap to Sparkles
+  Sparkles,
   HelpCircle, 
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -97,11 +97,14 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       const model = localStorage.getItem('userModel');
       const role = localStorage.getItem('userRole');
       const fallback = localStorage.getItem('userAvatarFallback');
+      const userClass = localStorage.getItem('userClass'); // Load userClass
+      const userEmail = localStorage.getItem('userEmail'); // Load userEmail
       
       if (fullName) setCurrentUserFullName(fullName);
       if (model) setCurrentUserModel(model);
       if (role) setCurrentUserRole(role);
       if (fallback) setCurrentUserAvatarFallback(fallback);
+      // You might want to store userClass and userEmail in state if needed elsewhere in this layout
     }
   }, []);
 
@@ -111,6 +114,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       localStorage.removeItem('userModel');
       localStorage.removeItem('userRole');
       localStorage.removeItem('userAvatarFallback');
+      localStorage.removeItem('userClass');
+      localStorage.removeItem('userEmail');
     }
     router.push('/landing');
   };
@@ -123,13 +128,12 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         }
       }
     }
-    // Fallback label if no active item matches exactly, or if on a non-sidebar route.
-    // This could be a generic app name or based on the first segment of the path.
     if (pathname.startsWith('/dashboard')) return 'Dashboard';
     if (pathname.startsWith('/test-series')) return 'Test Series';
     if (pathname.startsWith('/dpps')) return 'DPP';
-    // Add more specific fallbacks if needed for other top-level routes
-    return 'EduNexus'; // Generic fallback
+    if (pathname.startsWith('/profile')) return 'My Profile';
+    if (pathname.startsWith('/settings')) return 'Settings';
+    return 'EduNexus'; 
   };
 
   const appSideBaseNavStructure: SideBaseNavItemGroup[] = navStructure;

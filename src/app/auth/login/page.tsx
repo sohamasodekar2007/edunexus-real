@@ -38,17 +38,18 @@ export default function LoginPage() {
       const result = await loginUserAction(actionData);
 
       if (result.success) {
-        const userFullName = `${result.userName || 'User'} ${result.userSurname || ''}`.trim();
         toast({
           title: 'Login Successful',
-          description: `Welcome back, ${userFullName}!`,
+          description: `Welcome back, ${result.userFullName}!`,
         });
         // Store user info for header and dashboard display
         if (typeof window !== 'undefined') {
-          localStorage.setItem('userFullName', userFullName);
+          localStorage.setItem('userFullName', result.userFullName || 'User');
           localStorage.setItem('userModel', result.userModel || 'Free'); 
           localStorage.setItem('userRole', result.userRole || 'User');
-          localStorage.setItem('userAvatarFallback', (result.userName || 'U').charAt(0).toUpperCase());
+          localStorage.setItem('userClass', result.userClass || 'N/A');
+          localStorage.setItem('userEmail', result.userEmail || 'user@example.com');
+          localStorage.setItem('userAvatarFallback', (result.userFullName || 'U').charAt(0).toUpperCase());
         }
         router.push('/dashboard'); 
       } else {
@@ -76,7 +77,7 @@ export default function LoginPage() {
           <Link href="/landing" className="mb-6 inline-block">
             <Logo className="mx-auto h-12 w-12 text-primary" />
           </Link>
-          <CardTitle className="text-3xl font-bold">Log in to EduNexus</CardTitle>
+          <CardTitle className="text-3xl font-bold">EduNexus Login</CardTitle>
           <CardDescription>Enter your credentials to access your EduNexus account.</CardDescription>
         </CardHeader>
         <CardContent>

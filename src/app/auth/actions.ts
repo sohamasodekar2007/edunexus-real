@@ -4,7 +4,7 @@
 import { LoginSchema, SignupSchema, type SignupFormData } from '@/lib/validationSchemas';
 import { hashPassword, verifyPassword, generateReferralCode } from '@/lib/authUtils';
 import { findUserByEmail, saveUser } from '@/lib/userDataService';
-import type { User, UserModel, UserRole } from '@/types';
+import type { User, UserModel, UserRole, UserClass } from '@/types';
 import { randomUUID } from 'crypto'; // Node.js built-in for UUID
 
 export async function signupUserAction(data: SignupFormData): Promise<{ success: boolean; message: string; error?: string; userId?: string }> {
@@ -62,7 +62,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
   }
 }
 
-export async function loginUserAction(data: { email: string, password_login: string }): Promise<{ success: boolean; message: string; error?: string; userId?: string, userName?: string, userSurname?: string, userModel?: UserModel, userRole?: UserRole }> {
+export async function loginUserAction(data: { email: string, password_login: string }): Promise<{ success: boolean; message: string; error?: string; userId?: string, userFullName?: string, userModel?: UserModel, userRole?: UserRole, userClass?: UserClass, userEmail?: string }> {
   const validation = LoginSchema.safeParse({email: data.email, password: data.password_login}); // map password_login to password for validation
   if (!validation.success) {
      const errorMessages = validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
@@ -82,16 +82,17 @@ export async function loginUserAction(data: { email: string, password_login: str
       return { success: false, message: 'Invalid email or password.', error: 'Invalid email or password.' };
     }
 
-    // IMPORTANT: In a real app, you would set up a session here (e.g., using cookies, JWT)
-    // For this prototype, we just return success.
+    const userFullName = `${user.name || ''} ${user.surname || ''}`.trim();
+
     return { 
       success: true, 
       message: 'Login successful!', 
       userId: user.id, 
-      userName: user.name, 
-      userSurname: user.surname,
+      userFullName: userFullName, 
       userModel: user.model,
-      userRole: user.role 
+      userRole: user.role,
+      userClass: user.class,
+      userEmail: user.email
     };
 
   } catch (error) {
