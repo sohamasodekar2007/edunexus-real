@@ -10,16 +10,15 @@ import {
   Sparkles,
   CalendarDays,
   NotebookText,
-  Wand2,
   LineChart,
   History,
   User, 
   ChevronRight,
   BarChartHorizontalBig,
-  TrendingUp
+  TrendingUp,
+  Trophy // Consolidated Trophy import
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Trophy } from "lucide-react"; // Added Trophy explicitly
 
 const leaderboardSnapshotData = [
   { id: 'user1', name: 'Soham Asodariya', rank: 1, score: '15 pts', avatarFallback: 'SA' },
@@ -92,7 +91,7 @@ export default function DashboardPage() {
 
       {/* Quick Actions Section */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <Card className="lg:col-span-3 shadow-md"> {/* Changed lg:col-span-2 to lg:col-span-3 */}
+        <Card className="lg:col-span-3 shadow-md">
           <CardHeader>
             <CardTitle className="text-lg font-semibold flex items-center">
               <BarChartHorizontalBig className="mr-2 h-5 w-5 text-primary" />
@@ -100,7 +99,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Button variant="outline" size="lg" className="w-full justify-start text-left py-6" asChild> {/* Changed variant to outline */}
+            <Button variant="outline" size="lg" className="w-full justify-start text-left py-6" asChild>
               <Link href="/test-series">
                 <ListChecks className="mr-3 h-5 w-5" /> Test Series
               </Link>
@@ -122,7 +121,6 @@ export default function DashboardPage() {
             </Button>
           </CardContent>
         </Card>
-        {/* AI Powered Tools Card Removed */}
       </section>
 
       {/* Score Trend & Leaderboard Snapshot Section */}
