@@ -25,8 +25,8 @@ import type { UserClass, User } from '@/types';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileAction, getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
-import pb from '@/lib/pocketbase'; // Correct: import your initialized instance
-import { ClientResponseError } from 'pocketbase'; // Correct: import type from package
+import pb from '@/lib/pocketbase';
+import { ClientResponseError } from 'pocketbase';
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
 const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"];
@@ -50,8 +50,6 @@ export default function SettingsPage() {
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
   const [userModel, setUserModel] = useState<string>('N/A');
   const [isSaving, setIsSaving] = useState(false);
-  // Referral stats display was removed, local state can be removed if not used by real-time.
-  // const [userReferralStats, setUserReferralStats] = useState<User['referralStats'] | null>(null);
 
 
   useEffect(() => {
@@ -112,18 +110,17 @@ export default function SettingsPage() {
               unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
                 if (e.action === 'update' && e.record && isMounted) {
                   console.log('[Real-time] User record updated:', e.record);
-                  // Only update model from real-time if it was the source of the change (or other specific fields you want to sync)
+                  // This example only updates model and referralStats. Adjust as needed.
                   if (e.record.model && typeof window !== 'undefined' && e.record.model !== localStorage.getItem('userModel')) {
                      localStorage.setItem('userModel', e.record.model as string);
                      setUserModel(e.record.model as string);
                   }
-                  // The userReferralStats display was removed, but if you re-add it or need it for something else, this would be where to update it.
-                  // For example, if you want to show a toast when referralStats change:
+                  // Example for referralStats:
                   // const updatedStats = e.record.referralStats as User['referralStats'];
                   // if (updatedStats && JSON.stringify(updatedStats) !== localStorage.getItem('userReferralStats')) {
                   //   localStorage.setItem('userReferralStats', JSON.stringify(updatedStats));
-                  //   // setUserReferralStats(updatedStats); // If local state for display is re-added
-                  //   toast({ title: "Referral Stats Updated!", description: "Your referral count has changed." });
+                  //   // If you were displaying referralStats, you'd update local state here too
+                  //   // toast({ title: "Referral Stats Updated!", description: "Your referral count has changed." });
                   // }
                 }
               });
@@ -134,7 +131,7 @@ export default function SettingsPage() {
                 if (error instanceof ClientResponseError) {
                   console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Status: ${error.status}`);
                   if (error.status === 0) {
-                    console.error("[Real-time Subscription Error] Status 0 indicates the PocketBase server (especially via ngrok) is unreachable or the WebSocket connection failed. Verify NEXT_PUBLIC_POCKETBASE_URL, ngrok tunnel, and PocketBase server status. Also check for browser/network/firewall issues blocking WebSockets.");
+                    console.error("[Real-time Subscription Error] Status 0 indicates the PocketBase server is unreachable or the network request failed. Check your PocketBase server, ngrok tunnel (if used), and ensure NEXT_PUBLIC_POCKETBASE_URL in your .env file is correct and accessible from your browser's network.");
                   }
                   console.error(`[Real-time Subscription Error] PocketBase ClientResponseError URL: ${error.url || 'N/A'}`);
                   console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Response: ${JSON.stringify(error.response)}`);
@@ -154,7 +151,7 @@ export default function SettingsPage() {
                   title: "Real-time Sync Issue",
                   description: "Could not connect for live updates. Please verify NEXT_PUBLIC_POCKETBASE_URL, ngrok tunnel, and PocketBase server status. Also check for browser/network issues blocking WebSockets.",
                   variant: "destructive",
-                  duration: 15000, // Increased duration for this critical message
+                  duration: 15000,
                 });
             }
         }
@@ -172,7 +169,7 @@ export default function SettingsPage() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, toast]); // Added toast to dependency array as it's used in the effect
+  }, [userId, toast]);
 
   const handleSaveChanges = async () => {
     const currentUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
@@ -192,9 +189,9 @@ export default function SettingsPage() {
       toast({ title: "Success", description: result.message || "Profile updated successfully!" });
       if (typeof window !== 'undefined') {
         localStorage.setItem('userClass', result.updatedUser.class || '');
-        setUserClass(result.updatedUser.class || ''); // Update local state
+        setUserClass(result.updatedUser.class || '');
         localStorage.setItem('userTargetYear', result.updatedUser.targetYear?.toString() || '-- Not Set --');
-        setUserTargetYear(result.updatedUser.targetYear?.toString() || '-- Not Set --'); // Update local state
+        setUserTargetYear(result.updatedUser.targetYear?.toString() || '-- Not Set --');
       }
     } else {
       toast({ title: "Update Failed", description: result.error || "Could not update profile.", variant: "destructive" });
@@ -405,4 +402,6 @@ export default function SettingsPage() {
     </div>
   );
 }
+    
+
     
