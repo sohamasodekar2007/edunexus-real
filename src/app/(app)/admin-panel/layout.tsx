@@ -159,7 +159,7 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex-1 p-0 sm:px-0 sm:py-0 overflow-auto bg-muted/30">
+        <main className="flex-1 p-0 sm:px-0 sm:py-0 overflow-auto">
           {children}
         </main>
       </SidebarInset>
