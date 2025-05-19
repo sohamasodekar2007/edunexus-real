@@ -146,7 +146,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             <Zap className="mr-1 sm:mr-2 h-4 w-4" />
             Upgrade
           </Button>
-          {currentUserModel && <Badge variant="secondary" className="hidden sm:inline-flex">Plan: {currentUserModel.replace('_', '-')}</Badge>}
+          {currentUserModel && <Badge variant="secondary" className="hidden sm:inline-flex">Plan: {currentUserModel}</Badge>}
           <Button variant="ghost" size="icon" className="rounded-full">
             <Bell className="h-5 w-5" />
             <span className="sr-only">Notifications</span>
