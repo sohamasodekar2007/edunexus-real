@@ -25,7 +25,8 @@ import type { UserClass, User } from '@/types';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileAction, getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
-import pb, { ClientResponseError } from 'pocketbase';
+import pb from '@/lib/pocketbase'; // Corrected import for pb instance
+import { ClientResponseError } from 'pocketbase'; // Correct import for ClientResponseError type/class
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
 const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"];
@@ -92,6 +93,7 @@ export default function SettingsPage() {
             if (isMounted) setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
           }
         } else {
+           // Initialize with default if nothing in localStorage, to avoid null issues in display
           if (isMounted) setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
         }
         if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
@@ -163,7 +165,7 @@ export default function SettingsPage() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Re-run if userId changes - but userId is set from localUserId, so effectively on mount.
+  }, []); 
 
   const handleSaveChanges = async () => {
     if (!userId) {
@@ -183,6 +185,7 @@ export default function SettingsPage() {
       if (typeof window !== 'undefined') {
         localStorage.setItem('userClass', result.updatedUser.class || '');
         localStorage.setItem('userTargetYear', result.updatedUser.targetYear?.toString() || '-- Not Set --');
+         // No need to update userReferralStats here, real-time subscription handles it
       }
     } else {
       toast({ title: "Update Failed", description: result.error || "Could not update profile.", variant: "destructive" });
@@ -291,7 +294,6 @@ export default function SettingsPage() {
                     setUserClass(value as UserClass);
                   }
                 }}
-                
               >
                 <SelectTrigger id="academicStatus" className="mt-1">
                   <SelectValue placeholder="Select your class" />
@@ -331,7 +333,7 @@ export default function SettingsPage() {
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Referral Program</CardTitle>
-          <CardDescription>Share your code and see who referred you.</CardDescription>
+          <CardDescription>Share your link and see who referred you.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {userReferredByUserName && (
@@ -368,7 +370,6 @@ export default function SettingsPage() {
               </Button>
             </div>
           </div>
-          {/* Removed Referral Statistics Display Block */}
         </CardContent>
       </Card>
 
@@ -395,4 +396,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
