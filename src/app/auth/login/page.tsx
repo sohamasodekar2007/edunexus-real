@@ -41,7 +41,12 @@ export default function LoginPage() {
           title: 'Login Successful',
           description: `Welcome back, ${result.userName || 'User'}!`,
         });
-        // In a real app, session would be managed. Here, we just redirect.
+        // Store user info for header and dashboard display
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('userName', result.userName || 'User');
+          localStorage.setItem('userModel', result.userModel || 'Free'); // Default to Free if not present
+          localStorage.setItem('userAvatarFallback', (result.userName || 'U').charAt(0).toUpperCase());
+        }
         router.push('/dashboard'); 
       } else {
         toast({
@@ -50,10 +55,10 @@ export default function LoginPage() {
           variant: 'destructive',
         });
       }
-    } catch (error) {
+    } catch (error) { // Added missing opening brace
       toast({
         title: 'Error',
-        description: error.message || 'An unexpected error occurred.',
+        description: (error as Error).message || 'An unexpected error occurred.',
         variant: 'destructive',
       });
     } finally {

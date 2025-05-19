@@ -3,7 +3,7 @@
 import { LoginSchema, SignupSchema, type SignupFormData } from '@/lib/validationSchemas';
 import { hashPassword, verifyPassword, generateReferralCode } from '@/lib/authUtils';
 import { findUserByEmail, saveUser } from '@/lib/userDataService';
-import type { User } from '@/types';
+import type { User, UserModel } from '@/types';
 import { randomUUID } from 'crypto'; // Node.js built-in for UUID
 
 export async function signupUserAction(data: SignupFormData): Promise<{ success: boolean; message: string; error?: string; userId?: string }> {
@@ -61,7 +61,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
   }
 }
 
-export async function loginUserAction(data: { email: string, password_login: string }): Promise<{ success: boolean; message: string; error?: string; userId?: string, userName?: string }> {
+export async function loginUserAction(data: { email: string, password_login: string }): Promise<{ success: boolean; message: string; error?: string; userId?: string, userName?: string, userModel?: UserModel }> {
   const validation = LoginSchema.safeParse({email: data.email, password: data.password_login}); // map password_login to password for validation
   if (!validation.success) {
      const errorMessages = validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
@@ -83,7 +83,7 @@ export async function loginUserAction(data: { email: string, password_login: str
 
     // IMPORTANT: In a real app, you would set up a session here (e.g., using cookies, JWT)
     // For this prototype, we just return success.
-    return { success: true, message: 'Login successful!', userId: user.id, userName: user.name };
+    return { success: true, message: 'Login successful!', userId: user.id, userName: user.name, userModel: user.model };
 
   } catch (error) {
     console.error('Login Action Error:', error);

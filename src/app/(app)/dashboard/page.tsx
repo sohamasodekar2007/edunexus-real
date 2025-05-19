@@ -7,7 +7,7 @@ import {
   ArrowRight, 
   ListChecks, 
   ClipboardList, 
-  Bookmark as BookmarkIcon, // Renamed to avoid conflict with component
+  Bookmark as BookmarkIcon, 
   Trophy, 
   TrendingUp,
   Percent,
@@ -18,26 +18,37 @@ import {
   Wand2,
   LineChart,
   History,
-  Settings2, // For the gear icon in stats cards
-  User, // Placeholder for leaderboard
+  Settings2, 
+  User, 
   ChevronRight,
   BarChartHorizontalBig
 } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
-// Placeholder data for Leaderboard Snapshot
 const leaderboardSnapshotData = [
   { id: 'user1', name: 'Soham Asodariya', rank: 1, score: '15 pts', avatarFallback: 'SA' },
   { id: 'user2', name: 'Anonymous', rank: 2, score: '2 pts', avatarFallback: 'A' },
 ];
 
 export default function DashboardPage() {
+  const [userName, setUserName] = useState<string>('User'); // Default to 'User'
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedName = localStorage.getItem('userName');
+      if (storedName) {
+        setUserName(storedName);
+      }
+    }
+  }, []);
+
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 space-y-6">
       {/* Greeting Section */}
       <section className="mb-8">
         <h1 className="text-3xl font-bold flex items-center">
-          Hello, Soham! 
+          Hello, {userName}! 
           <span role="img" aria-label="waving hand" className="ml-2 text-2xl">👋</span>
         </h1>
         <p className="text-muted-foreground">Let's conquer those exams!</p>
@@ -105,7 +116,7 @@ export default function DashboardPage() {
               </Link>
             </Button>
             <Button variant="outline" size="lg" className="w-full justify-start text-left py-6" asChild>
-              <Link href="/my-progress"> {/* Assuming /my-progress route */}
+              <Link href="/my-progress"> 
                 <TrendingUp className="mr-3 h-5 w-5" /> My Progress
               </Link>
             </Button>
@@ -125,7 +136,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <Button variant="outline" className="w-full justify-start text-left py-6" asChild>
-              <Link href="/ai-doubt-solving"> {/* Assuming /ai-doubt-solving route */}
+              <Link href="/ai-doubt-solving"> 
                 <NotebookText className="mr-3 h-5 w-5" /> Ask EduNexus AI
               </Link>
             </Button>
@@ -145,7 +156,6 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="h-48 flex items-center justify-center">
             <p className="text-muted-foreground">No test data yet to show trend.</p>
-            {/* Placeholder for chart */}
           </CardContent>
         </Card>
         <Card className="shadow-md">
@@ -194,12 +204,9 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="h-32 flex items-center justify-center">
             <p className="text-muted-foreground">No recent test activity to show.</p>
-            {/* Placeholder for activity list */}
           </CardContent>
         </Card>
       </section>
     </div>
   );
 }
-
-    

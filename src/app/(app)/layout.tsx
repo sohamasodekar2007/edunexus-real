@@ -4,23 +4,11 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  // Sidebar, // Replaced by SideBase
-  // SidebarContent, // Used within SideBase
-  // SidebarHeader, // Used within SideBase
-  // SidebarMenu, // Used within SideBase
-  // SidebarMenuItem, // Used within SideBase
-  // SidebarMenuButton, // Used within SideBase
   SidebarTrigger,
   SidebarInset,
   useSidebar,
-  // SidebarFooter, // Used within SideBase
-  // SidebarGroup, // Used within SideBase
-  // SidebarGroupLabel, // Used within SideBase
-  // SidebarSeparator, // Used within SideBase
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-// import { ScrollArea } from '@/components/ui/scroll-area'; // Used within SideBase
-// import { Logo } from '@/components/icons'; // Used within SideBase
 import {
   LayoutDashboard,
   ListChecks,
@@ -42,11 +30,13 @@ import {
   GitCompareArrows,
   MessageSquareQuote,
   ShieldCheck,
-  // MoreHorizontal, // Used within SideBase
+  Bell,
+  Zap,
 } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { initializeLocalStorageData } from '@/lib/mock-data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,9 +45,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SideBase, type NavItemGroup as SideBaseNavItemGroup, type NavItem as SideBaseNavItem } from '@/components/sidebase'; // Import the new component and types
+import { SideBase, type NavItemGroup as SideBaseNavItemGroup, type NavItem as SideBaseNavItem } from '@/components/sidebase';
 
-// Ensure NavItem and NavItemGroup types used here are compatible with SideBase's props
 interface NavItem extends SideBaseNavItem {}
 interface NavItemGroup extends SideBaseNavItemGroup {}
 
@@ -101,12 +90,29 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { isMobile } = useSidebar(); 
+  const [currentUserModel, setCurrentUserModel] = useState<string | null>(null);
+  const [currentUserAvatarFallback, setCurrentUserAvatarFallback] = useState<string>('S'); // Default
 
   useEffect(() => {
     initializeLocalStorageData();
+    if (typeof window !== 'undefined') {
+      const model = localStorage.getItem('userModel');
+      const fallback = localStorage.getItem('userAvatarFallback');
+      if (model) {
+        setCurrentUserModel(model);
+      }
+      if (fallback) {
+        setCurrentUserAvatarFallback(fallback);
+      }
+    }
   }, []);
 
   const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userModel');
+      localStorage.removeItem('userAvatarFallback');
+    }
     router.push('/landing');
   };
   
@@ -121,26 +127,38 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     return 'EduNexus'; 
   };
 
-  // Ensure the navStructure passed to SideBase matches its expected prop type
   const appSideBaseNavStructure: SideBaseNavItemGroup[] = navStructure;
 
   return (
     <div className="flex min-h-screen w-full">
       <SideBase navStructure={appSideBaseNavStructure} pathname={pathname} />
       <SidebarInset className="flex-1 flex flex-col">
-        <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 py-4">
+        <header className="sticky top-0 z-10 flex h-14 items-center gap-2 sm:gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 py-4">
           {isMobile && <SidebarTrigger asChild><Button variant="outline" size="icon"><Menu /></Button></SidebarTrigger>}
           <div className="flex-1">
             <h1 className="text-xl font-semibold">
               {getActiveLabel()}
             </h1>
           </div>
+
+          {/* Upgrade Button, Plan Badge, Notification Bell */}
+          <Button variant="outline" size="sm" className="hidden sm:inline-flex items-center">
+            <Zap className="mr-1 sm:mr-2 h-4 w-4" />
+            Upgrade
+          </Button>
+          {currentUserModel && <Badge variant="secondary" className="hidden sm:inline-flex">Plan: {currentUserModel.replace('_', '-')}</Badge>}
+          <Button variant="ghost" size="icon" className="rounded-full">
+            <Bell className="h-5 w-5" />
+            <span className="sr-only">Notifications</span>
+          </Button>
+
+          {/* User Avatar and Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" className="rounded-full">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="https://placehold.co/40x40.png" alt="User Avatar" data-ai-hint="user avatar"/>
-                  <AvatarFallback>S</AvatarFallback>
+                  <AvatarFallback>{currentUserAvatarFallback}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
