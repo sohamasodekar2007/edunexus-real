@@ -1,3 +1,4 @@
+
 export interface Question {
   id: string;
   text: string;
@@ -39,42 +40,37 @@ export type UserRole = "User" | "Admin" | "Teacher";
 
 // User type aligned with PocketBase fields and app needs
 export interface User {
-  id: string; // PocketBase record ID
+  id: string; 
   email: string;
-  // Password is not directly stored or retrieved by the app client-side after PocketBase handles it
-  name: string; // Combined from signup: name + surname
-  // surname is not a direct field in PocketBase, combined into 'name'
+  name: string; 
   phone?: string | null;
   class?: UserClass | null;
   model?: UserModel | null;
   role?: UserRole | null;
-  expiry_date?: string | null; // ISO date string
-  created?: string; // PocketBase field
-  updated?: string; // PocketBase field
-  avatarUrl?: string | null;
+  expiry_date?: string | null; 
+  created?: string; 
+  updated?: string; 
+  avatar?: string | File | null; // Can be filename (string from PB), File (for upload), or null
+  avatarUrl?: string | null; // Derived URL for display
   totalPoints?: number | null;
   targetYear?: number | null;
-  // telegramId and telegramUsername are not in the provided PocketBase schema, can be added if needed
-  // telegramId?: string | null;
-  // telegramUsername?: string | null;
-  referralCode?: string | null; // The referral code generated for this user
-  referredByCode?: string | null; // The referral code this user used during signup
+  referralCode?: string | null; 
+  referredByCode?: string | null; 
   referralStats?: {
     referred_free: number;
     referred_chapterwise: number;
     referred_full_length: number;
     referred_combo: number;
   } | null;
-  // PocketBase specific fields you might need from the record
   collectionId?: string;
   collectionName?: string;
-  username?: string; // PocketBase has a username field, often same as email or generated
+  username?: string; 
   verified?: boolean;
 }
 
 
 export interface UserScore {
-  id: string; // Could be user ID
+  id: string; 
   name: string;
   score: number;
   avatarUrl?: string;
