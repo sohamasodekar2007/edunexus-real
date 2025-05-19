@@ -4,7 +4,7 @@ import { Users } from "lucide-react";
 
 export default function UserManagementPage() {
   return (
-    <div className="container mx-auto py-8 px-4 md:px-6">
+    <div className="p-6">
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center text-2xl">
