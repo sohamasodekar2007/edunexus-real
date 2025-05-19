@@ -50,6 +50,8 @@ export default function LoginPage() {
           localStorage.setItem('userClass', result.userClass || 'N/A');
           localStorage.setItem('userEmail', result.userEmail || 'user@example.com');
           localStorage.setItem('userAvatarFallback', (result.userFullName || 'U').charAt(0).toUpperCase());
+          localStorage.setItem('userPhone', result.userPhone || 'N/A');
+          localStorage.setItem('userTargetYear', result.userTargetYear?.toString() || 'N/A');
         }
         router.push('/dashboard'); 
       } else {
@@ -136,3 +138,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

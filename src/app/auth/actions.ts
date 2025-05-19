@@ -48,7 +48,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
         referred_combo: 0,
       },
       // Optional fields can be null or undefined
-      targetYear: null,
+      targetYear: null, // Default to null
       telegramId: null,
       telegramUsername: null,
     };
@@ -62,7 +62,19 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
   }
 }
 
-export async function loginUserAction(data: { email: string, password_login: string }): Promise<{ success: boolean; message: string; error?: string; userId?: string, userFullName?: string, userModel?: UserModel, userRole?: UserRole, userClass?: UserClass, userEmail?: string }> {
+export async function loginUserAction(data: { email: string, password_login: string }): Promise<{ 
+  success: boolean; 
+  message: string; 
+  error?: string; 
+  userId?: string, 
+  userFullName?: string, 
+  userModel?: UserModel, 
+  userRole?: UserRole, 
+  userClass?: UserClass, 
+  userEmail?: string,
+  userPhone?: string,
+  userTargetYear?: number | null 
+}> {
   const validation = LoginSchema.safeParse({email: data.email, password: data.password_login}); // map password_login to password for validation
   if (!validation.success) {
      const errorMessages = validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
@@ -92,7 +104,9 @@ export async function loginUserAction(data: { email: string, password_login: str
       userModel: user.model,
       userRole: user.role,
       userClass: user.class,
-      userEmail: user.email
+      userEmail: user.email,
+      userPhone: user.phone,
+      userTargetYear: user.targetYear
     };
 
   } catch (error) {
@@ -100,3 +114,4 @@ export async function loginUserAction(data: { email: string, password_login: str
     return { success: false, message: (error as Error).message || 'An unexpected error occurred during login.', error: (error as Error).message };
   }
 }
+

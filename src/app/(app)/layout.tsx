@@ -24,13 +24,13 @@ import {
   TrendingUp,
   Swords,
   Mail,
-  Search, 
+  Search,
   UserCheck,
   Users,
   GitCompareArrows,
   ShieldCheck,
   Bell,
-  Sparkles,
+  Sparkles, // Changed from Zap to Sparkles
   HelpCircle, 
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -46,6 +46,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SideBase, type NavItemGroup as SideBaseNavItemGroup, type NavItem as SideBaseNavItem } from '@/components/sidebase';
+
 
 interface NavItem extends SideBaseNavItem {}
 interface NavItemGroup extends SideBaseNavItemGroup {}
@@ -78,6 +79,7 @@ const administrationItems: NavItem[] = [
 const navStructure: NavItemGroup[] = [
   { label: 'Main Navigation', items: mainNavigationItems },
   { label: 'Connect & Compete', items: connectAndCompeteItems },
+  // { label: 'AI Tools', items: aiToolsItems }, // AI Tools section removed
   { label: 'Administration', items: administrationItems },
 ];
 
@@ -89,6 +91,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const [currentUserModel, setCurrentUserModel] = useState<string | null>(null);
   const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
   const [currentUserAvatarFallback, setCurrentUserAvatarFallback] = useState<string>('U');
+  const [currentUserClass, setCurrentUserClass] = useState<string | null>(null); // Load userClass
+  const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null); // Load userEmail
+
 
   useEffect(() => {
     initializeLocalStorageData();
@@ -97,14 +102,18 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       const model = localStorage.getItem('userModel');
       const role = localStorage.getItem('userRole');
       const fallback = localStorage.getItem('userAvatarFallback');
-      const userClass = localStorage.getItem('userClass'); // Load userClass
-      const userEmail = localStorage.getItem('userEmail'); // Load userEmail
+      const userClass = localStorage.getItem('userClass'); 
+      const userEmail = localStorage.getItem('userEmail'); 
+      const userPhone = localStorage.getItem('userPhone');
+      const userTargetYear = localStorage.getItem('userTargetYear');
       
       if (fullName) setCurrentUserFullName(fullName);
       if (model) setCurrentUserModel(model);
       if (role) setCurrentUserRole(role);
       if (fallback) setCurrentUserAvatarFallback(fallback);
-      // You might want to store userClass and userEmail in state if needed elsewhere in this layout
+      if (userClass) setCurrentUserClass(userClass);
+      if (userEmail) setCurrentUserEmail(userEmail);
+      // userPhone and userTargetYear are loaded but not directly used in this layout's state
     }
   }, []);
 
@@ -116,6 +125,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       localStorage.removeItem('userAvatarFallback');
       localStorage.removeItem('userClass');
       localStorage.removeItem('userEmail');
+      localStorage.removeItem('userPhone');
+      localStorage.removeItem('userTargetYear');
     }
     router.push('/landing');
   };
@@ -224,3 +235,4 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
