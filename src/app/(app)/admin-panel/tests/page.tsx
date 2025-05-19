@@ -4,7 +4,7 @@ import { ListChecks } from "lucide-react";
 
 export default function TestManagementPage() {
   return (
-    <div>
+    <div className="container mx-auto py-6 px-4 md:px-6">
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center text-2xl">

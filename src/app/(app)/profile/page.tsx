@@ -46,7 +46,7 @@ export default function ProfilePage() {
   const [userAvatarFallback, setUserAvatarFallback] = useState<string>('SA');
   const [userClass, setUserClass] = useState<string | null>('12th Class');
   const [userModel, setUserModel] = useState<string | null>('Full_length');
-  const [userTargetYear, setUserTargetYear] = useState<string | null>(null); // Changed to string | null
+  const [userTargetYear, setUserTargetYear] = useState<string | null>(null); 
   const [totalPoints, setTotalPoints] = useState<number>(15); 
 
   useEffect(() => {
@@ -69,8 +69,8 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <div className="container mx-auto py-6 px-4 md:px-6 space-y-6 bg-muted/30 min-h-screen">
-      <header className="flex items-center justify-between mb-6 sticky top-0 bg-muted/30 py-4 z-10 -mx-4 md:-mx-6 px-4 md:px-6 border-b">
+    <div className="container mx-auto py-6 px-4 md:px-6 space-y-6">
+      <header className="flex items-center justify-between mb-6 sticky top-0 bg-background/80 backdrop-blur-sm py-4 z-10 -mx-4 md:-mx-6 px-4 md:px-6 border-b">
         <Button variant="ghost" size="icon" onClick={() => router.back()}>
           <ArrowLeft className="h-5 w-5" />
         </Button>

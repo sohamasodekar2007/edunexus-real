@@ -68,7 +68,7 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
       if (fallback) setCurrentUserAvatarFallback(fallback);
 
       if (role !== 'Admin') {
-        router.replace('/dashboard'); // Redirect non-admins
+        router.replace('/dashboard'); 
       } else {
         setIsLoading(false);
       }
@@ -78,7 +78,6 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
       pb.authStore.clear();
-      // Clear all relevant localStorage items
       ['userId', 'userFullName', 'userName', 'userModel', 'userRole', 'userAvatarFallback', 'userClass', 'userEmail', 'userPhone', 'userTargetYear', 'userReferralCode', 'userReferredByCode', 'userReferralStats', 'userExpiryDate', 'userAvatarUrl'].forEach(key => localStorage.removeItem(key));
     }
     router.push('/landing');
@@ -92,7 +91,6 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
         }
       }
     }
-    // Fallback if no specific section matches (e.g., for the root /admin-panel)
     if (pathname === '/admin-panel') return 'Dashboard';
     return 'Admin Panel';
   };
@@ -159,7 +157,7 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex-1 px-6 py-4 overflow-auto">
+        <main className="flex-1 overflow-auto">
           {children}
         </main>
       </SidebarInset>

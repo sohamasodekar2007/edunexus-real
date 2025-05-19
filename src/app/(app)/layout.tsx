@@ -123,7 +123,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       if (role) setCurrentUserRole(role);
       if (fallback) setCurrentUserAvatarFallback(fallback);
       if (avatarUrl && avatarUrl !== 'null' && avatarUrl !== 'undefined') setCurrentUserAvatarUrl(avatarUrl);
-      else setCurrentUserAvatarUrl(null); // Ensure it's null if no valid URL
+      else setCurrentUserAvatarUrl(null); 
 
       if (userClass) setCurrentUserClass(userClass);
       if (userEmail) setCurrentUserEmail(userEmail);
@@ -277,7 +277,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </DropdownMenu>
           </header>
         )}
-        <main className="flex-1 p-0 sm:px-0 sm:py-0 overflow-auto bg-muted/30">
+        <main className="flex-1 overflow-auto bg-muted/30">
           {children}
         </main>
       </SidebarInset>

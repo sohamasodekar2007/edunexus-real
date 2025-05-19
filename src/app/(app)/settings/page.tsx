@@ -99,9 +99,11 @@ export default function SettingsPage() {
         if (storedModel) setUserModel(storedModel);
         if (storedReferralCode) setUserReferralCode(storedReferralCode);
         if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
+        
+        const userReferredByCodeExists = storedUserReferredByCode && storedUserReferredByCode.trim() !== '';
+        setHasUserReferredByCodeInStorage(userReferredByCodeExists);
 
-        if (storedUserReferredByCode && storedUserReferredByCode.trim() !== '') {
-          setHasUserReferredByCodeInStorage(true);
+        if (userReferredByCodeExists) {
           if (isMounted) setIsLoadingReferrerName(true);
           getReferrerInfoForCurrentUserAction()
             .then(result => {
@@ -112,28 +114,27 @@ export default function SettingsPage() {
             })
             .catch(err => console.error("Error calling getReferrerInfoForCurrentUserAction:", err))
             .finally(() => { if (isMounted) setIsLoadingReferrerName(false); });
-        } else {
-          setHasUserReferredByCodeInStorage(false);
         }
 
         if (pb.authStore.isValid && currentUserId && isMounted) {
+            const localUserId = currentUserId;
             console.log(`[Real-time Subscription] PocketBase client baseUrl: ${pb.baseUrl}`);
             const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
-            console.log(`[Real-time Subscription] Attempting to connect to WebSocket: ${realtimeUrl} for user ID: ${currentUserId}`);
+            console.log(`[Real-time Subscription] Attempting to connect to WebSocket: ${realtimeUrl} for user ID: ${localUserId}`);
             try {
-              unsubscribe = await pb.collection('users').subscribe(currentUserId, (e) => {
+              unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
                 if (e.action === 'update' && e.record && isMounted) {
                   console.log('[Real-time] User record updated:', e.record);
                   if (e.record.model && typeof window !== 'undefined' && e.record.model !== localStorage.getItem('userModel')) {
                      localStorage.setItem('userModel', e.record.model as string);
                      setUserModel(e.record.model as string);
                   }
-                   // Update avatar if changed by another session
+                   
                   if (typeof window !== 'undefined') {
                     const newAvatarFilename = e.record.avatar as string | undefined;
                     const newAvatarUrlFromEvent = newAvatarFilename ? pb.getFileUrl(e.record, newAvatarFilename) : null;
                     
-                    if (newAvatarUrlFromEvent !== userAvatarUrl) { // Compare with current state
+                    if (newAvatarUrlFromEvent !== userAvatarUrl) { 
                         localStorage.setItem('userAvatarUrl', newAvatarUrlFromEvent || '');
                         setUserAvatarUrl(newAvatarUrlFromEvent);
                         setAvatarPreview(newAvatarUrlFromEvent || `https://placehold.co/96x96.png?text=${localStorage.getItem('userAvatarFallback') || 'U'}`);
@@ -141,9 +142,9 @@ export default function SettingsPage() {
                   }
                 }
               });
-              console.log(`[Real-time Subscription] Successfully subscribed to updates for user ID: ${currentUserId}`);
+              console.log(`[Real-time Subscription] Successfully subscribed to updates for user ID: ${localUserId}`);
             } catch (error) {
-                console.error(`[Real-time Subscription Error] Failed to subscribe to user updates for user ID: ${currentUserId}. This often indicates a network issue or problem with the PocketBase server's real-time connection.`, error);
+                console.error(`[Real-time Subscription Error] Failed to subscribe to user updates for user ID: ${localUserId}. This often indicates a network issue or problem with the PocketBase server's real-time connection.`, error);
                 console.error(`[Real-time Subscription Error] pb.baseUrl at time of error: ${pb?.baseUrl}`);
                 if (error instanceof ClientResponseError) {
                   console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Status: ${error.status}`);
@@ -185,14 +186,11 @@ export default function SettingsPage() {
         unsubscribe();
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toast]); // Removed userId from deps to avoid re-subscribing on minor state changes if userId itself is stable
+  }, [toast, userAvatarUrl]); 
 
   const handleSaveChanges = async () => {
     const currentAuthUserId = pb.authStore.model?.id;
-    console.log("[Settings Save] User ID from pb.authStore.model.id:", currentAuthUserId);
-
-    if (!pb.authStore.isValid || !currentAuthUserId) {
+    if (!currentAuthUserId) {
       toast({ title: "Authentication Error", description: "Your session seems invalid. Please log in again.", variant: "destructive" });
       setIsSaving(false);
       return;
@@ -229,7 +227,7 @@ export default function SettingsPage() {
 
   const handleProfilePictureChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const currentAuthUserId = pb.authStore.model?.id;
-    if (!pb.authStore.isValid || !currentAuthUserId) {
+    if (!currentAuthUserId) {
       toast({ title: "Authentication Error", description: "Cannot change picture. Please log in again.", variant: "destructive" });
       return;
     }
@@ -268,7 +266,7 @@ export default function SettingsPage() {
 
   const handleRemoveProfilePicture = async () => {
     const currentAuthUserId = pb.authStore.model?.id;
-    if (!pb.authStore.isValid || !currentAuthUserId) {
+    if (!currentAuthUserId) {
       toast({ title: "Authentication Error", description: "Cannot remove picture. Please log in again.", variant: "destructive" });
       return;
     }
@@ -301,8 +299,8 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="container mx-auto py-6 px-4 md:px-6 space-y-8 bg-muted/30 min-h-screen">
-      <header className="flex items-center justify-between mb-2 sticky top-0 bg-muted/30 py-4 z-10 -mx-4 md:-mx-6 px-4 md:px-6 border-b">
+    <div className="container mx-auto py-6 px-4 md:px-6 space-y-8">
+      <header className="flex items-center justify-between mb-2 sticky top-0 bg-background/80 backdrop-blur-sm py-4 z-10 -mx-4 md:-mx-6 px-4 md:px-6 border-b">
         <Button variant="ghost" size="icon" onClick={() => router.back()}>
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -323,7 +321,7 @@ export default function SettingsPage() {
                 <AvatarImage src={avatarPreview || `https://placehold.co/96x96.png`} alt={userFullName} data-ai-hint="user avatar settings"/>
                 <AvatarFallback>{userAvatarFallback}</AvatarFallback>
               </Avatar>
-              {/* Change and Remove buttons are removed as per user request */}
+              
             </div>
             <p className="mt-2 text-xs text-muted-foreground">Max 2MB. JPG, PNG, WEBP.</p>
           </div>
