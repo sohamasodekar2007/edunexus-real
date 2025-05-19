@@ -135,10 +135,11 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       }
       if (expiryDate) setCurrentUserExpiryDate(expiryDate);
 
+      // If the user is not authenticated, redirect them to the landing page
+      // This layout (AppLayout) is only for authenticated routes like /dashboard, /profile etc.
+      // So, if pb.authStore is not valid here, it means they tried to access an authenticated route without logging in.
       if (!pb.authStore.isValid) {
-        if (pathname !== '/auth/login' && pathname !== '/auth/signup' && pathname !== '/landing') {
-          // router.push('/auth/login'); // Re-enable if strict auth checks are needed on every layout load
-        }
+        router.push('/landing');
       }
     }
   }, [pathname, router]);
@@ -212,7 +213,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" className="rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="https://placehold.co/40x40.png" alt={currentUserFullName} data-ai-hint="user avatar"/>
+                  <AvatarImage src={`https://placehold.co/40x40.png?text=${currentUserAvatarFallback}`} alt={currentUserFullName} data-ai-hint="user avatar"/>
                   <AvatarFallback>{currentUserAvatarFallback}</AvatarFallback>
                 </Avatar>
               </Button>
