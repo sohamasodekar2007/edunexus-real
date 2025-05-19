@@ -25,8 +25,8 @@ import type { UserClass, User } from '@/types';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileAction, getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
-import pb from '@/lib/pocketbase';
-import { ClientResponseError } from 'pocketbase';
+import pb from '@/lib/pocketbase'; // Correct: import your initialized instance
+import { ClientResponseError } from 'pocketbase'; // Correct: import type from package
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
 const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"];
@@ -50,7 +50,7 @@ export default function SettingsPage() {
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
   const [userModel, setUserModel] = useState<string>('N/A');
   const [isSaving, setIsSaving] = useState(false);
-  // Referral stats display was removed, but state can remain if other logic depends on it or for future use
+  // Referral stats display was removed, local state can be removed if not used by real-time.
   // const [userReferralStats, setUserReferralStats] = useState<User['referralStats'] | null>(null);
 
 
@@ -71,7 +71,6 @@ export default function SettingsPage() {
         const storedModel = localStorage.getItem('userModel');
         const storedReferralCode = localStorage.getItem('userReferralCode');
         const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
-        // const storedReferralStats = localStorage.getItem('userReferralStats');
         const storedExpiryDate = localStorage.getItem('userExpiryDate');
 
         if (storedFullName) setUserFullName(storedFullName);
@@ -86,17 +85,6 @@ export default function SettingsPage() {
 
         if (storedModel) setUserModel(storedModel);
         if (storedReferralCode) setUserReferralCode(storedReferralCode);
-        
-        /* if (storedReferralStats) {
-          try {
-            // setUserReferralStats(JSON.parse(storedReferralStats)); // If stats display is re-added
-          } catch (e) {
-            console.error("Error parsing referral stats from localStorage", e);
-            // setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
-          }
-        } else {
-           // setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
-        } */
         
         if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
 
@@ -124,25 +112,29 @@ export default function SettingsPage() {
               unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
                 if (e.action === 'update' && e.record && isMounted) {
                   console.log('[Real-time] User record updated:', e.record);
-                  if (e.record.model && typeof window !== 'undefined') {
-                    localStorage.setItem('userModel', e.record.model as string);
-                    setUserModel(e.record.model as string);
+                  // Only update model from real-time if it was the source of the change (or other specific fields you want to sync)
+                  if (e.record.model && typeof window !== 'undefined' && e.record.model !== localStorage.getItem('userModel')) {
+                     localStorage.setItem('userModel', e.record.model as string);
+                     setUserModel(e.record.model as string);
                   }
-                  // The userReferralStats display was removed, but the logic to update localStorage
-                  // can remain if other parts of the app might use it or if it's reinstated later.
-                  /* if (e.record.referralStats && typeof window !== 'undefined') {
-                     localStorage.setItem('userReferralStats', JSON.stringify(e.record.referralStats));
-                     // setUserReferralStats(e.record.referralStats as User['referralStats']); // If stats display is re-added
-                  } */
+                  // The userReferralStats display was removed, but if you re-add it or need it for something else, this would be where to update it.
+                  // For example, if you want to show a toast when referralStats change:
+                  // const updatedStats = e.record.referralStats as User['referralStats'];
+                  // if (updatedStats && JSON.stringify(updatedStats) !== localStorage.getItem('userReferralStats')) {
+                  //   localStorage.setItem('userReferralStats', JSON.stringify(updatedStats));
+                  //   // setUserReferralStats(updatedStats); // If local state for display is re-added
+                  //   toast({ title: "Referral Stats Updated!", description: "Your referral count has changed." });
+                  // }
                 }
               });
               console.log(`[Real-time Subscription] Successfully subscribed to updates for user ID: ${localUserId}`);
             } catch (error) {
                 console.error(`[Real-time Subscription Error] Failed to subscribe to user updates for user ID: ${localUserId}. This often indicates a network issue or problem with the PocketBase server's real-time connection.`, error);
+                console.error(`[Real-time Subscription Error] pb.baseUrl at time of error: ${pb?.baseUrl}`);
                 if (error instanceof ClientResponseError) {
                   console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Status: ${error.status}`);
                   if (error.status === 0) {
-                    console.error("[Real-time Subscription Error] Status 0 indicates the PocketBase server is unreachable or the network request failed. Check your PocketBase server, ngrok tunnel (if used), and ensure NEXT_PUBLIC_POCKETBASE_URL in your .env file is correct and accessible from your browser's network.");
+                    console.error("[Real-time Subscription Error] Status 0 indicates the PocketBase server (especially via ngrok) is unreachable or the WebSocket connection failed. Verify NEXT_PUBLIC_POCKETBASE_URL, ngrok tunnel, and PocketBase server status. Also check for browser/network/firewall issues blocking WebSockets.");
                   }
                   console.error(`[Real-time Subscription Error] PocketBase ClientResponseError URL: ${error.url || 'N/A'}`);
                   console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Response: ${JSON.stringify(error.response)}`);
@@ -160,9 +152,9 @@ export default function SettingsPage() {
                 }
                 toast({
                   title: "Real-time Sync Issue",
-                  description: "Could not connect for live updates. Please check your internet connection and ensure the PocketBase server is reachable.",
+                  description: "Could not connect for live updates. Please verify NEXT_PUBLIC_POCKETBASE_URL, ngrok tunnel, and PocketBase server status. Also check for browser/network issues blocking WebSockets.",
                   variant: "destructive",
-                  duration: 10000,
+                  duration: 15000, // Increased duration for this critical message
                 });
             }
         }
@@ -180,7 +172,7 @@ export default function SettingsPage() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+  }, [userId, toast]); // Added toast to dependency array as it's used in the effect
 
   const handleSaveChanges = async () => {
     const currentUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
@@ -200,9 +192,9 @@ export default function SettingsPage() {
       toast({ title: "Success", description: result.message || "Profile updated successfully!" });
       if (typeof window !== 'undefined') {
         localStorage.setItem('userClass', result.updatedUser.class || '');
-        setUserClass(result.updatedUser.class || '');
+        setUserClass(result.updatedUser.class || ''); // Update local state
         localStorage.setItem('userTargetYear', result.updatedUser.targetYear?.toString() || '-- Not Set --');
-        setUserTargetYear(result.updatedUser.targetYear?.toString() || '-- Not Set --');
+        setUserTargetYear(result.updatedUser.targetYear?.toString() || '-- Not Set --'); // Update local state
       }
     } else {
       toast({ title: "Update Failed", description: result.error || "Could not update profile.", variant: "destructive" });
@@ -387,7 +379,6 @@ export default function SettingsPage() {
               </Button>
             </div>
           </div>
-          {/* Referral statistics display was removed in a previous step. */}
         </CardContent>
       </Card>
 
@@ -414,4 +405,4 @@ export default function SettingsPage() {
     </div>
   );
 }
-
+    
