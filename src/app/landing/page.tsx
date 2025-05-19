@@ -1,21 +1,32 @@
+'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import pb from '@/lib/pocketbase';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Logo } from '@/components/icons';
 import { ArrowRight, Rocket, Target, Wand2, BarChartBig } from 'lucide-react';
-import { use } from 'react';
 
-export default function LandingPage({
-  params,
-  searchParams
-}: {
-  params: { [key: string]: string | string[] | undefined };
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  // Ensure params and searchParams are unwrapped before any potential enumeration
-  use(params);
-  use(searchParams);
+export default function LandingPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (pb.authStore.isValid) {
+      router.replace('/dashboard');
+    }
+  }, [router]);
+
+  if (typeof window !== 'undefined' && pb.authStore.isValid) {
+    // Prevent flash of landing page content if user is logged in and redirecting
+    return (
+       <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+        <Logo className="h-16 w-16 animate-spin text-primary" />
+        <p className="mt-4 text-muted-foreground">Redirecting to dashboard...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
