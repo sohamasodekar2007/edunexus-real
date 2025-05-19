@@ -58,6 +58,7 @@ export default function SettingsPage() {
   useEffect(() => {
     let isMounted = true;
     let unsubscribe: (() => void) | null = null;
+    const currentUserId = pb.authStore.model?.id;
     
     async function initializeDataAndSubscribe() {
       if (typeof window !== 'undefined' && isMounted) {
@@ -77,11 +78,15 @@ export default function SettingsPage() {
         if (storedEmail) setUserEmail(storedEmail);
         if (storedPhone) setUserPhone(storedPhone);
         if (storedAvatarFallback) setUserAvatarFallback(storedAvatarFallback);
-        if (storedAvatarUrl && storedAvatarUrl !== 'null' && storedAvatarUrl !== 'undefined') {
-          setUserAvatarUrl(storedAvatarUrl);
-          setAvatarPreview(storedAvatarUrl);
+        
+        const currentPbAvatarUrl = pb.authStore.model?.avatar ? pb.getFileUrl(pb.authStore.model, pb.authStore.model.avatar as string) : null;
+        const effectiveAvatarUrl = currentPbAvatarUrl || (storedAvatarUrl && storedAvatarUrl !== 'null' && storedAvatarUrl !== 'undefined' ? storedAvatarUrl : null);
+
+        if (effectiveAvatarUrl) {
+            setUserAvatarUrl(effectiveAvatarUrl);
+            setAvatarPreview(effectiveAvatarUrl);
         } else {
-          setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
+            setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
         }
         
         if (storedClass && USER_CLASSES_OPTIONS.includes(storedClass)) setUserClass(storedClass);
@@ -107,7 +112,6 @@ export default function SettingsPage() {
             .finally(() => { if (isMounted) setIsLoadingReferrerName(false); });
         }
 
-        const currentUserId = pb.authStore.model?.id;
         if (pb.authStore.isValid && currentUserId && isMounted) {
             console.log(`[Real-time Subscription] PocketBase client baseUrl: ${pb.baseUrl}`);
             const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
@@ -120,18 +124,16 @@ export default function SettingsPage() {
                      localStorage.setItem('userModel', e.record.model as string);
                      setUserModel(e.record.model as string);
                   }
-                  // Update avatar if changed by another session
-                  if (e.record.avatar && typeof window !== 'undefined') {
-                    const newAvatarUrl = pb.getFileUrl(e.record, e.record.avatar as string);
-                    if (newAvatarUrl !== localStorage.getItem('userAvatarUrl')) {
-                        localStorage.setItem('userAvatarUrl', newAvatarUrl);
-                        setUserAvatarUrl(newAvatarUrl);
-                        setAvatarPreview(newAvatarUrl);
+                   // Update avatar if changed by another session
+                  if (typeof window !== 'undefined') {
+                    const newAvatarFilename = e.record.avatar as string | undefined;
+                    const newAvatarUrlFromEvent = newAvatarFilename ? pb.getFileUrl(e.record, newAvatarFilename) : null;
+                    
+                    if (newAvatarUrlFromEvent !== userAvatarUrl) { // Compare with current state
+                        localStorage.setItem('userAvatarUrl', newAvatarUrlFromEvent || '');
+                        setUserAvatarUrl(newAvatarUrlFromEvent);
+                        setAvatarPreview(newAvatarUrlFromEvent || `https://placehold.co/96x96.png?text=${localStorage.getItem('userAvatarFallback') || 'U'}`);
                     }
-                  } else if (!e.record.avatar && localStorage.getItem('userAvatarUrl')) {
-                      localStorage.removeItem('userAvatarUrl');
-                      setUserAvatarUrl(null);
-                      setAvatarPreview(`https://placehold.co/96x96.png?text=${localStorage.getItem('userAvatarFallback') || 'U'}`);
                   }
                 }
               });
@@ -174,17 +176,17 @@ export default function SettingsPage() {
     return () => {
       isMounted = false;
       if (unsubscribe) {
-        const currentLocalUserId = pb.authStore.model?.id || 'unknown_user_on_unmount';
-        console.log(`[Real-time Subscription] Unsubscribing from updates for user ID: ${currentLocalUserId}`);
+        const localUserIdOnUnmount = currentUserId || 'unknown_user_on_unmount';
+        console.log(`[Real-time Subscription] Unsubscribing from updates for user ID: ${localUserIdOnUnmount}`);
         unsubscribe();
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toast]); 
+  }, [toast]); // Removed userId from deps to avoid re-subscribing on minor state changes if userId itself is stable
 
   const handleSaveChanges = async () => {
     const currentAuthUserId = pb.authStore.model?.id;
-    console.log("Settings Save: User ID from pb.authStore.model.id:", currentAuthUserId);
+    console.log("[Settings Save] User ID from pb.authStore.model.id:", currentAuthUserId);
 
     if (!pb.authStore.isValid || !currentAuthUserId) {
       toast({ title: "Authentication Error", description: "Your session seems invalid. Please log in again.", variant: "destructive" });
@@ -235,25 +237,26 @@ export default function SettingsPage() {
         return;
       }
       
-      setAvatarPreview(URL.createObjectURL(file)); // Show local preview immediately
+      setAvatarPreview(URL.createObjectURL(file)); 
       setIsUploadingAvatar(true);
 
       const formData = new FormData();
       formData.append('avatar', file);
-      // No need to append userId here if updateUserAvatarAction gets it from authStore
-
+      
       const result = await updateUserAvatarAction(formData);
 
       if (result.success && result.updatedUserRecord) {
         const newAvatarUrl = pb.getFileUrl(result.updatedUserRecord, result.updatedUserRecord.avatar as string);
         setAvatarPreview(newAvatarUrl);
         setUserAvatarUrl(newAvatarUrl);
-        localStorage.setItem('userAvatarUrl', newAvatarUrl);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('userAvatarUrl', newAvatarUrl);
+        }
         toast({ title: "Avatar Updated", description: "Profile picture changed successfully." });
       } else {
         toast({ title: "Avatar Upload Failed", description: result.error || "Could not update profile picture.", variant: "destructive" });
-        // Revert preview if upload failed
-        setAvatarPreview(userAvatarUrl || `https://placehold.co/96x96.png?text=${userAvatarFallback}`);
+        const fallbackAvatar = localStorage.getItem('userAvatarUrl');
+        setAvatarPreview(fallbackAvatar || `https://placehold.co/96x96.png?text=${userAvatarFallback}`);
       }
       setIsUploadingAvatar(false);
     }
@@ -270,7 +273,9 @@ export default function SettingsPage() {
     if (result.success) {
       setAvatarPreview(`https://placehold.co/96x96.png?text=${userAvatarFallback}`);
       setUserAvatarUrl(null);
-      localStorage.removeItem('userAvatarUrl');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('userAvatarUrl');
+      }
       toast({ title: "Avatar Removed", description: "Profile picture removed." });
     } else {
       toast({ title: "Removal Failed", description: result.error || "Could not remove profile picture.", variant: "destructive" });
@@ -314,19 +319,7 @@ export default function SettingsPage() {
                 <AvatarImage src={avatarPreview || `https://placehold.co/96x96.png`} alt={userFullName} data-ai-hint="user avatar settings"/>
                 <AvatarFallback>{userAvatarFallback}</AvatarFallback>
               </Avatar>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Button variant="outline" asChild disabled={isUploadingAvatar}>
-                  <Label htmlFor="profilePictureFile" className="cursor-pointer">
-                    {isUploadingAvatar && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    <UploadCloud className="mr-2 h-4 w-4" /> Change
-                  </Label>
-                </Button>
-                <input type="file" id="profilePictureFile" className="hidden" accept="image/jpeg, image/png, image/webp" onChange={handleProfilePictureChange} disabled={isUploadingAvatar} />
-                <Button variant="destructive" onClick={handleRemoveProfilePicture} disabled={isUploadingAvatar}>
-                  {isUploadingAvatar && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  <XCircle className="mr-2 h-4 w-4" /> Remove
-                </Button>
-              </div>
+              {/* Change and Remove buttons are removed as per user request */}
             </div>
             <p className="mt-2 text-xs text-muted-foreground">Max 2MB. JPG, PNG, WEBP.</p>
           </div>
@@ -400,7 +393,13 @@ export default function SettingsPage() {
           <CardDescription>Share your link and see who referred you.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {userReferredByUserName && (
+          {isLoadingReferrerName && !userReferredByUserName && (
+             <div className="flex items-center text-sm text-muted-foreground">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Loading referrer information...
+              </div>
+          )}
+          {userReferredByUserName && !isLoadingReferrerName && (
             <div className="p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-md flex items-center gap-2">
               <Info className="h-5 w-5 text-green-600 dark:text-green-400" />
               <p className="text-sm text-green-700 dark:text-green-300">
@@ -408,12 +407,13 @@ export default function SettingsPage() {
               </p>
             </div>
           )}
-          {isLoadingReferrerName && !userReferredByUserName && (
-             <div className="flex items-center text-sm text-muted-foreground">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Loading referrer information...
-              </div>
+          {!userReferredByUserName && !isLoadingReferrerName && !localStorage.getItem('userReferredByCode') && (
+             <div className="p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md flex items-center gap-2">
+                <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <p className="text-sm text-blue-700 dark:text-blue-300">You were not referred by anyone.</p>
+            </div>
           )}
+
           <div>
             <Label htmlFor="referralCodeDisplay">Your Referral Signup Link</Label>
             <div className="mt-1 flex items-center gap-2">
@@ -460,3 +460,5 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+    
