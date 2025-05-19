@@ -4,7 +4,7 @@ import { ClipboardList } from "lucide-react";
 
 export default function DppManagementPage() {
   return (
-    <div className="p-6">
+    <div>
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center text-2xl">

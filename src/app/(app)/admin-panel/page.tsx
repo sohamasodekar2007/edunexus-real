@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function AdminDashboardPage() {
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <section className="mb-8">
         <h1 className="text-3xl font-bold flex items-center">
           <ShieldCheck className="mr-3 h-8 w-8 text-primary" />
