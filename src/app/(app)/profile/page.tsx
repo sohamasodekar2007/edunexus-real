@@ -29,7 +29,7 @@ const recentTestsData = [
     id: 'test-physics-1',
     title: 'Mathematics in Physics',
     score: '1/3 (33.3%)',
-    date: '10/05/2025', // Note: Dates in image are in DD/MM/YYYY format.
+    date: '10/05/2025', 
   },
   {
     id: 'test-physics-2',
@@ -46,7 +46,8 @@ export default function ProfilePage() {
   const [userAvatarFallback, setUserAvatarFallback] = useState<string>('SA');
   const [userClass, setUserClass] = useState<string | null>('12th Class');
   const [userModel, setUserModel] = useState<string | null>('Full_length');
-  const [totalPoints, setTotalPoints] = useState<number>(15); // Placeholder
+  const [userTargetYear, setUserTargetYear] = useState<string | null>(null); // Changed to string | null
+  const [totalPoints, setTotalPoints] = useState<number>(15); 
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -55,19 +56,20 @@ export default function ProfilePage() {
       const storedAvatarFallback = localStorage.getItem('userAvatarFallback');
       const storedClass = localStorage.getItem('userClass');
       const storedModel = localStorage.getItem('userModel');
+      const storedTargetYear = localStorage.getItem('userTargetYear');
+
 
       if (storedFullName) setUserFullName(storedFullName);
       if (storedEmail) setUserEmail(storedEmail);
       if (storedAvatarFallback) setUserAvatarFallback(storedAvatarFallback);
       if (storedClass) setUserClass(storedClass);
       if (storedModel) setUserModel(storedModel);
-      // totalPoints remains placeholder for now
+      if (storedTargetYear && storedTargetYear !== "N/A") setUserTargetYear(storedTargetYear); else setUserTargetYear(null);
     }
   }, []);
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 space-y-6 bg-muted/30 min-h-screen">
-      {/* Header */}
       <header className="flex items-center justify-between mb-6 sticky top-0 bg-muted/30 py-4 z-10 -mx-4 md:-mx-6 px-4 md:px-6 border-b">
         <Button variant="ghost" size="icon" onClick={() => router.back()}>
           <ArrowLeft className="h-5 w-5" />
@@ -78,7 +80,6 @@ export default function ProfilePage() {
         </Button>
       </header>
 
-      {/* Profile Info Card */}
       <Card className="shadow-md">
         <CardContent className="p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
           <Avatar className="h-20 w-20 sm:h-24 sm:w-24 text-2xl sm:text-3xl border-2 border-primary">
@@ -89,9 +90,9 @@ export default function ProfilePage() {
             <h2 className="text-2xl font-semibold">{userFullName}</h2>
             <p className="text-sm text-muted-foreground">{userEmail}</p>
             <div className="mt-2 flex flex-wrap justify-center sm:justify-start gap-2">
-              {userClass && <Badge variant="secondary">Class: {userClass}</Badge>}
-              <Badge variant="secondary">Target: N/A</Badge>
-              {userModel && <Badge variant="secondary">Plan: {userModel}</Badge>}
+              {userClass && userClass !== "N/A" && <Badge variant="secondary">Class: {userClass}</Badge>}
+              <Badge variant="secondary">Target: {userTargetYear || 'N/A'}</Badge>
+              {userModel && userModel !== "N/A" && <Badge variant="secondary">Plan: {userModel}</Badge>}
             </div>
           </div>
           <div className="flex flex-col items-center text-center sm:text-left shrink-0 mt-4 sm:mt-0">
@@ -102,10 +103,9 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Action Buttons */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Button variant="outline" size="lg" className="justify-start py-6" asChild>
-          <Link href="/test-history"> {/* Placeholder link */}
+          <Link href="/test-history"> 
             <History className="mr-3 h-5 w-5" /> My Test History
           </Link>
         </Button>
@@ -116,7 +116,6 @@ export default function ProfilePage() {
         </Button>
       </div>
 
-      {/* My Learning Activity Card */}
       <Card className="shadow-md">
         <CardHeader>
           <CardTitle className="text-lg">My Learning Activity</CardTitle>
@@ -131,7 +130,6 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
 
-      {/* This Week's Snapshot Card */}
       <Card className="shadow-md">
         <CardHeader>
           <CardTitle className="text-lg">This Week&apos;s Snapshot (DPP)</CardTitle>
@@ -152,7 +150,6 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Recent Tests Card */}
       <Card className="shadow-md">
         <CardHeader>
           <CardTitle className="text-lg">Recent Tests</CardTitle>
@@ -169,7 +166,7 @@ export default function ProfilePage() {
                 </p>
               </div>
               <Button variant="ghost" size="sm" asChild>
-                <Link href={`/test-details/${test.id}`}> {/* Placeholder link */}
+                <Link href={`/test-details/${test.id}`}> 
                   View Details <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
                 </Link>
               </Button>
@@ -188,5 +185,4 @@ export default function ProfilePage() {
     </div>
   );
 }
-
     

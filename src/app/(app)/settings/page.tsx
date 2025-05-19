@@ -19,14 +19,18 @@ import {
   Star,
   CalendarDays,
 } from 'lucide-react';
-import type { UserClass, User } from '@/types'; // Added User type
-import { format } from 'date-fns'; // For date formatting
+import type { UserClass, User } from '@/types'; 
+import { format } from 'date-fns'; 
+import { useToast } from '@/hooks/use-toast';
+import { updateUserProfileAction } from '@/app/auth/actions';
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
-const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"]; // Example years
+const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"]; 
 
 export default function SettingsPage() {
   const router = useRouter();
+  const { toast } = useToast();
+  const [userId, setUserId] = useState<string>('');
   const [userFullName, setUserFullName] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
   const [userPhone, setUserPhone] = useState<string>('');
@@ -39,10 +43,11 @@ export default function SettingsPage() {
   const [userReferralStats, setUserReferralStats] = useState<User['referralStats'] | null>(null);
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
   const [userModel, setUserModel] = useState<string>('N/A');
-  const [isSaving, setIsSaving] = useState(false); // For save button state
+  const [isSaving, setIsSaving] = useState(false); 
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      const storedUserId = localStorage.getItem('userId');
       const storedFullName = localStorage.getItem('userFullName');
       const storedEmail = localStorage.getItem('userEmail');
       const storedPhone = localStorage.getItem('userPhone');
@@ -55,12 +60,18 @@ export default function SettingsPage() {
       const storedReferralStatsString = localStorage.getItem('userReferralStats');
       const storedExpiryDate = localStorage.getItem('userExpiryDate');
 
+      if (storedUserId) setUserId(storedUserId);
       if (storedFullName) setUserFullName(storedFullName);
       if (storedEmail) setUserEmail(storedEmail);
       if (storedPhone) setUserPhone(storedPhone);
       if (storedAvatarFallback) setUserAvatarFallback(storedAvatarFallback);
       if (storedClass && USER_CLASSES_OPTIONS.includes(storedClass)) setUserClass(storedClass);
-      if (storedTargetYear && storedTargetYear !== 'N/A' ) setUserTargetYear(storedTargetYear);
+      else if (storedClass === null || storedClass === '') setUserClass(''); // Handle null/empty from localStorage
+      
+      if (storedTargetYear && storedTargetYear !== 'N/A' && TARGET_EXAM_YEAR_OPTIONS.includes(storedTargetYear)) setUserTargetYear(storedTargetYear);
+      else setUserTargetYear('-- Not Set --');
+
+
       if (storedModel) setUserModel(storedModel);
 
       if (storedReferralCode) setUserReferralCode(storedReferralCode);
@@ -80,21 +91,30 @@ export default function SettingsPage() {
     }
   }, []);
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
+    if (!userId) {
+      toast({ title: "Error", description: "User not identified. Please log in again.", variant: "destructive" });
+      return;
+    }
     setIsSaving(true);
-    // Placeholder for save logic (e.g., call a server action)
-    console.log("Save Changes Clicked. Data to save:", { userClass, userTargetYear });
-    // Simulate API call
-    setTimeout(() => {
-      // Update localStorage if needed (though ideally server handles persistence)
+    
+    const result = await updateUserProfileAction({
+      userId,
+      classToUpdate: userClass,
+      targetYearToUpdate: userTargetYear,
+    });
+
+    if (result.success) {
+      toast({ title: "Success", description: result.message || "Profile updated successfully!" });
+      // Update localStorage with the new values
       if (typeof window !== 'undefined') {
-        localStorage.setItem('userClass', userClass || '');
+        localStorage.setItem('userClass', userClass || ''); // Store empty string if that's the selection
         localStorage.setItem('userTargetYear', userTargetYear);
       }
-      setIsSaving(false);
-      // Potentially show a success toast
-      // router.push('/profile'); // Or stay on page
-    }, 1000);
+    } else {
+      toast({ title: "Update Failed", description: result.error || "Could not update profile.", variant: "destructive" });
+    }
+    setIsSaving(false);
   };
 
   const handleCancel = () => {
@@ -104,13 +124,15 @@ export default function SettingsPage() {
   const handleProfilePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      if (file.size > 2 * 1024 * 1024) { // Max 2MB
-        alert("File is too large. Max 2MB allowed.");
+      if (file.size > 2 * 1024 * 1024) { 
+        toast({ title: "File Too Large", description: "Max 2MB allowed for profile picture.", variant: "destructive" });
         return;
       }
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarPreview(reader.result as string);
+        // TODO: Add logic to upload and save profile picture to PocketBase
+        // and update localStorage.getItem('userAvatarFallback') if name changes
       };
       reader.readAsDataURL(file);
     }
@@ -118,28 +140,30 @@ export default function SettingsPage() {
 
   const handleRemoveProfilePicture = () => {
     setAvatarPreview(`https://placehold.co/96x96.png?text=${userAvatarFallback}`);
+    // TODO: Add logic to remove profile picture from PocketBase
   };
 
   const handleCopyReferralCode = () => {
     if (userReferralCode && userReferralCode !== 'N/A') {
       navigator.clipboard.writeText(userReferralCode)
-        .then(() => alert("Referral code copied!"))
-        .catch(err => console.error("Failed to copy referral code: ", err));
+        .then(() => toast({ title: "Copied!", description: "Referral code copied to clipboard." }))
+        .catch(err => {
+          console.error("Failed to copy referral code: ", err);
+          toast({ title: "Copy Failed", description: "Could not copy referral code.", variant: "destructive" });
+        });
     }
   };
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 space-y-8 bg-muted/30 min-h-screen">
-      {/* Header */}
       <header className="flex items-center justify-between mb-2 sticky top-0 bg-muted/30 py-4 z-10 -mx-4 md:-mx-6 px-4 md:px-6 border-b">
         <Button variant="ghost" size="icon" onClick={() => router.back()}>
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <h1 className="text-xl font-semibold">Settings</h1>
-        <div className="w-9"></div> {/* Placeholder for alignment */}
+        <div className="w-9"></div> 
       </header>
 
-      {/* Profile Settings Card */}
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Profile</CardTitle>
@@ -185,7 +209,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <Label htmlFor="academicStatus">Academic Status</Label>
-              <Select value={userClass} onValueChange={(value) => setUserClass(value as UserClass)}>
+              <Select value={userClass} onValueChange={(value) => setUserClass(value as UserClass | '')}>
                 <SelectTrigger id="academicStatus" className="mt-1">
                   <SelectValue placeholder="Select your class" />
                 </SelectTrigger>
@@ -193,6 +217,7 @@ export default function SettingsPage() {
                   {USER_CLASSES_OPTIONS.map(option => (
                     <SelectItem key={option} value={option}>{option}</SelectItem>
                   ))}
+                   <SelectItem value="">-- Not Set --</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -219,7 +244,6 @@ export default function SettingsPage() {
         </CardFooter>
       </Card>
 
-      {/* Referral Program Card */}
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Referral Program</CardTitle>
@@ -262,7 +286,6 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
       
-      {/* Subscription Card */}
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Subscription</CardTitle>
@@ -286,4 +309,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-

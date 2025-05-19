@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 'use server';
 import pb from './pocketbase';
@@ -37,18 +38,16 @@ export async function findUserByEmail(email: string): Promise<User | null> {
     if (error instanceof ClientResponseError) {
       console.error('PocketBase error details:', JSON.stringify(error.data));
     }
-    // Do not throw here, allow action to handle it or return null
     return null;
   }
 }
 
-// Expects 'password' field from validated form data for user creation
 export async function createUserInPocketBase(userData: Omit<User, 'id' | 'created' | 'updated' | 'collectionId' | 'collectionName' | 'username' | 'verified'> & { password?: string }): Promise<User> {
   try {
     const dataForPocketBase = {
       email: userData.email.toLowerCase(),
-      password: userData.password, // Use the passed password directly
-      passwordConfirm: userData.password, // PocketBase requires passwordConfirm
+      password: userData.password, 
+      passwordConfirm: userData.password, 
       name: userData.name, 
       phone: userData.phone,
       class: userData.class,
@@ -90,12 +89,11 @@ export async function createUserInPocketBase(userData: Omit<User, 'id' | 'create
       verified: record.verified,
     };
   } catch (error) {
-    // Log the detailed error and then re-throw it so the action can handle it
     console.error('Error creating user in PocketBase (userDataService):', error);
     if (error instanceof ClientResponseError) {
       console.error('PocketBase error details (userDataService):', JSON.stringify(error.data, null, 2));
     }
-    throw error; // Re-throw the error to be caught by the calling action
+    throw error; 
   }
 }
 
@@ -132,7 +130,40 @@ export async function findUserById(id: string): Promise<User | null> {
     if (error instanceof ClientResponseError) {
       console.error('PocketBase error details:', JSON.stringify(error.data));
     }
-    // Do not throw here, allow action to handle it or return null
     return null;
+  }
+}
+
+export async function updateUserInPocketBase(userId: string, data: Partial<Pick<User, 'class' | 'targetYear'>>): Promise<User> {
+  try {
+    const record = await pb.collection('users').update(userId, data);
+    return {
+      id: record.id,
+      email: record.email,
+      name: record.name,
+      phone: record.phone,
+      class: record.class as UserClass,
+      model: record.model as UserModel,
+      role: record.role as UserRole,
+      expiry_date: record.expiry_date,
+      created: record.created,
+      updated: record.updated,
+      avatarUrl: record.avatarUrl,
+      totalPoints: record.totalPoints,
+      targetYear: record.targetYear, // Ensure this is correctly typed as number | null from PB
+      referralCode: record.referralCode,
+      referredByCode: record.referredByCode,
+      referralStats: record.referralStats,
+      collectionId: record.collectionId,
+      collectionName: record.collectionName,
+      username: record.username,
+      verified: record.verified,
+    };
+  } catch (error) {
+    console.error('Error updating user in PocketBase (userDataService):', error);
+    if (error instanceof ClientResponseError) {
+      console.error('PocketBase error details for update (userDataService):', JSON.stringify(error.data, null, 2));
+    }
+    throw error;
   }
 }

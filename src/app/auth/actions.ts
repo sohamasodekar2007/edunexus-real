@@ -4,7 +4,7 @@
 import pb from '@/lib/pocketbase';
 import { LoginSchema, SignupSchema, type SignupFormData } from '@/lib/validationSchemas';
 import { generateReferralCode } from '@/lib/authUtils';
-import { findUserByEmail, createUserInPocketBase } from '@/lib/userDataService';
+import { findUserByEmail, createUserInPocketBase, updateUserInPocketBase } from '@/lib/userDataService';
 import type { User, UserModel, UserRole, UserClass } from '@/types';
 import { ClientResponseError } from 'pocketbase';
 
@@ -21,7 +21,6 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
     const newUserReferralCode = generateReferralCode();
     const combinedName = `${name} ${surname}`.trim();
     const avatarUrl = `https://placehold.co/100x100.png?text=${name.charAt(0).toUpperCase()}`;
-    // dataAiHint is for client-side image hints, not stored in PocketBase user record directly unless schema supports it.
 
     const userDataForPocketBase = {
       email: email.toLowerCase(),
@@ -42,26 +41,23 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
         referred_full_length: 0,
         referred_combo: 0,
       },
-      targetYear: null, // Assuming not collected at signup currently
+      targetYear: null, 
     };
 
     const newUser = await createUserInPocketBase(userDataForPocketBase);
     return { success: true, message: 'Signup successful! Please log in.', userId: newUser.id };
 
   } catch (error) {
-    console.error('Signup Action Error (Full Error Object):', error); // Logs the entire error object
+    console.error('Signup Action Error (Full Error Object):', error); 
 
     let specificDetails = '';
-    let genericMessage = 'Something went wrong while processing your request.'; // Default
+    let genericMessage = 'Something went wrong while processing your request.'; 
 
     if (error instanceof ClientResponseError) {
-        // Log the structured PocketBase error data if available
         console.error('PocketBase ClientResponseError details (error.data):', JSON.stringify(error.data, null, 2));
-        
-        // Use PocketBase's top-level message as the generic message if available
         genericMessage = error.data?.message || genericMessage; 
 
-        const pbFieldErrors = error.data?.data; // This is where field-specific errors usually are
+        const pbFieldErrors = error.data?.data; 
         if (pbFieldErrors && typeof pbFieldErrors === 'object') {
             specificDetails = Object.keys(pbFieldErrors).map(key => {
                 if (pbFieldErrors[key] && pbFieldErrors[key].message) {
@@ -78,15 +74,13 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
     
     let finalErrorMessage = genericMessage;
     if (specificDetails) {
-      // Prepend generic message if it's not too generic, or just use details if generic is unhelpful
       if (genericMessage !== 'Something went wrong while processing your request.' && genericMessage !== 'Failed to create record.') {
         finalErrorMessage = `${genericMessage}. Details: ${specificDetails}`;
       } else {
-        finalErrorMessage = specificDetails; // Prioritize specific field errors if the generic one is too vague
+        finalErrorMessage = specificDetails; 
       }
     }
     
-    // Ensure a fallback if everything somehow ends up empty
     if (!finalErrorMessage.trim()) {
         finalErrorMessage = 'An unknown error occurred during signup.';
     }
@@ -101,7 +95,7 @@ export async function loginUserAction(data: { email: string, password_login: str
   error?: string; 
   userId?: string, 
   userFullName?: string, 
-  userName?: string, // This was intended for first name
+  userName?: string, 
   userModel?: UserModel | null, 
   userRole?: UserRole | null, 
   userClass?: UserClass | null, 
@@ -128,9 +122,9 @@ export async function loginUserAction(data: { email: string, password_login: str
       return { success: false, message: 'Login failed. Please check your credentials.', error: 'Invalid credentials' };
     }
 
-    const user = authData.record as User; // Cast to User type
+    const user = authData.record as User; 
     const userFullName = user.name || 'User'; 
-    const userName = user.name?.split(' ')[0] || 'User'; // First part of full name or fallback
+    const userName = user.name?.split(' ')[0] || 'User'; 
 
     return { 
       success: true, 
@@ -161,6 +155,63 @@ export async function loginUserAction(data: { email: string, password_login: str
         }
     } else if (error instanceof Error) {
         errorMessage = error.message;
+    }
+    return { success: false, message: errorMessage, error: errorMessage };
+  }
+}
+
+
+export async function updateUserProfileAction({ 
+  userId, 
+  classToUpdate, 
+  targetYearToUpdate 
+}: { 
+  userId: string, 
+  classToUpdate?: UserClass | '', 
+  targetYearToUpdate?: string 
+}): Promise<{ success: boolean; message: string; error?: string; updatedUser?: User }> {
+  if (!userId) {
+    return { success: false, message: "User ID is required.", error: "User ID missing" };
+  }
+
+  const dataForPocketBase: Partial<Pick<User, 'class' | 'targetYear'>> = {};
+
+  if (classToUpdate !== undefined) { // Allow empty string to clear, or specific class
+    dataForPocketBase.class = classToUpdate === '' ? null : classToUpdate;
+  }
+
+  if (targetYearToUpdate !== undefined) {
+    if (targetYearToUpdate === "-- Not Set --" || targetYearToUpdate === '') {
+      dataForPocketBase.targetYear = null;
+    } else {
+      const year = parseInt(targetYearToUpdate, 10);
+      if (!isNaN(year)) {
+        dataForPocketBase.targetYear = year;
+      } else {
+        // Optionally handle invalid year string, though Select should prevent this
+        console.warn(`Invalid target year string received: ${targetYearToUpdate}`);
+      }
+    }
+  }
+  
+  if (Object.keys(dataForPocketBase).length === 0) {
+    return { success: true, message: "No changes to save." }; // Or false if you prefer
+  }
+
+  try {
+    const updatedUserRecord = await updateUserInPocketBase(userId, dataForPocketBase);
+    return { success: true, message: "Profile updated successfully!", updatedUser: updatedUserRecord };
+  } catch (error) {
+    console.error('Update User Profile Action Error:', error);
+    let errorMessage = "Failed to update profile.";
+    if (error instanceof ClientResponseError) {
+      errorMessage = error.data?.message || errorMessage;
+      if (error.data?.data) {
+        const fieldErrors = Object.entries(error.data.data).map(([key, val]) => `${key}: ${val.message}`).join('; ');
+        errorMessage += ` Details: ${fieldErrors}`;
+      }
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
     }
     return { success: false, message: errorMessage, error: errorMessage };
   }
