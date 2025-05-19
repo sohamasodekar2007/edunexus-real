@@ -24,7 +24,7 @@ export default function LandingPage({
         <div className="flex justify-between items-center">
           <Link href="/landing" className="flex items-center gap-2 text-primary">
             <Logo className="h-8 w-8" />
-            <span className="font-bold text-xl">EduNexus</span>
+            <span className="font-bold text-lg sm:text-xl">EduNexus</span>
           </Link>
           <nav className="space-x-2">
             <Button variant="ghost" asChild>
