@@ -28,11 +28,10 @@ import {
   UserCheck,
   Users,
   GitCompareArrows,
-  MessageSquareQuote,
   ShieldCheck,
   Bell,
   Zap,
-  HelpCircle, // Added HelpCircle
+  HelpCircle, 
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { initializeLocalStorageData } from '@/lib/mock-data';
@@ -72,9 +71,7 @@ const connectAndCompeteItems: NavItem[] = [
   { href: '/compare', label: 'Compare', icon: GitCompareArrows },
 ];
 
-const aiToolsItems: NavItem[] = [
-  { href: '/doubt-solving', label: 'Doubt Solving', icon: MessageSquareQuote },
-];
+// AI Tools items removed
 
 const administrationItems: NavItem[] = [
   { href: '/admin-panel', label: 'Admin Panel', icon: ShieldCheck },
@@ -83,7 +80,7 @@ const administrationItems: NavItem[] = [
 const navStructure: NavItemGroup[] = [
   { label: 'Main Navigation', items: mainNavigationItems },
   { label: 'Connect & Compete', items: connectAndCompeteItems },
-  { label: 'AI Tools', items: aiToolsItems },
+  // AI Tools group removed
   { label: 'Administration', items: administrationItems },
 ];
 
@@ -103,18 +100,11 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       const model = localStorage.getItem('userModel');
       const role = localStorage.getItem('userRole');
       const fallback = localStorage.getItem('userAvatarFallback');
-      if (fullName) {
-        setCurrentUserFullName(fullName);
-      }
-      if (model) {
-        setCurrentUserModel(model);
-      }
-      if (role) {
-        setCurrentUserRole(role);
-      }
-      if (fallback) {
-        setCurrentUserAvatarFallback(fallback);
-      }
+      
+      if (fullName) setCurrentUserFullName(fullName);
+      if (model) setCurrentUserModel(model);
+      if (role) setCurrentUserRole(role);
+      if (fallback) setCurrentUserAvatarFallback(fallback);
     }
   }, []);
 
@@ -185,7 +175,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href="/profile"> {/* Placeholder link */}
+                <Link href="/profile"> 
                   <UserCircle className="mr-2 h-4 w-4" />
                   My Profile
                 </Link>
@@ -197,13 +187,13 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                 <Link href="/settings"> {/* Placeholder link */}
+                 <Link href="/settings"> 
                   <Settings className="mr-2 h-4 w-4" />
                   Settings
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/support"> {/* Placeholder link */}
+                <Link href="/support"> 
                   <HelpCircle className="mr-2 h-4 w-4" />
                   Support
                 </Link>

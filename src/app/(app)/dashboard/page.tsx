@@ -4,12 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { 
-  ArrowRight, 
   ListChecks, 
-  ClipboardList, 
-  Bookmark as BookmarkIcon, 
-  Trophy, 
-  TrendingUp,
   Percent,
   Target,
   Sparkles,
@@ -18,13 +13,13 @@ import {
   Wand2,
   LineChart,
   History,
-  Settings2, 
   User, 
   ChevronRight,
-  BarChartHorizontalBig
+  BarChartHorizontalBig,
+  TrendingUp
 } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Trophy } from "lucide-react"; // Added Trophy explicitly
 
 const leaderboardSnapshotData = [
   { id: 'user1', name: 'Soham Asodariya', rank: 1, score: '15 pts', avatarFallback: 'SA' },
@@ -32,7 +27,7 @@ const leaderboardSnapshotData = [
 ];
 
 export default function DashboardPage() {
-  const [userFullName, setUserFullName] = useState<string>('User'); // Default to 'User'
+  const [userFullName, setUserFullName] = useState<string>('User');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -95,9 +90,9 @@ export default function DashboardPage() {
         </Card>
       </section>
 
-      {/* Quick Actions & AI Tools Section */}
+      {/* Quick Actions Section */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <Card className="lg:col-span-2 shadow-md">
+        <Card className="lg:col-span-3 shadow-md"> {/* Changed lg:col-span-2 to lg:col-span-3 */}
           <CardHeader>
             <CardTitle className="text-lg font-semibold flex items-center">
               <BarChartHorizontalBig className="mr-2 h-5 w-5 text-primary" />
@@ -105,7 +100,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Button variant="default" size="lg" className="w-full justify-start text-left py-6" asChild>
+            <Button variant="outline" size="lg" className="w-full justify-start text-left py-6" asChild> {/* Changed variant to outline */}
               <Link href="/test-series">
                 <ListChecks className="mr-3 h-5 w-5" /> Test Series
               </Link>
@@ -127,21 +122,7 @@ export default function DashboardPage() {
             </Button>
           </CardContent>
         </Card>
-        <Card className="shadow-md">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold flex items-center">
-              <Wand2 className="mr-2 h-5 w-5 text-primary" />
-              AI Powered Tools
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Button variant="outline" className="w-full justify-start text-left py-6" asChild>
-              <Link href="/ai-doubt-solving"> 
-                <NotebookText className="mr-3 h-5 w-5" /> Ask EduNexus AI
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
+        {/* AI Powered Tools Card Removed */}
       </section>
 
       {/* Score Trend & Leaderboard Snapshot Section */}
