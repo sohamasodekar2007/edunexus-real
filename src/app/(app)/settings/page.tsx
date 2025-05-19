@@ -50,6 +50,7 @@ export default function SettingsPage() {
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
   const [userModel, setUserModel] = useState<string>('N/A');
   const [isSaving, setIsSaving] = useState(false);
+  // Referral stats display was removed, but state can remain if other logic depends on it or for future use
   // const [userReferralStats, setUserReferralStats] = useState<User['referralStats'] | null>(null);
 
 
@@ -88,13 +89,13 @@ export default function SettingsPage() {
         
         /* if (storedReferralStats) {
           try {
-            setUserReferralStats(JSON.parse(storedReferralStats));
+            // setUserReferralStats(JSON.parse(storedReferralStats)); // If stats display is re-added
           } catch (e) {
             console.error("Error parsing referral stats from localStorage", e);
-            setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+            // setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
           }
         } else {
-           setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+           // setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
         } */
         
         if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
@@ -253,7 +254,7 @@ export default function SettingsPage() {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <h1 className="text-xl font-semibold">Settings</h1>
-        <div className="w-9"></div>
+        <div className="w-9"></div> {/* Placeholder for balance */}
       </header>
 
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
@@ -386,6 +387,7 @@ export default function SettingsPage() {
               </Button>
             </div>
           </div>
+          {/* Referral statistics display was removed in a previous step. */}
         </CardContent>
       </Card>
 
@@ -413,4 +415,3 @@ export default function SettingsPage() {
   );
 }
 
-    
