@@ -30,7 +30,7 @@ import {
   GitCompareArrows,
   ShieldCheck,
   Bell,
-  Sparkles,
+  Sparkles, // Replaced Zap with Sparkles
   HelpCircle, 
   MessageSquareQuote,
 } from 'lucide-react';
@@ -135,9 +135,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       }
       if (expiryDate) setCurrentUserExpiryDate(expiryDate);
 
-      // If the user is not authenticated, redirect them to the landing page
-      // This layout (AppLayout) is only for authenticated routes like /dashboard, /profile etc.
-      // So, if pb.authStore is not valid here, it means they tried to access an authenticated route without logging in.
       if (!pb.authStore.isValid) {
         router.push('/landing');
       }
@@ -181,7 +178,15 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     return 'EduNexus'; 
   };
 
-  const appSideBaseNavStructure: SideBaseNavItemGroup[] = navStructure;
+  const appSideBaseNavStructure: SideBaseNavItemGroup[] = navStructure
+    .map(group => {
+      if (group.label === 'Administration') {
+        return currentUserRole === 'Admin' ? group : null;
+      }
+      return group;
+    })
+    .filter(Boolean) as SideBaseNavItemGroup[];
+
 
   return (
     <div className="flex min-h-screen w-full">
