@@ -30,7 +30,7 @@ import {
   GitCompareArrows,
   ShieldCheck,
   Bell,
-  Sparkles, // Replaced Zap with Sparkles
+  Sparkles, 
   HelpCircle, 
   MessageSquareQuote,
 } from 'lucide-react';
@@ -90,6 +90,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const [currentUserModel, setCurrentUserModel] = useState<string | null>(null);
   const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
   const [currentUserAvatarFallback, setCurrentUserAvatarFallback] = useState<string>('U');
+  const [currentUserAvatarUrl, setCurrentUserAvatarUrl] = useState<string | null>(null);
   const [currentUserClass, setCurrentUserClass] = useState<string | null>(null);
   const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
   const [currentUserPhone, setCurrentUserPhone] = useState<string | null>(null);
@@ -107,6 +108,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       const model = localStorage.getItem('userModel');
       const role = localStorage.getItem('userRole');
       const fallback = localStorage.getItem('userAvatarFallback');
+      const avatarUrl = localStorage.getItem('userAvatarUrl');
       const userClass = localStorage.getItem('userClass'); 
       const userEmail = localStorage.getItem('userEmail'); 
       const userPhone = localStorage.getItem('userPhone');
@@ -120,6 +122,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       if (model) setCurrentUserModel(model);
       if (role) setCurrentUserRole(role);
       if (fallback) setCurrentUserAvatarFallback(fallback);
+      if (avatarUrl && avatarUrl !== 'null' && avatarUrl !== 'undefined') setCurrentUserAvatarUrl(avatarUrl);
+      else setCurrentUserAvatarUrl(null); // Ensure it's null if no valid URL
+
       if (userClass) setCurrentUserClass(userClass);
       if (userEmail) setCurrentUserEmail(userEmail);
       if (userPhone) setCurrentUserPhone(userPhone);
@@ -150,6 +155,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       localStorage.removeItem('userModel');
       localStorage.removeItem('userRole');
       localStorage.removeItem('userAvatarFallback');
+      localStorage.removeItem('userAvatarUrl');
       localStorage.removeItem('userClass');
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userPhone');
@@ -187,86 +193,90 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     })
     .filter(Boolean) as SideBaseNavItemGroup[];
 
+  const showMainAppHeader = !pathname.startsWith('/admin-panel');
+
 
   return (
     <div className="flex min-h-screen w-full">
       <SideBase navStructure={appSideBaseNavStructure} pathname={pathname} />
       <SidebarInset className="flex-1 flex flex-col">
-        <header className="sticky top-0 z-10 flex h-14 items-center gap-2 sm:gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 py-4">
-          {isMobile && <SidebarTrigger asChild><Button variant="outline" size="icon"><Menu /></Button></SidebarTrigger>}
-          <div className="flex-1">
-            <h1 className="text-xl font-semibold">
-              {getActiveLabel()}
-            </h1>
-          </div>
+        {showMainAppHeader && (
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-2 sm:gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 py-4">
+            {isMobile && <SidebarTrigger asChild><Button variant="outline" size="icon"><Menu /></Button></SidebarTrigger>}
+            <div className="flex-1">
+              <h1 className="text-xl font-semibold">
+                {getActiveLabel()}
+              </h1>
+            </div>
 
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="hidden sm:inline-flex items-center text-primary border-primary"
-          >
-            <Sparkles className="mr-1 sm:mr-2 h-4 w-4" /> 
-            Upgrade
-          </Button>
-          {currentUserModel && <Badge variant="secondary" className="hidden sm:inline-flex">Plan: {currentUserModel}</Badge>}
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <Bell className="h-5 w-5" />
-            <span className="sr-only">Notifications</span>
-          </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="hidden sm:inline-flex items-center text-primary border-primary"
+            >
+              <Sparkles className="mr-1 sm:mr-2 h-4 w-4" /> 
+              Upgrade
+            </Button>
+            {currentUserModel && <Badge variant="secondary" className="hidden sm:inline-flex">Plan: {currentUserModel}</Badge>}
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Bell className="h-5 w-5" />
+              <span className="sr-only">Notifications</span>
+            </Button>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={`https://placehold.co/40x40.png?text=${currentUserAvatarFallback}`} alt={currentUserFullName} data-ai-hint="user avatar"/>
-                  <AvatarFallback>{currentUserAvatarFallback}</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{currentUserFullName}</p>
-                  {currentUserRole && currentUserModel && (
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {currentUserRole} - {currentUserModel} Plan
-                    </p>
-                  )}
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/profile"> 
-                  <UserCircle className="mr-2 h-4 w-4" />
-                  My Profile
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/leaderboard">
-                  <Trophy className="mr-2 h-4 w-4" />
-                  Leaderboard
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                 <Link href="/settings"> 
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/support"> 
-                  <HelpCircle className="mr-2 h-4 w-4" />
-                  Support
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive focus:bg-destructive/10">
-                <LogOut className="mr-2 h-4 w-4" />
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </header>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={currentUserAvatarUrl || `https://placehold.co/40x40.png?text=${currentUserAvatarFallback}`} alt={currentUserFullName} data-ai-hint="user avatar"/>
+                    <AvatarFallback>{currentUserAvatarFallback}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{currentUserFullName}</p>
+                    {currentUserRole && currentUserModel && (
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {currentUserRole} - {currentUserModel} Plan
+                      </p>
+                    )}
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/profile"> 
+                    <UserCircle className="mr-2 h-4 w-4" />
+                    My Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/leaderboard">
+                    <Trophy className="mr-2 h-4 w-4" />
+                    Leaderboard
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/settings"> 
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/support"> 
+                    <HelpCircle className="mr-2 h-4 w-4" />
+                    Support
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive focus:bg-destructive/10">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </header>
+        )}
         <main className="flex-1 p-0 sm:px-0 sm:py-0 overflow-auto bg-muted/30">
           {children}
         </main>
@@ -274,3 +284,4 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
