@@ -19,11 +19,13 @@ import {
   Star,
   CalendarDays,
   Info,
+  Loader2,
 } from 'lucide-react';
 import type { UserClass, User } from '@/types';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileAction, getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
+import pb, { ClientResponseError } from 'pocketbase';
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
 const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"];
@@ -50,64 +52,118 @@ export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedUserId = localStorage.getItem('userId');
-      const storedFullName = localStorage.getItem('userFullName');
-      const storedEmail = localStorage.getItem('userEmail');
-      const storedPhone = localStorage.getItem('userPhone');
-      const storedAvatarFallback = localStorage.getItem('userAvatarFallback');
-      const storedClass = localStorage.getItem('userClass') as UserClass | null;
-      const storedTargetYear = localStorage.getItem('userTargetYear');
-      const storedModel = localStorage.getItem('userModel');
+    let isMounted = true;
+    let unsubscribe: (() => void) | null = null;
+    const localUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
-      const storedReferralCode = localStorage.getItem('userReferralCode');
-      const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
-      const storedReferralStatsString = localStorage.getItem('userReferralStats');
-      const storedExpiryDate = localStorage.getItem('userExpiryDate');
+    async function initializeDataAndSubscribe() {
+      if (typeof window !== 'undefined' && localUserId && isMounted) {
+        setUserId(localUserId);
+        const storedFullName = localStorage.getItem('userFullName');
+        const storedEmail = localStorage.getItem('userEmail');
+        const storedPhone = localStorage.getItem('userPhone');
+        const storedAvatarFallback = localStorage.getItem('userAvatarFallback');
+        const storedClass = localStorage.getItem('userClass') as UserClass | null;
+        const storedTargetYear = localStorage.getItem('userTargetYear');
+        const storedModel = localStorage.getItem('userModel');
+        const storedReferralCode = localStorage.getItem('userReferralCode');
+        const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
+        const storedReferralStatsString = localStorage.getItem('userReferralStats');
+        const storedExpiryDate = localStorage.getItem('userExpiryDate');
 
-      if (storedUserId) setUserId(storedUserId);
-      if (storedFullName) setUserFullName(storedFullName);
-      if (storedEmail) setUserEmail(storedEmail);
-      if (storedPhone) setUserPhone(storedPhone);
-      if (storedAvatarFallback) setUserAvatarFallback(storedAvatarFallback);
-      if (storedClass && USER_CLASSES_OPTIONS.includes(storedClass)) setUserClass(storedClass);
-      else if (storedClass === null || storedClass === '') setUserClass('');
+        if (storedFullName) setUserFullName(storedFullName);
+        if (storedEmail) setUserEmail(storedEmail);
+        if (storedPhone) setUserPhone(storedPhone);
+        if (storedAvatarFallback) setUserAvatarFallback(storedAvatarFallback);
+        if (storedClass && USER_CLASSES_OPTIONS.includes(storedClass)) setUserClass(storedClass);
+        else if (storedClass === null || storedClass === '') setUserClass('');
 
-      if (storedTargetYear && storedTargetYear !== 'N/A' && TARGET_EXAM_YEAR_OPTIONS.includes(storedTargetYear)) setUserTargetYear(storedTargetYear);
-      else setUserTargetYear('-- Not Set --');
+        if (storedTargetYear && storedTargetYear !== 'N/A' && TARGET_EXAM_YEAR_OPTIONS.includes(storedTargetYear)) setUserTargetYear(storedTargetYear);
+        else setUserTargetYear('-- Not Set --');
 
-      if (storedModel) setUserModel(storedModel);
-
-      if (storedReferralCode) setUserReferralCode(storedReferralCode);
-      if (storedReferralStatsString) {
-        try {
-          setUserReferralStats(JSON.parse(storedReferralStatsString));
-        } catch (e) {
-          console.error("Error parsing referral stats from localStorage", e);
-          setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+        if (storedModel) setUserModel(storedModel);
+        if (storedReferralCode) setUserReferralCode(storedReferralCode);
+        if (storedReferralStatsString) {
+          try {
+            const parsedStats = JSON.parse(storedReferralStatsString);
+            if (isMounted) setUserReferralStats(parsedStats);
+          } catch (e) {
+            console.error("Error parsing referral stats from localStorage", e);
+            if (isMounted) setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+          }
+        } else {
+          if (isMounted) setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
         }
-      } else {
-        setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
-      }
-      if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
+        if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
 
-      setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
+        setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
 
-      if (storedUserReferredByCode && storedUserReferredByCode.trim() !== '') {
-        setIsLoadingReferrerName(true);
-        getReferrerInfoForCurrentUserAction()
-          .then(result => {
-            if (result.referrerName) {
-              setUserReferredByUserName(result.referrerName);
-            } else if (result.error) {
-              console.warn("Could not fetch referrer name:", result.error);
+        if (storedUserReferredByCode && storedUserReferredByCode.trim() !== '') {
+          if (isMounted) setIsLoadingReferrerName(true);
+          getReferrerInfoForCurrentUserAction()
+            .then(result => {
+              if (isMounted) {
+                if (result.referrerName) setUserReferredByUserName(result.referrerName);
+                else if (result.error) console.warn("Could not fetch referrer name:", result.error);
+              }
+            })
+            .catch(err => console.error("Error calling getReferrerInfoForCurrentUserAction:", err))
+            .finally(() => { if (isMounted) setIsLoadingReferrerName(false); });
+        }
+
+        // PocketBase real-time subscription
+        try {
+          unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
+            if (e.action === 'update' && e.record && isMounted) {
+              console.log('Real-time update for user received:', e.record);
+              const updatedStats = e.record.referralStats as User['referralStats'];
+              if (updatedStats && JSON.stringify(updatedStats) !== JSON.stringify(userReferralStats)) {
+                setUserReferralStats(updatedStats);
+                localStorage.setItem('userReferralStats', JSON.stringify(updatedStats));
+                toast({ title: "Referral Stats Updated!", description: "Your referral counts have been updated." });
+              }
             }
-          })
-          .catch(err => console.error("Error calling getReferrerInfoForCurrentUserAction:", err))
-          .finally(() => setIsLoadingReferrerName(false));
+          });
+          console.log(`Subscribed to real-time updates for user ID: ${localUserId}`);
+        } catch (error) {
+            console.error(`[Real-time Subscription Error] Failed to subscribe to user updates for user ID: ${localUserId}. This often indicates a network issue or problem with the PocketBase server's real-time connection.`, error);
+            if (error instanceof ClientResponseError) {
+              console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Status: ${error.status}`);
+              console.error(`[Real-time Subscription Error] PocketBase ClientResponseError URL: ${error.url || 'N/A'}`);
+              console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Response: ${JSON.stringify(error.response)}`);
+              console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Data: ${JSON.stringify(error.data)}`);
+              console.error("[Real-time Subscription Error] Full ClientResponseError object:", error);
+              if (error.originalError) {
+                console.error(`[Real-time Subscription Error] OriginalError Type: ${error.originalError.constructor.name}`);
+                if (error.originalError instanceof Error) {
+                  console.error(`[Real-time Subscription Error] OriginalError Message: ${error.originalError.message}`);
+                  console.error(`[Real-time Subscription Error] OriginalError Stack: ${error.originalError.stack}`);
+                } else {
+                  console.error(`[Real-time Subscription Error] OriginalError: ${String(error.originalError)}`);
+                }
+              }
+            }
+            toast({
+              title: "Real-time Sync Issue",
+              description: "Could not connect to live updates. Referral stats might be delayed. Please check your internet connection and ensure the PocketBase server is reachable.",
+              variant: "destructive",
+              duration: 10000,
+            });
+        }
       }
     }
-  }, []);
+
+    initializeDataAndSubscribe();
+
+    return () => {
+      isMounted = false;
+      if (unsubscribe) {
+        console.log(`Unsubscribing from real-time updates for user ID: ${localUserId}`);
+        unsubscribe();
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Re-run if userId changes - but userId is set from localUserId, so effectively on mount.
 
   const handleSaveChanges = async () => {
     if (!userId) {
@@ -122,11 +178,11 @@ export default function SettingsPage() {
       targetYearToUpdate: userTargetYear,
     });
 
-    if (result.success) {
+    if (result.success && result.updatedUser) {
       toast({ title: "Success", description: result.message || "Profile updated successfully!" });
       if (typeof window !== 'undefined') {
-        localStorage.setItem('userClass', userClass || '');
-        localStorage.setItem('userTargetYear', userTargetYear);
+        localStorage.setItem('userClass', result.updatedUser.class || '');
+        localStorage.setItem('userTargetYear', result.updatedUser.targetYear?.toString() || '-- Not Set --');
       }
     } else {
       toast({ title: "Update Failed", description: result.error || "Could not update profile.", variant: "destructive" });
@@ -235,6 +291,7 @@ export default function SettingsPage() {
                     setUserClass(value as UserClass);
                   }
                 }}
+                
               >
                 <SelectTrigger id="academicStatus" className="mt-1">
                   <SelectValue placeholder="Select your class" />
@@ -249,7 +306,7 @@ export default function SettingsPage() {
             </div>
             <div className="md:col-span-2">
               <Label htmlFor="targetExamYear">Target Exam Year</Label>
-              <Select value={userTargetYear} onValueChange={setUserTargetYear}>
+              <Select value={userTargetYear} onValueChange={setUserTargetYear} >
                 <SelectTrigger id="targetExamYear" className="mt-1">
                   <SelectValue placeholder="-- Not Set --" />
                 </SelectTrigger>
@@ -265,6 +322,7 @@ export default function SettingsPage() {
         <CardFooter className="flex justify-end gap-3 pt-8">
           <Button variant="outline" onClick={handleCancel} disabled={isSaving}>Cancel</Button>
           <Button onClick={handleSaveChanges} disabled={isSaving}>
+            {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
             {isSaving ? "Saving..." : "Save Changes"}
           </Button>
         </CardFooter>
@@ -273,7 +331,7 @@ export default function SettingsPage() {
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Referral Program</CardTitle>
-          <CardDescription>Share your code, track your success, and see who referred you.</CardDescription>
+          <CardDescription>Share your code and see who referred you.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {userReferredByUserName && (
@@ -285,7 +343,10 @@ export default function SettingsPage() {
             </div>
           )}
           {isLoadingReferrerName && !userReferredByUserName && (
-             <p className="text-sm text-muted-foreground">Loading referrer information...</p>
+             <div className="flex items-center text-sm text-muted-foreground">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Loading referrer information...
+              </div>
           )}
           <div>
             <Label htmlFor="referralCodeDisplay">Your Referral Signup Link</Label>
@@ -307,30 +368,7 @@ export default function SettingsPage() {
               </Button>
             </div>
           </div>
-          <div>
-            <h4 className="text-sm font-medium mb-2">Your Referral Statistics</h4>
-            <div className="p-4 bg-muted/50 rounded-md grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-              <div>
-                <p className="text-xs text-muted-foreground">Free Users</p>
-                <p className="text-xl font-semibold">{userReferralStats?.referred_free ?? 0}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Chapterwise</p>
-                <p className="text-xl font-semibold">{userReferralStats?.referred_chapterwise ?? 0}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Full Length</p>
-                <p className="text-xl font-semibold">{userReferralStats?.referred_full_length ?? 0}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Combo</p>
-                <p className="text-xl font-semibold">{userReferralStats?.referred_combo ?? 0}</p>
-              </div>
-            </div>
-            <p className="mt-2 text-xs text-muted-foreground">
-              Note: Stats update when a referred user signs up. Rewards based on referred user's plan type may apply.
-            </p>
-          </div>
+          {/* Removed Referral Statistics Display Block */}
         </CardContent>
       </Card>
 
@@ -349,7 +387,7 @@ export default function SettingsPage() {
             <CalendarDays className="h-5 w-5 text-muted-foreground" />
             <span className="font-medium">Expires on:</span>
             <span className="text-muted-foreground">
-              {userExpiryDate && userExpiryDate !== 'N/A' ? format(new Date(userExpiryDate), 'MMMM d, yyyy') : 'N/A'}
+              {userExpiryDate && userExpiryDate !== 'N/A' && userExpiryDate.length > 0 ? format(new Date(userExpiryDate), 'MMMM d, yyyy') : 'N/A'}
             </span>
           </div>
         </CardContent>
@@ -357,3 +395,4 @@ export default function SettingsPage() {
     </div>
   );
 }
+
