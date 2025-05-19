@@ -1,6 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ShieldCheck, BarChart3, Users, Settings } from 'lucide-react';
+import { ShieldCheck, BarChart3, Users, Settings, ExternalLink } from 'lucide-react';
+import Link from "next/link";
 
 export default function AdminDashboardPage() {
   return (
@@ -53,10 +54,22 @@ export default function AdminDashboardPage() {
             <CardDescription>Navigate to key admin sections.</CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <p className="p-4 border rounded-md hover:bg-muted/50">User Management (Coming Soon)</p>
-            <p className="p-4 border rounded-md hover:bg-muted/50">Test & DPP Configuration (Coming Soon)</p>
-            <p className="p-4 border rounded-md hover:bg-muted/50">System Analytics (Coming Soon)</p>
-            <p className="p-4 border rounded-md hover:bg-muted/50">Global Settings (Coming Soon)</p>
+            <Link href="/admin-panel/users" className="p-4 border rounded-md hover:bg-muted/50 flex justify-between items-center transition-colors">
+              <span>User Management (Coming Soon)</span>
+              <ExternalLink className="h-4 w-4 text-muted-foreground" />
+            </Link>
+            <Link href="/admin-panel/tests" className="p-4 border rounded-md hover:bg-muted/50 flex justify-between items-center transition-colors">
+              <span>Test & DPP Configuration (Coming Soon)</span>
+              <ExternalLink className="h-4 w-4 text-muted-foreground" />
+            </Link>
+            <div className="p-4 border rounded-md hover:bg-muted/50 flex justify-between items-center transition-colors cursor-not-allowed opacity-60">
+               <span>System Analytics (Coming Soon)</span>
+               <ExternalLink className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <Link href="/admin-panel/site-settings" className="p-4 border rounded-md hover:bg-muted/50 flex justify-between items-center transition-colors">
+              <span>Global Settings (Coming Soon)</span>
+              <ExternalLink className="h-4 w-4 text-muted-foreground" />
+            </Link>
           </CardContent>
         </Card>
       </section>

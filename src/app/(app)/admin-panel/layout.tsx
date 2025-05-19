@@ -19,11 +19,9 @@ import {
   UserCircle,
   LogOut,
   Bell,
-  Sparkles,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -94,16 +92,16 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
         }
       }
     }
+    // Fallback if no specific section matches (e.g., for the root /admin-panel)
+    if (pathname === '/admin-panel') return 'Dashboard';
     return 'Admin Panel';
   };
 
   if (isLoading) {
-    // Optional: Add a proper loading spinner component here
     return <div className="flex min-h-screen items-center justify-center"><p>Loading Admin Panel...</p></div>;
   }
 
   if (currentUserRole !== 'Admin') {
-    // This should ideally not be reached if redirection works, but as a fallback
     return <div className="flex min-h-screen items-center justify-center"><p>Access Denied. Redirecting...</p></div>;
   }
 
@@ -150,7 +148,6 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push('/dashboard')}>
-                 {/* Assuming ShieldAlert or LayoutDashboard might be suitable */}
                 <ShieldAlert className="mr-2 h-4 w-4" /> 
                 Exit Admin
               </DropdownMenuItem>
