@@ -25,8 +25,8 @@ import type { UserClass, User } from '@/types';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileAction, getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
-import pb from '@/lib/pocketbase'; 
-import { ClientResponseError } from 'pocketbase'; 
+import pb from '@/lib/pocketbase';
+import { ClientResponseError } from 'pocketbase';
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
 const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"];
@@ -50,8 +50,6 @@ export default function SettingsPage() {
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
   const [userModel, setUserModel] = useState<string>('N/A');
   const [isSaving, setIsSaving] = useState(false);
-  // No longer displaying referral stats, so no state needed for userReferralStats for display
-  // const [userReferralStats, setUserReferralStats] = useState<User['referralStats']>(null);
 
 
   useEffect(() => {
@@ -71,7 +69,6 @@ export default function SettingsPage() {
         const storedModel = localStorage.getItem('userModel');
         const storedReferralCode = localStorage.getItem('userReferralCode');
         const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
-        // const storedReferralStats = localStorage.getItem('userReferralStats'); // No longer needed for display
         const storedExpiryDate = localStorage.getItem('userExpiryDate');
 
         if (storedFullName) setUserFullName(storedFullName);
@@ -91,14 +88,6 @@ export default function SettingsPage() {
 
         setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
 
-        // if (storedReferralStats) { // No longer parsing for display
-        //   try {
-        //     // setUserReferralStats(JSON.parse(storedReferralStats));
-        //   } catch (e) {
-        //     console.error("Error parsing referral stats from localStorage", e);
-        //   }
-        // }
-
         if (storedUserReferredByCode && storedUserReferredByCode.trim() !== '') {
           if (isMounted) setIsLoadingReferrerName(true);
           getReferrerInfoForCurrentUserAction()
@@ -112,25 +101,23 @@ export default function SettingsPage() {
             .finally(() => { if (isMounted) setIsLoadingReferrerName(false); });
         }
 
-        // PocketBase real-time subscription for referralStats (even if not displayed, backend might update it)
-        // and potentially other user fields in the future.
-        if (pb) { // Ensure pb is initialized
+        // PocketBase real-time subscription
+        if (pb && localUserId) {
             const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
             console.log(`[Real-time Subscription] Attempting to connect to WebSocket: ${realtimeUrl} for user ID: ${localUserId}`);
             try {
               unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
                 if (e.action === 'update' && e.record && isMounted) {
                   console.log('[Real-time] User record updated:', e.record);
-                  // Example: if you were to update userModel or other fields live
                   if (e.record.model && typeof window !== 'undefined') {
                     localStorage.setItem('userModel', e.record.model as string);
                     setUserModel(e.record.model as string);
                   }
-                  // Update referral stats in localStorage if they change, even if not displayed directly on this page.
-                  // This keeps localStorage consistent if other parts of the app might use it.
+                  // The userReferralStats display was removed, but the logic to update localStorage
+                  // can remain if other parts of the app might use it or if it's reinstated later.
                   if (e.record.referralStats && typeof window !== 'undefined') {
                      localStorage.setItem('userReferralStats', JSON.stringify(e.record.referralStats));
-                     // setUserReferralStats(e.record.referralStats as User['referralStats']); // If you re-add stats display
+                     // setUserReferralStats(e.record.referralStats as User['referralStats']); // If stats display is re-added
                   }
                 }
               });
@@ -172,23 +159,24 @@ export default function SettingsPage() {
     return () => {
       isMounted = false;
       if (unsubscribe) {
-        const currentLocalUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : 'unknown';
+        const currentLocalUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : 'unknown_user_on_unmount';
         console.log(`[Real-time Subscription] Unsubscribing from updates for user ID: ${currentLocalUserId || localUserId}`);
         unsubscribe();
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]); // Re-run effect if userId changes, though it should be stable after initial load.
+  }, []); // Removed userId from dependency array to prevent re-subscriptions on potential userId state flicker
 
   const handleSaveChanges = async () => {
-    if (!userId) {
+    const currentUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+    if (!currentUserId) {
       toast({ title: "Error", description: "User not identified. Please log in again.", variant: "destructive" });
       return;
     }
     setIsSaving(true);
 
     const result = await updateUserProfileAction({
-      userId,
+      userId: currentUserId,
       classToUpdate: userClass,
       targetYearToUpdate: userTargetYear,
     });
@@ -197,7 +185,9 @@ export default function SettingsPage() {
       toast({ title: "Success", description: result.message || "Profile updated successfully!" });
       if (typeof window !== 'undefined') {
         localStorage.setItem('userClass', result.updatedUser.class || '');
+        setUserClass(result.updatedUser.class || '');
         localStorage.setItem('userTargetYear', result.updatedUser.targetYear?.toString() || '-- Not Set --');
+        setUserTargetYear(result.updatedUser.targetYear?.toString() || '-- Not Set --');
       }
     } else {
       toast({ title: "Update Failed", description: result.error || "Could not update profile.", variant: "destructive" });
@@ -408,4 +398,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
