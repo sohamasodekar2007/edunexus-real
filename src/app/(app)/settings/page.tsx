@@ -45,7 +45,6 @@ export default function SettingsPage() {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
   const [userReferralCode, setUserReferralCode] = useState<string>('N/A');
-  // Removed userReferralStats as per previous request to remove the display section
   const [userReferredByUserName, setUserReferredByUserName] = useState<string | null>(null);
   const [isLoadingReferrerName, setIsLoadingReferrerName] = useState(false);
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
@@ -69,7 +68,6 @@ export default function SettingsPage() {
         const storedModel = localStorage.getItem('userModel');
         const storedReferralCode = localStorage.getItem('userReferralCode');
         const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
-        // userReferralStats removed from here as its display was removed
         const storedExpiryDate = localStorage.getItem('userExpiryDate');
 
         if (storedFullName) setUserFullName(storedFullName);
@@ -84,8 +82,6 @@ export default function SettingsPage() {
 
         if (storedModel) setUserModel(storedModel);
         if (storedReferralCode) setUserReferralCode(storedReferralCode);
-        
-        // Referral stats state and localStorage update removed
         
         if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
 
@@ -109,9 +105,6 @@ export default function SettingsPage() {
           unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
             if (e.action === 'update' && e.record && isMounted) {
               console.log('Real-time update for user received:', e.record);
-              // Logic for updating userReferralStats from e.record was removed 
-              // as the display section for these stats was removed earlier.
-              // If other real-time updates are needed, they can be handled here.
             }
           });
           console.log(`Subscribed to real-time updates for user ID: ${localUserId}`);
@@ -119,7 +112,7 @@ export default function SettingsPage() {
             console.error(`[Real-time Subscription Error] Failed to subscribe to user updates for user ID: ${localUserId}. This often indicates a network issue or problem with the PocketBase server's real-time connection.`, error);
             if (error instanceof ClientResponseError) {
               console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Status: ${error.status}`);
-              if (error.status === 0) {
+               if (error.status === 0) {
                 console.error("[Real-time Subscription Error] Status 0 indicates the PocketBase server is unreachable or the network request failed. Check your PocketBase server, ngrok tunnel (if used), and ensure NEXT_PUBLIC_POCKETBASE_URL in your .env file is correct and accessible from your browser's network.");
               }
               console.error(`[Real-time Subscription Error] PocketBase ClientResponseError URL: ${error.url || 'N/A'}`);
