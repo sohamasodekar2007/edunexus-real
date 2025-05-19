@@ -25,8 +25,8 @@ import type { UserClass, User } from '@/types';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileAction, getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
-import pb from '@/lib/pocketbase'; // Corrected import for pb instance
-import { ClientResponseError } from 'pocketbase'; // Correct import for ClientResponseError type/class
+import pb from '@/lib/pocketbase'; 
+import { ClientResponseError } from 'pocketbase'; 
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
 const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"];
@@ -45,7 +45,7 @@ export default function SettingsPage() {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
   const [userReferralCode, setUserReferralCode] = useState<string>('N/A');
-  const [userReferralStats, setUserReferralStats] = useState<User['referralStats'] | null>(null);
+  // Removed userReferralStats as per previous request to remove the display section
   const [userReferredByUserName, setUserReferredByUserName] = useState<string | null>(null);
   const [isLoadingReferrerName, setIsLoadingReferrerName] = useState(false);
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
@@ -69,7 +69,7 @@ export default function SettingsPage() {
         const storedModel = localStorage.getItem('userModel');
         const storedReferralCode = localStorage.getItem('userReferralCode');
         const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
-        const storedReferralStatsString = localStorage.getItem('userReferralStats');
+        // userReferralStats removed from here as its display was removed
         const storedExpiryDate = localStorage.getItem('userExpiryDate');
 
         if (storedFullName) setUserFullName(storedFullName);
@@ -84,18 +84,9 @@ export default function SettingsPage() {
 
         if (storedModel) setUserModel(storedModel);
         if (storedReferralCode) setUserReferralCode(storedReferralCode);
-        if (storedReferralStatsString) {
-          try {
-            const parsedStats = JSON.parse(storedReferralStatsString);
-            if (isMounted) setUserReferralStats(parsedStats);
-          } catch (e) {
-            console.error("Error parsing referral stats from localStorage", e);
-            if (isMounted) setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
-          }
-        } else {
-           // Initialize with default if nothing in localStorage, to avoid null issues in display
-          if (isMounted) setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
-        }
+        
+        // Referral stats state and localStorage update removed
+        
         if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
 
         setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
@@ -118,12 +109,9 @@ export default function SettingsPage() {
           unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
             if (e.action === 'update' && e.record && isMounted) {
               console.log('Real-time update for user received:', e.record);
-              const updatedStats = e.record.referralStats as User['referralStats'];
-              if (updatedStats && JSON.stringify(updatedStats) !== JSON.stringify(userReferralStats)) {
-                setUserReferralStats(updatedStats);
-                localStorage.setItem('userReferralStats', JSON.stringify(updatedStats));
-                toast({ title: "Referral Stats Updated!", description: "Your referral counts have been updated." });
-              }
+              // Logic for updating userReferralStats from e.record was removed 
+              // as the display section for these stats was removed earlier.
+              // If other real-time updates are needed, they can be handled here.
             }
           });
           console.log(`Subscribed to real-time updates for user ID: ${localUserId}`);
@@ -131,6 +119,9 @@ export default function SettingsPage() {
             console.error(`[Real-time Subscription Error] Failed to subscribe to user updates for user ID: ${localUserId}. This often indicates a network issue or problem with the PocketBase server's real-time connection.`, error);
             if (error instanceof ClientResponseError) {
               console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Status: ${error.status}`);
+              if (error.status === 0) {
+                console.error("[Real-time Subscription Error] Status 0 indicates the PocketBase server is unreachable or the network request failed. Check your PocketBase server, ngrok tunnel (if used), and ensure NEXT_PUBLIC_POCKETBASE_URL in your .env file is correct and accessible from your browser's network.");
+              }
               console.error(`[Real-time Subscription Error] PocketBase ClientResponseError URL: ${error.url || 'N/A'}`);
               console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Response: ${JSON.stringify(error.response)}`);
               console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Data: ${JSON.stringify(error.data)}`);
@@ -147,7 +138,7 @@ export default function SettingsPage() {
             }
             toast({
               title: "Real-time Sync Issue",
-              description: "Could not connect to live updates. Referral stats might be delayed. Please check your internet connection and ensure the PocketBase server is reachable.",
+              description: "Could not connect to live updates. Please check your internet connection and ensure the PocketBase server is reachable.",
               variant: "destructive",
               duration: 10000,
             });
@@ -185,7 +176,6 @@ export default function SettingsPage() {
       if (typeof window !== 'undefined') {
         localStorage.setItem('userClass', result.updatedUser.class || '');
         localStorage.setItem('userTargetYear', result.updatedUser.targetYear?.toString() || '-- Not Set --');
-         // No need to update userReferralStats here, real-time subscription handles it
       }
     } else {
       toast({ title: "Update Failed", description: result.error || "Could not update profile.", variant: "destructive" });
@@ -396,3 +386,4 @@ export default function SettingsPage() {
     </div>
   );
 }
+
