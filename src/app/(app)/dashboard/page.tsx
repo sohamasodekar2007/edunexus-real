@@ -32,13 +32,13 @@ const leaderboardSnapshotData = [
 ];
 
 export default function DashboardPage() {
-  const [userName, setUserName] = useState<string>('User'); // Default to 'User'
+  const [userFullName, setUserFullName] = useState<string>('User'); // Default to 'User'
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const storedName = localStorage.getItem('userName');
+      const storedName = localStorage.getItem('userFullName');
       if (storedName) {
-        setUserName(storedName);
+        setUserFullName(storedName);
       }
     }
   }, []);
@@ -48,7 +48,7 @@ export default function DashboardPage() {
       {/* Greeting Section */}
       <section className="mb-8">
         <h1 className="text-3xl font-bold flex items-center">
-          Hello, {userName}! 
+          Hello, {userFullName}! 
           <span role="img" aria-label="waving hand" className="ml-2 text-2xl">👋</span>
         </h1>
         <p className="text-muted-foreground">Let's conquer those exams!</p>

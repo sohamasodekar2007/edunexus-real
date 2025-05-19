@@ -32,6 +32,7 @@ import {
   ShieldCheck,
   Bell,
   Zap,
+  HelpCircle, // Added HelpCircle
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { initializeLocalStorageData } from '@/lib/mock-data';
@@ -90,21 +91,26 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { isMobile } = useSidebar(); 
-  const [currentUserName, setCurrentUserName] = useState<string>('User'); // Default to 'User'
+  const [currentUserFullName, setCurrentUserFullName] = useState<string>('User');
   const [currentUserModel, setCurrentUserModel] = useState<string | null>(null);
-  const [currentUserAvatarFallback, setCurrentUserAvatarFallback] = useState<string>('S'); // Default
+  const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
+  const [currentUserAvatarFallback, setCurrentUserAvatarFallback] = useState<string>('U');
 
   useEffect(() => {
     initializeLocalStorageData();
     if (typeof window !== 'undefined') {
-      const name = localStorage.getItem('userName');
+      const fullName = localStorage.getItem('userFullName');
       const model = localStorage.getItem('userModel');
+      const role = localStorage.getItem('userRole');
       const fallback = localStorage.getItem('userAvatarFallback');
-      if (name) {
-        setCurrentUserName(name);
+      if (fullName) {
+        setCurrentUserFullName(fullName);
       }
       if (model) {
-        setCurrentUserModel(model); // Keep as is, don't replace underscore
+        setCurrentUserModel(model);
+      }
+      if (role) {
+        setCurrentUserRole(role);
       }
       if (fallback) {
         setCurrentUserAvatarFallback(fallback);
@@ -114,8 +120,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('userName');
+      localStorage.removeItem('userFullName');
       localStorage.removeItem('userModel');
+      localStorage.removeItem('userRole');
       localStorage.removeItem('userAvatarFallback');
     }
     router.push('/landing');
@@ -146,7 +153,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </h1>
           </div>
 
-          {/* Upgrade Button, Plan Badge, Notification Bell */}
           <Button variant="outline" size="sm" className="hidden sm:inline-flex items-center">
             <Zap className="mr-1 sm:mr-2 h-4 w-4" />
             Upgrade
@@ -157,7 +163,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             <span className="sr-only">Notifications</span>
           </Button>
 
-          {/* User Avatar and Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" className="rounded-full">
@@ -167,19 +172,44 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>{currentUserName}</DropdownMenuLabel>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{currentUserFullName}</p>
+                  {currentUserRole && currentUserModel && (
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {currentUserRole} - {currentUserModel} Plan
+                    </p>
+                  )}
+                </div>
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <UserCircle className="mr-2 h-4 w-4" />
-                Profile
+              <DropdownMenuItem asChild>
+                <Link href="/profile"> {/* Placeholder link */}
+                  <UserCircle className="mr-2 h-4 w-4" />
+                  My Profile
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
+              <DropdownMenuItem asChild>
+                <Link href="/leaderboard">
+                  <Trophy className="mr-2 h-4 w-4" />
+                  Leaderboard
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                 <Link href="/settings"> {/* Placeholder link */}
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/support"> {/* Placeholder link */}
+                  <HelpCircle className="mr-2 h-4 w-4" />
+                  Support
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
+              <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive focus:bg-destructive/10">
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
               </DropdownMenuItem>

@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 'use client';
 import { useState } from 'react';
@@ -37,14 +38,16 @@ export default function LoginPage() {
       const result = await loginUserAction(actionData);
 
       if (result.success) {
+        const userFullName = `${result.userName || 'User'} ${result.userSurname || ''}`.trim();
         toast({
           title: 'Login Successful',
-          description: `Welcome back, ${result.userName || 'User'}!`,
+          description: `Welcome back, ${userFullName}!`,
         });
         // Store user info for header and dashboard display
         if (typeof window !== 'undefined') {
-          localStorage.setItem('userName', result.userName || 'User');
-          localStorage.setItem('userModel', result.userModel || 'Free'); // Default to Free if not present
+          localStorage.setItem('userFullName', userFullName);
+          localStorage.setItem('userModel', result.userModel || 'Free'); 
+          localStorage.setItem('userRole', result.userRole || 'User');
           localStorage.setItem('userAvatarFallback', (result.userName || 'U').charAt(0).toUpperCase());
         }
         router.push('/dashboard'); 
@@ -55,7 +58,7 @@ export default function LoginPage() {
           variant: 'destructive',
         });
       }
-    } catch (error) { // Added missing opening brace
+    } catch (error) {
       toast({
         title: 'Error',
         description: (error as Error).message || 'An unexpected error occurred.',
