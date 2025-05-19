@@ -29,8 +29,13 @@ export default function UserManagementPage() {
       if (result.success && result.users) {
         setUsers(result.users as DisplayUser[]);
       } else {
-        setError(result.message || "Failed to load users.");
-        console.error("Error fetching users:", result.error);
+        let uiErrorMessage = result.message || "Failed to load users.";
+        // Provide a more specific message if the internal error indicates missing admin auth
+        if (result.error === "Admin auth missing") {
+          uiErrorMessage = "Failed to load users: Admin authentication failed. Please ensure POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD are correctly set in your .env file and the Next.js server has been restarted.";
+        }
+        setError(uiErrorMessage);
+        console.error("Error fetching users:", result.error); // This logs "Admin auth missing"
       }
       setLoading(false);
     }
@@ -50,7 +55,7 @@ export default function UserManagementPage() {
   }
 
   return (
-    <div>
+    <div className="p-6">
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center text-2xl">
@@ -72,7 +77,7 @@ export default function UserManagementPage() {
             <div className="flex flex-col items-center justify-center py-10 text-destructive">
               <AlertCircle className="h-8 w-8 mb-2" />
               <p className="font-semibold">Error loading users</p>
-              <p className="text-sm">{error}</p>
+              <p className="text-sm text-center max-w-md">{error}</p>
               <Button variant="outline" size="sm" className="mt-4" onClick={async () => {
                  setLoading(true);
                  setError(null);
@@ -80,7 +85,12 @@ export default function UserManagementPage() {
                  if (result.success && result.users) {
                    setUsers(result.users as DisplayUser[]);
                  } else {
-                   setError(result.message || "Failed to load users.");
+                    let uiErrorMessage = result.message || "Failed to load users.";
+                    if (result.error === "Admin auth missing") {
+                        uiErrorMessage = "Failed to load users: Admin authentication failed. Please ensure POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD are correctly set in your .env file and the Next.js server has been restarted.";
+                    }
+                    setError(uiErrorMessage);
+                    console.error("Error fetching users (retry):", result.error);
                  }
                  setLoading(false);
               }}>Retry</Button>
@@ -158,4 +168,3 @@ export default function UserManagementPage() {
     </div>
   );
 }
-
