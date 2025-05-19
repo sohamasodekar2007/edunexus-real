@@ -73,7 +73,11 @@ export async function loginUserAction(data: { email: string, password_login: str
   userClass?: UserClass, 
   userEmail?: string,
   userPhone?: string,
-  userTargetYear?: number | null 
+  userTargetYear?: number | null,
+  userReferralCode?: string,
+  userReferralStats?: User['referralStats'],
+  userExpiryDate?: string,
+  userName?: string // Added userName for consistency with localStorage
 }> {
   const validation = LoginSchema.safeParse({email: data.email, password: data.password_login}); // map password_login to password for validation
   if (!validation.success) {
@@ -100,13 +104,17 @@ export async function loginUserAction(data: { email: string, password_login: str
       success: true, 
       message: 'Login successful!', 
       userId: user.id, 
-      userFullName: userFullName, 
+      userFullName: userFullName,
+      userName: user.name, // For dashboard greeting consistency
       userModel: user.model,
       userRole: user.role,
       userClass: user.class,
       userEmail: user.email,
       userPhone: user.phone,
-      userTargetYear: user.targetYear
+      userTargetYear: user.targetYear,
+      userReferralCode: user.referralCode,
+      userReferralStats: user.referralStats,
+      userExpiryDate: user.expiry_date,
     };
 
   } catch (error) {

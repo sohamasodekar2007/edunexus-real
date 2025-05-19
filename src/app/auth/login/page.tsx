@@ -45,6 +45,7 @@ export default function LoginPage() {
         // Store user info for header and dashboard display
         if (typeof window !== 'undefined') {
           localStorage.setItem('userFullName', result.userFullName || 'User');
+          localStorage.setItem('userName', result.userName || 'User'); // For dashboard greeting
           localStorage.setItem('userModel', result.userModel || 'Free'); 
           localStorage.setItem('userRole', result.userRole || 'User');
           localStorage.setItem('userClass', result.userClass || 'N/A');
@@ -52,6 +53,9 @@ export default function LoginPage() {
           localStorage.setItem('userAvatarFallback', (result.userFullName || 'U').charAt(0).toUpperCase());
           localStorage.setItem('userPhone', result.userPhone || 'N/A');
           localStorage.setItem('userTargetYear', result.userTargetYear?.toString() || 'N/A');
+          localStorage.setItem('userReferralCode', result.userReferralCode || 'N/A');
+          localStorage.setItem('userReferralStats', JSON.stringify(result.userReferralStats || {}));
+          localStorage.setItem('userExpiryDate', result.userExpiryDate || 'N/A');
         }
         router.push('/dashboard'); 
       } else {

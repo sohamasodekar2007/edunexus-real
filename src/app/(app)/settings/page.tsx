@@ -10,12 +10,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from '@/components/ui/badge';
 import {
   ArrowLeft,
   UploadCloud,
   XCircle,
+  Copy,
+  Star,
+  CalendarDays,
 } from 'lucide-react';
-import type { UserClass } from '@/types';
+import type { UserClass, User } from '@/types'; // Added User type
+import { format } from 'date-fns'; // For date formatting
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
 const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"]; // Example years
@@ -30,6 +35,12 @@ export default function SettingsPage() {
   const [userTargetYear, setUserTargetYear] = useState<string>('-- Not Set --');
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
+  const [userReferralCode, setUserReferralCode] = useState<string>('N/A');
+  const [userReferralStats, setUserReferralStats] = useState<User['referralStats'] | null>(null);
+  const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
+  const [userModel, setUserModel] = useState<string>('N/A');
+  const [isSaving, setIsSaving] = useState(false); // For save button state
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedFullName = localStorage.getItem('userFullName');
@@ -38,6 +49,11 @@ export default function SettingsPage() {
       const storedAvatarFallback = localStorage.getItem('userAvatarFallback');
       const storedClass = localStorage.getItem('userClass') as UserClass | null;
       const storedTargetYear = localStorage.getItem('userTargetYear');
+      const storedModel = localStorage.getItem('userModel');
+      
+      const storedReferralCode = localStorage.getItem('userReferralCode');
+      const storedReferralStatsString = localStorage.getItem('userReferralStats');
+      const storedExpiryDate = localStorage.getItem('userExpiryDate');
 
       if (storedFullName) setUserFullName(storedFullName);
       if (storedEmail) setUserEmail(storedEmail);
@@ -45,17 +61,40 @@ export default function SettingsPage() {
       if (storedAvatarFallback) setUserAvatarFallback(storedAvatarFallback);
       if (storedClass && USER_CLASSES_OPTIONS.includes(storedClass)) setUserClass(storedClass);
       if (storedTargetYear && storedTargetYear !== 'N/A' ) setUserTargetYear(storedTargetYear);
+      if (storedModel) setUserModel(storedModel);
+
+      if (storedReferralCode) setUserReferralCode(storedReferralCode);
+      if (storedReferralStatsString) {
+        try {
+          setUserReferralStats(JSON.parse(storedReferralStatsString));
+        } catch (e) {
+          console.error("Error parsing referral stats from localStorage", e);
+          setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+        }
+      } else {
+        setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+      }
+      if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
       
-      // For avatar preview, you might load from user.avatarUrl if it's stored
-      // For now, it uses the fallback.
       setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
     }
   }, []);
 
   const handleSaveChanges = () => {
-    // Placeholder for save logic
+    setIsSaving(true);
+    // Placeholder for save logic (e.g., call a server action)
     console.log("Save Changes Clicked. Data to save:", { userClass, userTargetYear });
-    // router.push('/profile'); // Navigate back or show toast
+    // Simulate API call
+    setTimeout(() => {
+      // Update localStorage if needed (though ideally server handles persistence)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('userClass', userClass || '');
+        localStorage.setItem('userTargetYear', userTargetYear);
+      }
+      setIsSaving(false);
+      // Potentially show a success toast
+      // router.push('/profile'); // Or stay on page
+    }, 1000);
   };
 
   const handleCancel = () => {
@@ -65,7 +104,6 @@ export default function SettingsPage() {
   const handleProfilePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      // Basic validation (can be expanded)
       if (file.size > 2 * 1024 * 1024) { // Max 2MB
         alert("File is too large. Max 2MB allowed.");
         return;
@@ -75,20 +113,25 @@ export default function SettingsPage() {
         setAvatarPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
-      // Here you would typically upload the file to a server
     }
   };
 
   const handleRemoveProfilePicture = () => {
     setAvatarPreview(`https://placehold.co/96x96.png?text=${userAvatarFallback}`);
-    // Here you would typically send a request to the server to remove the picture
   };
 
+  const handleCopyReferralCode = () => {
+    if (userReferralCode && userReferralCode !== 'N/A') {
+      navigator.clipboard.writeText(userReferralCode)
+        .then(() => alert("Referral code copied!"))
+        .catch(err => console.error("Failed to copy referral code: ", err));
+    }
+  };
 
   return (
-    <div className="container mx-auto py-6 px-4 md:px-6 space-y-6 bg-muted/30 min-h-screen">
+    <div className="container mx-auto py-6 px-4 md:px-6 space-y-8 bg-muted/30 min-h-screen">
       {/* Header */}
-      <header className="flex items-center justify-between mb-6 sticky top-0 bg-muted/30 py-4 z-10 -mx-4 md:-mx-6 px-4 md:px-6 border-b">
+      <header className="flex items-center justify-between mb-2 sticky top-0 bg-muted/30 py-4 z-10 -mx-4 md:-mx-6 px-4 md:px-6 border-b">
         <Button variant="ghost" size="icon" onClick={() => router.back()}>
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -96,18 +139,18 @@ export default function SettingsPage() {
         <div className="w-9"></div> {/* Placeholder for alignment */}
       </header>
 
+      {/* Profile Settings Card */}
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Profile</CardTitle>
           <CardDescription>Manage your personal information and profile picture.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Profile Picture Section */}
           <div>
             <Label htmlFor="profilePicture" className="text-sm font-medium">Profile Picture</Label>
             <div className="mt-2 flex items-center gap-4">
               <Avatar className="h-24 w-24 text-3xl">
-                <AvatarImage src={avatarPreview || `https://placehold.co/96x96.png?text=${userAvatarFallback}`} alt={userFullName} data-ai-hint="user avatar settings"/>
+                <AvatarImage src={avatarPreview || `https://placehold.co/96x96.png`} alt={userFullName} data-ai-hint="user avatar settings"/>
                 <AvatarFallback>{userAvatarFallback}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col sm:flex-row gap-2">
@@ -125,7 +168,6 @@ export default function SettingsPage() {
             <p className="mt-2 text-xs text-muted-foreground">Max 2MB. JPG, PNG, WEBP.</p>
           </div>
 
-          {/* Form Fields Section */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
             <div>
               <Label htmlFor="fullName">Full Name</Label>
@@ -143,7 +185,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <Label htmlFor="academicStatus">Academic Status</Label>
-              <Select value={userClass} onValueChange={(value) => setUserClass(value as UserClass)} disabled={false /* Enable if editable */}>
+              <Select value={userClass} onValueChange={(value) => setUserClass(value as UserClass)}>
                 <SelectTrigger id="academicStatus" className="mt-1">
                   <SelectValue placeholder="Select your class" />
                 </SelectTrigger>
@@ -156,7 +198,7 @@ export default function SettingsPage() {
             </div>
             <div className="md:col-span-2">
               <Label htmlFor="targetExamYear">Target Exam Year</Label>
-              <Select value={userTargetYear} onValueChange={setUserTargetYear} disabled={false /* Enable if editable */}>
+              <Select value={userTargetYear} onValueChange={setUserTargetYear}>
                 <SelectTrigger id="targetExamYear" className="mt-1">
                   <SelectValue placeholder="-- Not Set --" />
                 </SelectTrigger>
@@ -170,9 +212,76 @@ export default function SettingsPage() {
           </div>
         </CardContent>
         <CardFooter className="flex justify-end gap-3 pt-8">
-          <Button variant="outline" onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleSaveChanges}>Save Changes</Button>
+          <Button variant="outline" onClick={handleCancel} disabled={isSaving}>Cancel</Button>
+          <Button onClick={handleSaveChanges} disabled={isSaving}>
+            {isSaving ? "Saving..." : "Save Changes"}
+          </Button>
         </CardFooter>
+      </Card>
+
+      {/* Referral Program Card */}
+      <Card className="shadow-lg w-full max-w-3xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-2xl">Referral Program</CardTitle>
+          <CardDescription>Share your code and track your referral success.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div>
+            <Label htmlFor="referralCodeDisplay">Your Referral Code</Label>
+            <div className="mt-1 flex items-center gap-2">
+              <Input id="referralCodeDisplay" value={userReferralCode} readOnly className="bg-muted/50" />
+              <Button variant="outline" size="icon" onClick={handleCopyReferralCode} aria-label="Copy referral code" disabled={!userReferralCode || userReferralCode === 'N/A'}>
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div>
+            <h4 className="text-sm font-medium mb-2">Referral Statistics</h4>
+            <div className="p-4 bg-muted/50 rounded-md grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+              <div>
+                <p className="text-xs text-muted-foreground">Free Users</p>
+                <p className="text-xl font-semibold">{userReferralStats?.referred_free ?? 0}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Chapterwise</p>
+                <p className="text-xl font-semibold">{userReferralStats?.referred_chapterwise ?? 0}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Full Length</p>
+                <p className="text-xl font-semibold">{userReferralStats?.referred_full_length ?? 0}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Combo</p>
+                <p className="text-xl font-semibold">{userReferralStats?.referred_combo ?? 0}</p>
+              </div>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Note: Stats update when a referred user signs up. Rewards based on referred user's plan type may apply.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* Subscription Card */}
+      <Card className="shadow-lg w-full max-w-3xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-2xl">Subscription</CardTitle>
+          <CardDescription>Your current access plan.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Star className="h-5 w-5 text-primary" />
+            <span className="font-medium">Current Plan:</span>
+            <Badge variant="secondary">{userModel}</Badge>
+          </div>
+          <div className="flex items-center gap-2">
+            <CalendarDays className="h-5 w-5 text-muted-foreground" />
+            <span className="font-medium">Expires on:</span>
+            <span className="text-muted-foreground">
+              {userExpiryDate && userExpiryDate !== 'N/A' ? format(new Date(userExpiryDate), 'MMMM d, yyyy') : 'N/A'}
+            </span>
+          </div>
+        </CardContent>
       </Card>
     </div>
   );

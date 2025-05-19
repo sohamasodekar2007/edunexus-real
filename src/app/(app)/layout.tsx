@@ -30,7 +30,7 @@ import {
   GitCompareArrows,
   ShieldCheck,
   Bell,
-  Sparkles, // Changed from Zap to Sparkles
+  Sparkles,
   HelpCircle, 
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -79,7 +79,6 @@ const administrationItems: NavItem[] = [
 const navStructure: NavItemGroup[] = [
   { label: 'Main Navigation', items: mainNavigationItems },
   { label: 'Connect & Compete', items: connectAndCompeteItems },
-  // { label: 'AI Tools', items: aiToolsItems }, // AI Tools section removed
   { label: 'Administration', items: administrationItems },
 ];
 
@@ -91,12 +90,17 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const [currentUserModel, setCurrentUserModel] = useState<string | null>(null);
   const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
   const [currentUserAvatarFallback, setCurrentUserAvatarFallback] = useState<string>('U');
-  const [currentUserClass, setCurrentUserClass] = useState<string | null>(null); // Load userClass
-  const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null); // Load userEmail
+  const [currentUserClass, setCurrentUserClass] = useState<string | null>(null);
+  const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
+  const [currentUserPhone, setCurrentUserPhone] = useState<string | null>(null);
+  const [currentUserTargetYear, setCurrentUserTargetYear] = useState<string | null>(null);
+  const [currentUserReferralCode, setCurrentUserReferralCode] = useState<string | null>(null);
+  const [currentUserReferralStats, setCurrentUserReferralStats] = useState<object | null>(null);
+  const [currentUserExpiryDate, setCurrentUserExpiryDate] = useState<string | null>(null);
 
 
   useEffect(() => {
-    initializeLocalStorageData();
+    initializeLocalStorageData(); // For mock data, can be removed if not needed
     if (typeof window !== 'undefined') {
       const fullName = localStorage.getItem('userFullName');
       const model = localStorage.getItem('userModel');
@@ -106,6 +110,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       const userEmail = localStorage.getItem('userEmail'); 
       const userPhone = localStorage.getItem('userPhone');
       const userTargetYear = localStorage.getItem('userTargetYear');
+      const referralCode = localStorage.getItem('userReferralCode');
+      const referralStats = localStorage.getItem('userReferralStats');
+      const expiryDate = localStorage.getItem('userExpiryDate');
       
       if (fullName) setCurrentUserFullName(fullName);
       if (model) setCurrentUserModel(model);
@@ -113,13 +120,18 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       if (fallback) setCurrentUserAvatarFallback(fallback);
       if (userClass) setCurrentUserClass(userClass);
       if (userEmail) setCurrentUserEmail(userEmail);
-      // userPhone and userTargetYear are loaded but not directly used in this layout's state
+      if (userPhone) setCurrentUserPhone(userPhone);
+      if (userTargetYear) setCurrentUserTargetYear(userTargetYear);
+      if (referralCode) setCurrentUserReferralCode(referralCode);
+      if (referralStats) setCurrentUserReferralStats(JSON.parse(referralStats));
+      if (expiryDate) setCurrentUserExpiryDate(expiryDate);
     }
   }, []);
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('userFullName');
+      localStorage.removeItem('userName'); // Also clear userName if used elsewhere
       localStorage.removeItem('userModel');
       localStorage.removeItem('userRole');
       localStorage.removeItem('userAvatarFallback');
@@ -127,6 +139,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userPhone');
       localStorage.removeItem('userTargetYear');
+      localStorage.removeItem('userReferralCode');
+      localStorage.removeItem('userReferralStats');
+      localStorage.removeItem('userExpiryDate');
     }
     router.push('/landing');
   };
