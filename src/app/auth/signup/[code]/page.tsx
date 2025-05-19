@@ -1,8 +1,8 @@
 // @ts-nocheck
 'use client';
-import { useState, useEffect, useCallback, use } from 'react'; // Added 'use'
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignupSchema, type SignupFormData } from '@/lib/validationSchemas';
@@ -37,16 +37,16 @@ function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
 }
 
 
-export default function SignupPageContent({ params: paramsProp }: { params: { code?: string } }) {
-  const params = use(paramsProp); // Unwrap params using React.use()
+export default function SignupPageContent() {
   const router = useRouter();
+  const routeParams = useParams();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingReferral, setIsCheckingReferral] = useState(false);
   const [referralMessage, setReferralMessage] = useState<string | null>(null);
   const [referralMessageIsError, setReferralMessageIsError] = useState(false);
 
-  const referralCodeFromUrl = params?.code; // Use unwrapped params
+  const referralCodeFromUrl = typeof routeParams.code === 'string' ? routeParams.code : undefined;
 
   const form = useForm<SignupFormData>({
     resolver: zodResolver(SignupSchema),
@@ -58,7 +58,7 @@ export default function SignupPageContent({ params: paramsProp }: { params: { co
       password: '',
       confirmPassword: '',
       class: undefined, 
-      referralCode: referralCodeFromUrl || '', // Pre-fill from URL using unwrapped params
+      referralCode: referralCodeFromUrl || '', // Pre-fill from URL
       terms: false,
     },
   });
@@ -73,7 +73,7 @@ export default function SignupPageContent({ params: paramsProp }: { params: { co
       setIsCheckingReferral(true);
       setReferralMessage(null);
       try {
-        const result = await validateReferralCodeAction(code.trim());
+        const result = await validateReferralCodeAction(code.trim().toUpperCase());
         if (result.success) {
           setReferralMessage(result.message);
           setReferralMessageIsError(false);
@@ -93,12 +93,11 @@ export default function SignupPageContent({ params: paramsProp }: { params: { co
 
   useEffect(() => {
     if (referralCodeFromUrl) {
-      // Pre-fill the form field (already done in defaultValues)
-      // And trigger validation for the pre-filled code
+      // Default value is set in useForm, so we just need to trigger validation.
       handleReferralCodeChange(referralCodeFromUrl);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [referralCodeFromUrl]); // Only run when referralCodeFromUrl changes, handleReferralCodeChange is stable due to useCallback
+  }, [referralCodeFromUrl]); // handleReferralCodeChange is memoized
 
   async function onSubmit(data: SignupFormData) {
     setIsLoading(true);
