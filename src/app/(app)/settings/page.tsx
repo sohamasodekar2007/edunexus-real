@@ -50,6 +50,7 @@ export default function SettingsPage() {
   const [isLoadingReferrerName, setIsLoadingReferrerName] = useState(false);
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
   const [userModel, setUserModel] = useState<string>('N/A');
+  const [hasUserReferredByCodeInStorage, setHasUserReferredByCodeInStorage] = useState<boolean>(false);
   
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
@@ -100,6 +101,7 @@ export default function SettingsPage() {
         if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
 
         if (storedUserReferredByCode && storedUserReferredByCode.trim() !== '') {
+          setHasUserReferredByCodeInStorage(true);
           if (isMounted) setIsLoadingReferrerName(true);
           getReferrerInfoForCurrentUserAction()
             .then(result => {
@@ -110,6 +112,8 @@ export default function SettingsPage() {
             })
             .catch(err => console.error("Error calling getReferrerInfoForCurrentUserAction:", err))
             .finally(() => { if (isMounted) setIsLoadingReferrerName(false); });
+        } else {
+          setHasUserReferredByCodeInStorage(false);
         }
 
         if (pb.authStore.isValid && currentUserId && isMounted) {
@@ -407,7 +411,7 @@ export default function SettingsPage() {
               </p>
             </div>
           )}
-          {!userReferredByUserName && !isLoadingReferrerName && !localStorage.getItem('userReferredByCode') && (
+          {!userReferredByUserName && !isLoadingReferrerName && !hasUserReferredByCodeInStorage && (
              <div className="p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md flex items-center gap-2">
                 <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <p className="text-sm text-blue-700 dark:text-blue-300">You were not referred by anyone.</p>
