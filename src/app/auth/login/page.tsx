@@ -76,8 +76,8 @@ export default function LoginPage() {
           <Link href="/landing" className="mb-6 inline-block">
             <Logo className="mx-auto h-12 w-12 text-primary" />
           </Link>
-          <CardTitle className="text-3xl font-bold">Welcome Back!</CardTitle>
-          <CardDescription>Enter your email below to access your EduNexus account.</CardDescription>
+          <CardTitle className="text-3xl font-bold">Log in to EduNexus</CardTitle>
+          <CardDescription>Enter your credentials to access your EduNexus account.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
