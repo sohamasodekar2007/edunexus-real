@@ -4,7 +4,7 @@
 import pb from '@/lib/pocketbase';
 import { LoginSchema, SignupSchema, type SignupFormData } from '@/lib/validationSchemas';
 import { generateReferralCode } from '@/lib/authUtils';
-import { createUserInPocketBase, findUserByReferralCode, updateUserReferralStats, findUserById } from '@/lib/userDataService';
+import { createUserInPocketBase, findUserByReferralCode, updateUserReferralStats, findUserById, updateUserInPocketBase } from '@/lib/userDataService';
 import type { User, UserModel, UserRole, UserClass } from '@/types';
 import { ClientResponseError } from 'pocketbase';
 
@@ -14,7 +14,8 @@ export async function validateReferralCodeAction(code: string): Promise<{ succes
     return { success: false, message: "" }; // Silent failure for empty string for better UX on blur
   }
   try {
-    const referrer = await findUserByReferralCode(code.trim());
+    const upperCaseCode = code.trim().toUpperCase();
+    const referrer = await findUserByReferralCode(upperCaseCode);
     if (referrer) {
       return { success: true, message: `This referral code belongs to ${referrer.name}.`, referrerName: referrer.name };
     } else {
@@ -38,7 +39,8 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
   let referrer: User | null = null;
   if (referredByCodeInput && referredByCodeInput.trim() !== '') {
     try {
-      referrer = await findUserByReferralCode(referredByCodeInput.trim());
+      const upperCaseReferredByCode = referredByCodeInput.trim().toUpperCase();
+      referrer = await findUserByReferralCode(upperCaseReferredByCode);
       if (!referrer) {
         return { success: false, message: "Invalid referral code provided. Please check the code and try again.", error: "Invalid referral code." };
       }
@@ -67,7 +69,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       avatarUrl: avatarUrl,
       totalPoints: 0,
       referralCode: newUserReferralCode, // New user's own code
-      referredByCode: referrer ? referrer.referralCode : null, // Store the code they used
+      referredByCode: referrer ? referrer.referralCode : null, // Store the code they used (will be uppercase from DB)
       referralStats: {
         referred_free: 0,
         referred_chapterwise: 0,
@@ -241,6 +243,7 @@ export async function updateUserProfileAction({
         dataForPocketBase.targetYear = year;
       } else {
         console.warn(`Invalid target year string received: ${targetYearToUpdate}`);
+        // Keep targetYear as undefined in dataForPocketBase if parsing fails, effectively not updating it
       }
     }
   }
@@ -258,7 +261,7 @@ export async function updateUserProfileAction({
     if (error instanceof ClientResponseError) {
       errorMessage = error.data?.message || errorMessage;
       if (error.data?.data) {
-        const fieldErrors = Object.entries(error.data.data).map(([key, val]) => `${key}: ${val.message}`).join('; ');
+        const fieldErrors = Object.entries(error.data.data).map(([key, val]: [string, any]) => `${key}: ${val.message}`).join('; ');
         errorMessage += ` Details: ${fieldErrors}`;
       }
     } else if (error instanceof Error) {
@@ -277,7 +280,8 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
   try {
     const currentUser = await findUserById(currentUserId);
     if (currentUser && currentUser.referredByCode) {
-      const referrer = await findUserByReferralCode(currentUser.referredByCode);
+      // referral codes are stored in uppercase, so ensure we search for the uppercase version
+      const referrer = await findUserByReferralCode(currentUser.referredByCode.toUpperCase());
       if (referrer) {
         return { referrerName: referrer.name };
       } else {
