@@ -39,14 +39,16 @@ function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
 
 export default function SignupPageContent() {
   const router = useRouter();
-  const routeParams = useParams();
+  const params = useParams(); // Use useParams hook
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingReferral, setIsCheckingReferral] = useState(false);
   const [referralMessage, setReferralMessage] = useState<string | null>(null);
-  const [referralMessageIsError, setReferralMessageIsError] = useState(false);
+  // referralMessageIsError is no longer used to display errors for invalid codes, 
+  // but kept in case other types of referral validation messages are needed.
+  const [referralMessageIsError, setReferralMessageIsError] = useState(false); 
 
-  const referralCodeFromUrl = typeof routeParams.code === 'string' ? routeParams.code : undefined;
+  const referralCodeFromUrl = typeof params?.code === 'string' ? params.code : undefined;
 
   const form = useForm<SignupFormData>({
     resolver: zodResolver(SignupSchema),
@@ -58,7 +60,7 @@ export default function SignupPageContent() {
       password: '',
       confirmPassword: '',
       class: undefined, 
-      referralCode: referralCodeFromUrl || '', // Pre-fill from URL
+      referralCode: referralCodeFromUrl || '',
       terms: false,
     },
   });
@@ -74,16 +76,19 @@ export default function SignupPageContent() {
       setReferralMessage(null);
       try {
         const result = await validateReferralCodeAction(code.trim().toUpperCase());
-        if (result.success) {
+        if (result.success && result.message) { // Only set message if successful validation
           setReferralMessage(result.message);
           setReferralMessageIsError(false);
         } else {
-          setReferralMessage(result.message || "Invalid referral code.");
-          setReferralMessageIsError(true);
+          // Do not show "Invalid referral code" or similar errors.
+          // Clear any previous success message.
+          setReferralMessage(null);
+          setReferralMessageIsError(false); 
         }
       } catch (error) {
-        setReferralMessage("Error validating referral code.");
-        setReferralMessageIsError(true);
+        setReferralMessage(null); // Clear message on error
+        setReferralMessageIsError(false);
+        console.error("Error validating referral code client-side:", error);
       } finally {
         setIsCheckingReferral(false);
       }
@@ -93,14 +98,15 @@ export default function SignupPageContent() {
 
   useEffect(() => {
     if (referralCodeFromUrl) {
-      // Default value is set in useForm, so we just need to trigger validation.
+      form.setValue('referralCode', referralCodeFromUrl, { shouldValidate: true });
       handleReferralCodeChange(referralCodeFromUrl);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [referralCodeFromUrl]); // handleReferralCodeChange is memoized
+  }, [referralCodeFromUrl, form.setValue]); // handleReferralCodeChange is memoized
 
   async function onSubmit(data: SignupFormData) {
     setIsLoading(true);
+    // Clear previous referral message before submitting
     setReferralMessage(null); 
     try {
       const result = await signupUserAction(data);
@@ -266,8 +272,9 @@ export default function SignupPageContent() {
                         )}
                       </div>
                     </FormControl>
-                    {referralMessage && (
-                      <p className={`text-xs mt-1 ${referralMessageIsError ? 'text-destructive' : 'text-green-600'}`}>
+                    {/* Only display the message if it's a success/info message from validation */}
+                    {referralMessage && !referralMessageIsError && (
+                      <p className={`text-xs mt-1 text-green-600`}>
                         {referralMessage}
                       </p>
                     )}
@@ -315,3 +322,4 @@ export default function SignupPageContent() {
     </div>
   );
 }
+

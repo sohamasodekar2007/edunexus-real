@@ -10,8 +10,7 @@ import { ClientResponseError } from 'pocketbase';
 
 export async function validateReferralCodeAction(code: string): Promise<{ success: boolean; message: string; referrerName?: string }> {
   if (!code || code.trim().length === 0) {
-    // Optionally, don't return error for empty, let UI handle it or return a specific non-error state
-    return { success: false, message: "" }; // Silent failure for empty string for better UX on blur
+    return { success: false, message: "" }; 
   }
   try {
     const upperCaseCode = code.trim().toUpperCase();
@@ -36,24 +35,28 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
 
   const { name, surname, email, phone, password, class: userClass, referralCode: referredByCodeInput } = validation.data;
 
-  let referrer: User | null = null;
+  let referrerToUpdateStats: User | null = null;
+  let actualReferredByCodeForNewUser: string | null = null;
+
   if (referredByCodeInput && referredByCodeInput.trim() !== '') {
+    const upperCaseReferredByCode = referredByCodeInput.trim().toUpperCase();
     try {
-      const upperCaseReferredByCode = referredByCodeInput.trim().toUpperCase();
-      referrer = await findUserByReferralCode(upperCaseReferredByCode);
-      if (!referrer) {
-        return { success: false, message: "Invalid referral code provided. Please check the code and try again.", error: "Invalid referral code." };
-      }
+      referrerToUpdateStats = await findUserByReferralCode(upperCaseReferredByCode);
+      // Save the code user entered (uppercased), regardless of validity for now.
+      // If referrerToUpdateStats is found, we've confirmed its a valid code belonging to them.
+      // If not, we still save what the user input.
+      actualReferredByCodeForNewUser = upperCaseReferredByCode; 
     } catch (e) {
-      console.error("Error checking referral code during signup:", e);
-      return { success: false, message: "Could not verify referral code. Please try again or sign up without one.", error: "Referral code verification failed." };
+      console.error("Error looking up referral code during signup (this should not fail signup):", e);
+      // Still save what user entered, even if lookup failed.
+      actualReferredByCodeForNewUser = upperCaseReferredByCode;
     }
   }
+
 
   try {
     const newUserReferralCode = generateReferralCode();
     const combinedName = `${name} ${surname}`.trim();
-    // Generate avatar using first letter of first name
     const avatarFallback = name.charAt(0).toUpperCase();
     const avatarUrl = `https://placehold.co/100x100.png?text=${avatarFallback}`;
 
@@ -65,11 +68,11 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       class: userClass,
       model: 'Free' as UserModel,
       role: 'User' as UserRole,
-      expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0], // ~78 years for "lifetime"
+      expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0],
       avatarUrl: avatarUrl,
       totalPoints: 0,
-      referralCode: newUserReferralCode, // New user's own code
-      referredByCode: referrer ? referrer.referralCode : null, // Store the code they used (will be uppercase from DB)
+      referralCode: newUserReferralCode,
+      referredByCode: actualReferredByCodeForNewUser, // Save what was entered (or null)
       referralStats: {
         referred_free: 0,
         referred_chapterwise: 0,
@@ -81,19 +84,18 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
 
     const newUser = await createUserInPocketBase(userDataForPocketBase);
 
-    // If signup was successful and a valid referrer exists, update their stats
-    if (newUser && newUser.id && referrer && referrer.id) {
+    // If signup was successful and a valid referrer was identified, update their stats
+    if (newUser && newUser.id && referrerToUpdateStats && referrerToUpdateStats.id) {
       try {
-        const currentStats = referrer.referralStats || { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 };
+        const currentStats = referrerToUpdateStats.referralStats || { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 };
         const newReferrerStats: User['referralStats'] = {
           ...currentStats,
           referred_free: (currentStats.referred_free || 0) + 1,
         };
-        await updateUserReferralStats(referrer.id, newReferrerStats);
-        console.log(`Referral stats updated for referrer: ${referrer.name}`);
+        await updateUserReferralStats(referrerToUpdateStats.id, newReferrerStats);
+        console.log(`Referral stats updated for referrer: ${referrerToUpdateStats.name}`);
       } catch (statsError) {
-        console.error(`Failed to update referral stats for referrer ${referrer.id}:`, statsError);
-        // Do not fail the main signup if updating referrer stats fails, but log it.
+        console.error(`Failed to update referral stats for referrer ${referrerToUpdateStats.id}:`, statsError);
       }
     }
     
@@ -154,8 +156,8 @@ export async function loginUserAction(data: { email: string, password_login: str
   userEmail?: string,
   userPhone?: string | null,
   userTargetYear?: number | null,
-  userReferralCode?: string | null, // User's own referral code
-  userReferredByCode?: string | null, // Code they used to sign up
+  userReferralCode?: string | null, 
+  userReferredByCode?: string | null, 
   userReferralStats?: User['referralStats'] | null,
   userExpiryDate?: string | null,
   token?: string 
@@ -177,7 +179,7 @@ export async function loginUserAction(data: { email: string, password_login: str
 
     const user = authData.record as User; 
     const userFullName = user.name || 'User'; 
-    const userName = user.name?.split(' ')[0] || 'User'; // Typically first name
+    const userName = user.name?.split(' ')[0] || 'User'; 
 
     return { 
       success: true, 
@@ -185,7 +187,7 @@ export async function loginUserAction(data: { email: string, password_login: str
       token: authData.token, 
       userId: user.id, 
       userFullName: userFullName,
-      userName: userName, // First name
+      userName: userFullName, // Storing full name as userName now
       userModel: user.model || null,
       userRole: user.role || null,
       userClass: user.class || null,
@@ -193,7 +195,7 @@ export async function loginUserAction(data: { email: string, password_login: str
       userPhone: user.phone || null,
       userTargetYear: user.targetYear || null,
       userReferralCode: user.referralCode || null,
-      userReferredByCode: user.referredByCode || null,
+      userReferredByCode: user.referredByCode || null, 
       userReferralStats: user.referralStats || null,
       userExpiryDate: user.expiry_date || null,
     };
@@ -243,7 +245,6 @@ export async function updateUserProfileAction({
         dataForPocketBase.targetYear = year;
       } else {
         console.warn(`Invalid target year string received: ${targetYearToUpdate}`);
-        // Keep targetYear as undefined in dataForPocketBase if parsing fails, effectively not updating it
       }
     }
   }
@@ -280,19 +281,18 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
   try {
     const currentUser = await findUserById(currentUserId);
     if (currentUser && currentUser.referredByCode) {
-      // referral codes are stored in uppercase, so ensure we search for the uppercase version
       const referrer = await findUserByReferralCode(currentUser.referredByCode.toUpperCase());
       if (referrer) {
         return { referrerName: referrer.name };
       } else {
-        // This case should ideally not happen if referredByCode was validated at signup
         console.warn(`Current user ${currentUserId} has referredByCode ${currentUser.referredByCode}, but referrer not found.`);
         return { referrerName: null, error: "Referrer details not found." };
       }
     }
-    return { referrerName: null }; // No referral code used by current user
+    return { referrerName: null }; 
   } catch (error) {
     console.error('Error fetching referrer info for current user:', error);
     return { referrerName: null, error: "Could not fetch referrer information." };
   }
 }
+
