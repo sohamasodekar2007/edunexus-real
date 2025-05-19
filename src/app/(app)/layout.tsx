@@ -30,7 +30,7 @@ import {
   GitCompareArrows,
   ShieldCheck,
   Bell,
-  Zap,
+  Sparkles, // Changed from Zap to Sparkles
   HelpCircle, 
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -71,8 +71,6 @@ const connectAndCompeteItems: NavItem[] = [
   { href: '/compare', label: 'Compare', icon: GitCompareArrows },
 ];
 
-// AI Tools items removed
-
 const administrationItems: NavItem[] = [
   { href: '/admin-panel', label: 'Admin Panel', icon: ShieldCheck },
 ];
@@ -80,7 +78,6 @@ const administrationItems: NavItem[] = [
 const navStructure: NavItemGroup[] = [
   { label: 'Main Navigation', items: mainNavigationItems },
   { label: 'Connect & Compete', items: connectAndCompeteItems },
-  // AI Tools group removed
   { label: 'Administration', items: administrationItems },
 ];
 
@@ -126,7 +123,13 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         }
       }
     }
-    return 'EduNexus'; 
+    // Fallback label if no active item matches exactly, or if on a non-sidebar route.
+    // This could be a generic app name or based on the first segment of the path.
+    if (pathname.startsWith('/dashboard')) return 'Dashboard';
+    if (pathname.startsWith('/test-series')) return 'Test Series';
+    if (pathname.startsWith('/dpps')) return 'DPP';
+    // Add more specific fallbacks if needed for other top-level routes
+    return 'EduNexus'; // Generic fallback
   };
 
   const appSideBaseNavStructure: SideBaseNavItemGroup[] = navStructure;
@@ -143,8 +146,12 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </h1>
           </div>
 
-          <Button variant="outline" size="sm" className="hidden sm:inline-flex items-center">
-            <Zap className="mr-1 sm:mr-2 h-4 w-4" />
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="hidden sm:inline-flex items-center text-primary border-primary"
+          >
+            <Sparkles className="mr-1 sm:mr-2 h-4 w-4" /> 
             Upgrade
           </Button>
           {currentUserModel && <Badge variant="secondary" className="hidden sm:inline-flex">Plan: {currentUserModel}</Badge>}
