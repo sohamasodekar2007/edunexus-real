@@ -17,26 +17,21 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
   const { name, surname, email, phone, password, class: userClass, referralCode: referredByCodeInput } = validation.data;
 
   try {
-    // PocketBase's create action will handle email uniqueness check.
-    // const existingUser = await findUserByEmail(email); // This check is redundant if createRule is robust in PB
-    // if (existingUser) {
-    //   return { success: false, message: 'User already exists with this email.', error: 'User already exists with this email.' };
-    // }
-
     const newUserReferralCode = generateReferralCode();
     const combinedName = `${name} ${surname}`.trim();
 
+    // Prepare data for createUserInPocketBase, ensuring field names match expectations
     const userDataForPocketBase = {
       email: email.toLowerCase(),
-      password_signup: password, // Pass the raw password for PocketBase to hash
+      password: password, // Use 'password' from validated form data
       name: combinedName,
-      surname, // Not directly in PB schema, but useful for other parts if needed, otherwise remove
       phone,
       class: userClass,
       model: 'Free' as UserModel,
       role: 'User' as UserRole,
-      expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0], // Format YYYY-MM-DD
+      expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0],
       avatarUrl: `https://placehold.co/100x100.png?text=${name.charAt(0).toUpperCase()}`,
+      dataAiHint: `${name.charAt(0).toUpperCase()} avatar`,
       totalPoints: 0,
       referralCode: newUserReferralCode,
       referredByCode: referredByCodeInput || null,
@@ -53,23 +48,35 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
     return { success: true, message: 'Signup successful! Please log in.', userId: newUser.id };
 
   } catch (error) {
-    console.error('Signup Action Error:', error);
+    console.error('Signup Action Error:', error); // Log the full error object
     let errorMessage = 'An unexpected error occurred during signup.';
-    if (error instanceof Error) {
+    
+    if (error instanceof ClientResponseError) {
+        console.error('PocketBase ClientResponseError details:', JSON.stringify(error.data, null, 2));
+        // Try to get a more specific message from PocketBase's response
+        const pbErrorData = error.data.data;
+        if (pbErrorData) {
+            const fieldErrors = Object.keys(pbErrorData).map(key => {
+                if (pbErrorData[key] && pbErrorData[key].message) {
+                    return `${key}: ${pbErrorData[key].message}`;
+                }
+                return null;
+            }).filter(Boolean).join('; ');
+            if (fieldErrors) {
+                errorMessage = `Validation issues: ${fieldErrors}`;
+            } else if (error.data.message) {
+                errorMessage = error.data.message;
+            }
+        } else if (error.message) {
+            errorMessage = error.message;
+        }
+    } else if (error instanceof Error) {
         errorMessage = error.message;
     } else if (typeof error === 'string') {
         errorMessage = error;
     }
-    // Check for PocketBase specific errors if possible
-    if (error instanceof ClientResponseError) {
-        const pbErrorData = error.data.data;
-        if (pbErrorData?.email?.message) {
-            errorMessage = pbErrorData.email.message;
-        } else if (error.data?.message) {
-            errorMessage = error.data.message;
-        }
-    }
-    return { success: false, message: errorMessage, error: errorMessage };
+    
+    return { success: false, message: `Signup failed: ${errorMessage}`, error: errorMessage };
   }
 }
 
@@ -79,6 +86,7 @@ export async function loginUserAction(data: { email: string, password_login: str
   error?: string; 
   userId?: string, 
   userFullName?: string, 
+  userName?: string,
   userModel?: UserModel | null, 
   userRole?: UserRole | null, 
   userClass?: UserClass | null, 
@@ -88,8 +96,7 @@ export async function loginUserAction(data: { email: string, password_login: str
   userReferralCode?: string | null,
   userReferralStats?: User['referralStats'] | null,
   userExpiryDate?: string | null,
-  userName?: string // For dashboard greeting
-  token?: string // PocketBase auth token
+  token?: string 
 }> {
   const validation = LoginSchema.safeParse({email: data.email, password: data.password_login});
   if (!validation.success) {
@@ -107,15 +114,15 @@ export async function loginUserAction(data: { email: string, password_login: str
     }
 
     const user = authData.record;
-    const userFullName = user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim(); // PocketBase might use 'name' or split first/last
+    const userFullName = user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim(); 
 
     return { 
       success: true, 
       message: 'Login successful!', 
-      token: authData.token, // Important for subsequent authenticated requests
+      token: authData.token, 
       userId: user.id, 
       userFullName: userFullName,
-      userName: user.name || userFullName.split(' ')[0], // Get first name for greeting
+      userName: user.name || userFullName.split(' ')[0], 
       userModel: user.model as UserModel || null,
       userRole: user.role as UserRole || null,
       userClass: user.class as UserClass || null,
@@ -131,7 +138,7 @@ export async function loginUserAction(data: { email: string, password_login: str
     console.error('Login Action Error:', error);
     let errorMessage = 'Invalid email or password.';
      if (error instanceof ClientResponseError) {
-        if (error.status === 400) { // PocketBase often returns 400 for failed auth
+        if (error.status === 400) { 
             errorMessage = 'Invalid email or password. Please try again.';
         } else {
             errorMessage = error.data?.message || 'An error occurred during login.';
