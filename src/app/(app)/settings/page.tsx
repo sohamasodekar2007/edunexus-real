@@ -25,8 +25,8 @@ import type { UserClass, User } from '@/types';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileAction, getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
-import pb from '@/lib/pocketbase';
-import { ClientResponseError } from 'pocketbase';
+import pb from '@/lib/pocketbase'; // Import your initialized instance
+import { ClientResponseError } from 'pocketbase'; // Import ClientResponseError type
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
 const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"];
@@ -70,6 +70,7 @@ export default function SettingsPage() {
         const storedReferralCode = localStorage.getItem('userReferralCode');
         const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
         const storedExpiryDate = localStorage.getItem('userExpiryDate');
+        // Removed userReferralStats as its display was removed.
 
         if (storedFullName) setUserFullName(storedFullName);
         if (storedEmail) setUserEmail(storedEmail);
@@ -110,18 +111,11 @@ export default function SettingsPage() {
               unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
                 if (e.action === 'update' && e.record && isMounted) {
                   console.log('[Real-time] User record updated:', e.record);
-                  // This example only updates model and referralStats. Adjust as needed.
+                  // This example only updates model. Adjust as needed if referralStats or other fields need real-time updates.
                   if (e.record.model && typeof window !== 'undefined' && e.record.model !== localStorage.getItem('userModel')) {
                      localStorage.setItem('userModel', e.record.model as string);
                      setUserModel(e.record.model as string);
                   }
-                  // Example for referralStats:
-                  // const updatedStats = e.record.referralStats as User['referralStats'];
-                  // if (updatedStats && JSON.stringify(updatedStats) !== localStorage.getItem('userReferralStats')) {
-                  //   localStorage.setItem('userReferralStats', JSON.stringify(updatedStats));
-                  //   // If you were displaying referralStats, you'd update local state here too
-                  //   // toast({ title: "Referral Stats Updated!", description: "Your referral count has changed." });
-                  // }
                 }
               });
               console.log(`[Real-time Subscription] Successfully subscribed to updates for user ID: ${localUserId}`);
@@ -169,7 +163,7 @@ export default function SettingsPage() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, toast]);
+  }, [userId, toast]); // Added toast to dependencies
 
   const handleSaveChanges = async () => {
     const currentUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
@@ -376,6 +370,7 @@ export default function SettingsPage() {
               </Button>
             </div>
           </div>
+           {/* Removed "Your Referral Statistics" display section as per previous request */}
         </CardContent>
       </Card>
 
@@ -402,6 +397,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-    
-
-    
