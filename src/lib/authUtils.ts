@@ -1,21 +1,9 @@
-// @ts-nocheck
-// 'use server'; // Removed: This file contains server-side utilities, not direct Server Actions.
-import bcrypt from 'bcryptjs';
 
-const SALT_ROUNDS = 10;
-
-export async function hashPassword(password: string): Promise<string> {
-  const salt = await bcrypt.genSalt(SALT_ROUNDS);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  return hashedPassword;
-}
-
-export async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  return bcrypt.compare(password, hash);
-}
+// PocketBase handles password hashing and verification.
+// These bcrypt functions are no longer needed for the core auth flow.
 
 export function generateReferralCode(length: number = 8): string {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Removed lowercase for simpler codes
   let result = '';
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));

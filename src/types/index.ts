@@ -33,37 +33,43 @@ export interface BookmarkedQuestion {
   sourceType: 'test' | 'dpp';
 }
 
-// Updated User type based on provided JSON
 export type UserClass = "11th Grade" | "12th Grade" | "Dropper" | "Teacher";
-export type UserModel = "Free" | "Chapterwise" | "Full_length" | "Combo" | "Dpp" | "Teacher";
+export type UserModel = "Free" | "Chapterwise" | "Full_length" | "Dpp" | "Combo" | "Teacher";
 export type UserRole = "User" | "Admin" | "Teacher";
 
+// User type aligned with PocketBase fields and app needs
 export interface User {
-  id: string;
+  id: string; // PocketBase record ID
   email: string;
-  password?: string; // Hashed password, optional if fetching for display without sensitive data
-  name: string;
-  surname: string;
-  phone: string;
-  referral?: string; // User's own referral code if they entered one during signup (referredByCode)
-  class: UserClass;
-  model: UserModel;
-  role: UserRole;
-  expiry_date: string; // ISO date string
-  createdAt: string; // ISO date string
+  // Password is not directly stored or retrieved by the app client-side after PocketBase handles it
+  name: string; // Combined from signup: name + surname
+  // surname is not a direct field in PocketBase, combined into 'name'
+  phone?: string | null;
+  class?: UserClass | null;
+  model?: UserModel | null;
+  role?: UserRole | null;
+  expiry_date?: string | null; // ISO date string
+  created?: string; // PocketBase field
+  updated?: string; // PocketBase field
   avatarUrl?: string | null;
-  totalPoints: number;
+  totalPoints?: number | null;
   targetYear?: number | null;
-  telegramId?: string | null;
-  telegramUsername?: string | null;
-  referralCode: string; // The referral code generated for this user
+  // telegramId and telegramUsername are not in the provided PocketBase schema, can be added if needed
+  // telegramId?: string | null;
+  // telegramUsername?: string | null;
+  referralCode?: string | null; // The referral code generated for this user
   referredByCode?: string | null; // The referral code this user used during signup
-  referralStats: {
+  referralStats?: {
     referred_free: number;
     referred_chapterwise: number;
     referred_full_length: number;
     referred_combo: number;
-  };
+  } | null;
+  // PocketBase specific fields you might need from the record
+  collectionId?: string;
+  collectionName?: string;
+  username?: string; // PocketBase has a username field, often same as email or generated
+  verified?: boolean;
 }
 
 

@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 'use client';
 import { useState } from 'react';
@@ -15,7 +14,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Logo } from '@/components/icons';
 import { useToast } from '@/hooks/use-toast';
-import { Send } from 'lucide-react'; // Using Send icon as a placeholder for Telegram
+import { Send } from 'lucide-react';
+import pb from '@/lib/pocketbase'; // Import PocketBase client
 
 export default function LoginPage() {
   const router = useRouter();
@@ -33,19 +33,21 @@ export default function LoginPage() {
   async function onSubmit(data: LoginFormData) {
     setIsLoading(true);
     try {
-      // Rename password to password_login for the action
       const actionData = { email: data.email, password_login: data.password };
       const result = await loginUserAction(actionData);
 
-      if (result.success) {
+      if (result.success && result.token && result.userId) {
         toast({
           title: 'Login Successful',
           description: `Welcome back, ${result.userFullName}!`,
         });
-        // Store user info for header and dashboard display
+        
+        // Store PocketBase auth token and user info
         if (typeof window !== 'undefined') {
+          pb.authStore.save(result.token, null); // Save token, model is null for password auth
+          localStorage.setItem('userId', result.userId);
           localStorage.setItem('userFullName', result.userFullName || 'User');
-          localStorage.setItem('userName', result.userName || 'User'); // For dashboard greeting
+          localStorage.setItem('userName', result.userName || 'User');
           localStorage.setItem('userModel', result.userModel || 'Free'); 
           localStorage.setItem('userRole', result.userRole || 'User');
           localStorage.setItem('userClass', result.userClass || 'N/A');
@@ -142,4 +144,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

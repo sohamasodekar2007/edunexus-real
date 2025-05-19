@@ -32,6 +32,7 @@ import {
   Bell,
   Sparkles,
   HelpCircle, 
+  MessageSquareQuote, // Corrected Icon Name
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { initializeLocalStorageData } from '@/lib/mock-data';
@@ -46,11 +47,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SideBase, type NavItemGroup as SideBaseNavItemGroup, type NavItem as SideBaseNavItem } from '@/components/sidebase';
-
+import pb from '@/lib/pocketbase'; // Import PocketBase client
 
 interface NavItem extends SideBaseNavItem {}
 interface NavItemGroup extends SideBaseNavItemGroup {}
-
 
 const mainNavigationItems: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, matchExact: true },
@@ -79,6 +79,7 @@ const administrationItems: NavItem[] = [
 const navStructure: NavItemGroup[] = [
   { label: 'Main Navigation', items: mainNavigationItems },
   { label: 'Connect & Compete', items: connectAndCompeteItems },
+  // { label: 'AI Tools', items: aiToolsItems }, // AI Tools section removed
   { label: 'Administration', items: administrationItems },
 ];
 
@@ -123,15 +124,31 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       if (userPhone) setCurrentUserPhone(userPhone);
       if (userTargetYear) setCurrentUserTargetYear(userTargetYear);
       if (referralCode) setCurrentUserReferralCode(referralCode);
-      if (referralStats) setCurrentUserReferralStats(JSON.parse(referralStats));
+      if (referralStats) {
+        try {
+          setCurrentUserReferralStats(JSON.parse(referralStats));
+        } catch (e) {
+          console.error("Error parsing referral stats from localStorage", e);
+        }
+      }
       if (expiryDate) setCurrentUserExpiryDate(expiryDate);
+
+      // Check PocketBase auth state
+      if (!pb.authStore.isValid) {
+        // If not valid, redirect to login, but be careful with loops if already on login
+        if (pathname !== '/auth/login' && pathname !== '/auth/signup' && pathname !== '/landing') {
+          // router.push('/auth/login'); // Potentially re-enable if strict auth checks are needed on every layout load
+        }
+      }
     }
-  }, []);
+  }, [pathname, router]);
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
+      pb.authStore.clear(); // Clear PocketBase auth token
+      localStorage.removeItem('userId');
       localStorage.removeItem('userFullName');
-      localStorage.removeItem('userName'); // Also clear userName if used elsewhere
+      localStorage.removeItem('userName'); 
       localStorage.removeItem('userModel');
       localStorage.removeItem('userRole');
       localStorage.removeItem('userAvatarFallback');
@@ -194,7 +211,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" className="rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="https://placehold.co/40x40.png" alt="User Avatar" data-ai-hint="user avatar"/>
+                  <AvatarImage src="https://placehold.co/40x40.png" alt={currentUserFullName} data-ai-hint="user avatar"/>
                   <AvatarFallback>{currentUserAvatarFallback}</AvatarFallback>
                 </Avatar>
               </Button>
@@ -250,4 +267,3 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
