@@ -1,29 +1,51 @@
+
 // @ts-nocheck
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignupSchema, type SignupFormData } from '@/lib/validationSchemas';
-import { signupUserAction } from '@/app/auth/actions';
+import { signupUserAction, validateReferralCodeAction } from '@/app/auth/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Label } from '@/components/ui/label'; // Label is not explicitly used here due to FormLabel
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Logo } from '@/components/icons';
 import { useToast } from '@/hooks/use-toast';
 import type { UserClass } from '@/types';
+import { Loader2 } from 'lucide-react'; // For loading spinner
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
+
+// Debounce function
+function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+
+  const debounced = (...args: Parameters<F>) => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    timeout = setTimeout(() => func(...args), waitFor);
+  };
+
+  return debounced as (...args: Parameters<F>) => ReturnType<F>;
+}
+
 
 export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingReferral, setIsCheckingReferral] = useState(false);
+  const [referralMessage, setReferralMessage] = useState<string | null>(null);
+  const [referralMessageIsError, setReferralMessageIsError] = useState(false);
+
 
   const form = useForm<SignupFormData>({
     resolver: zodResolver(SignupSchema),
@@ -34,14 +56,43 @@ export default function SignupPage() {
       phone: '',
       password: '',
       confirmPassword: '',
-      class: undefined, // No default for select
+      class: undefined, 
       referralCode: '',
       terms: false,
     },
   });
 
+  const handleReferralCodeChange = useCallback(
+    debounce(async (code: string) => {
+      if (!code || code.trim().length < 3) { // Basic check, adjust length as needed
+        setReferralMessage(null);
+        setReferralMessageIsError(false);
+        return;
+      }
+      setIsCheckingReferral(true);
+      setReferralMessage(null);
+      try {
+        const result = await validateReferralCodeAction(code.trim());
+        if (result.success) {
+          setReferralMessage(result.message);
+          setReferralMessageIsError(false);
+        } else {
+          setReferralMessage(result.message || "Invalid referral code.");
+          setReferralMessageIsError(true);
+        }
+      } catch (error) {
+        setReferralMessage("Error validating referral code.");
+        setReferralMessageIsError(true);
+      } finally {
+        setIsCheckingReferral(false);
+      }
+    }, 700), // Debounce for 700ms
+    []
+  );
+
   async function onSubmit(data: SignupFormData) {
     setIsLoading(true);
+    setReferralMessage(null); // Clear referral message before new submission
     try {
       const result = await signupUserAction(data);
       if (result.success) {
@@ -192,9 +243,26 @@ export default function SignupPage() {
                   <FormItem>
                     <FormLabel>Referral Code (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter referral code" {...field} />
+                      <div className="relative">
+                        <Input 
+                          placeholder="Enter referral code" 
+                          {...field} 
+                          onChange={(e) => {
+                            field.onChange(e); // Update RHF
+                            handleReferralCodeChange(e.target.value); // Trigger validation
+                          }}
+                        />
+                        {isCheckingReferral && (
+                          <Loader2 className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin" />
+                        )}
+                      </div>
                     </FormControl>
-                    <FormMessage />
+                    {referralMessage && (
+                      <p className={`text-xs mt-1 ${referralMessageIsError ? 'text-destructive' : 'text-green-600'}`}>
+                        {referralMessage}
+                      </p>
+                    )}
+                    <FormMessage /> {/* For Zod validation errors */}
                   </FormItem>
                 )}
               />
@@ -213,15 +281,15 @@ export default function SignupPage() {
                       <FormLabel>
                         Accept terms and conditions
                       </FormLabel>
-                      <FormDescription>
+                      <p className="text-sm text-muted-foreground">
                         You agree to our Terms of Service and Privacy Policy.
-                      </FormDescription>
+                      </p>
                        <FormMessage className="!mt-1" />
                     </div>
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full" disabled={isLoading || isCheckingReferral}>
                 {isLoading ? 'Creating Account...' : 'Create Account'}
               </Button>
             </form>

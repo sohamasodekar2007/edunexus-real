@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -18,11 +18,12 @@ import {
   Copy,
   Star,
   CalendarDays,
+  Info,
 } from 'lucide-react';
 import type { UserClass, User } from '@/types'; 
 import { format } from 'date-fns'; 
 import { useToast } from '@/hooks/use-toast';
-import { updateUserProfileAction } from '@/app/auth/actions';
+import { updateUserProfileAction, getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
 const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"]; 
@@ -41,6 +42,8 @@ export default function SettingsPage() {
 
   const [userReferralCode, setUserReferralCode] = useState<string>('N/A');
   const [userReferralStats, setUserReferralStats] = useState<User['referralStats'] | null>(null);
+  const [userReferredByUserName, setUserReferredByUserName] = useState<string | null>(null);
+  const [isLoadingReferrerName, setIsLoadingReferrerName] = useState(false);
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
   const [userModel, setUserModel] = useState<string>('N/A');
   const [isSaving, setIsSaving] = useState(false); 
@@ -57,6 +60,7 @@ export default function SettingsPage() {
       const storedModel = localStorage.getItem('userModel');
       
       const storedReferralCode = localStorage.getItem('userReferralCode');
+      const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
       const storedReferralStatsString = localStorage.getItem('userReferralStats');
       const storedExpiryDate = localStorage.getItem('userExpiryDate');
 
@@ -66,11 +70,10 @@ export default function SettingsPage() {
       if (storedPhone) setUserPhone(storedPhone);
       if (storedAvatarFallback) setUserAvatarFallback(storedAvatarFallback);
       if (storedClass && USER_CLASSES_OPTIONS.includes(storedClass)) setUserClass(storedClass);
-      else if (storedClass === null || storedClass === '') setUserClass(''); // Handle null/empty from localStorage
+      else if (storedClass === null || storedClass === '') setUserClass(''); 
       
       if (storedTargetYear && storedTargetYear !== 'N/A' && TARGET_EXAM_YEAR_OPTIONS.includes(storedTargetYear)) setUserTargetYear(storedTargetYear);
       else setUserTargetYear('-- Not Set --');
-
 
       if (storedModel) setUserModel(storedModel);
 
@@ -88,6 +91,20 @@ export default function SettingsPage() {
       if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
       
       setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
+
+      if (storedUserReferredByCode && storedUserReferredByCode.trim() !== '') {
+        setIsLoadingReferrerName(true);
+        getReferrerInfoForCurrentUserAction()
+          .then(result => {
+            if (result.referrerName) {
+              setUserReferredByUserName(result.referrerName);
+            } else if (result.error) {
+              console.warn("Could not fetch referrer name:", result.error);
+            }
+          })
+          .catch(err => console.error("Error calling getReferrerInfoForCurrentUserAction:", err))
+          .finally(() => setIsLoadingReferrerName(false));
+      }
     }
   }, []);
 
@@ -106,9 +123,8 @@ export default function SettingsPage() {
 
     if (result.success) {
       toast({ title: "Success", description: result.message || "Profile updated successfully!" });
-      // Update localStorage with the new values
       if (typeof window !== 'undefined') {
-        localStorage.setItem('userClass', userClass || ''); // Store empty string if that's the selection
+        localStorage.setItem('userClass', userClass || ''); 
         localStorage.setItem('userTargetYear', userTargetYear);
       }
     } else {
@@ -132,7 +148,6 @@ export default function SettingsPage() {
       reader.onloadend = () => {
         setAvatarPreview(reader.result as string);
         // TODO: Add logic to upload and save profile picture to PocketBase
-        // and update localStorage.getItem('userAvatarFallback') if name changes
       };
       reader.readAsDataURL(file);
     }
@@ -247,20 +262,31 @@ export default function SettingsPage() {
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Referral Program</CardTitle>
-          <CardDescription>Share your code and track your referral success.</CardDescription>
+          <CardDescription>Share your code, track your success, and see who referred you.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          {userReferredByUserName && (
+            <div className="p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-md flex items-center gap-2">
+              <Info className="h-5 w-5 text-green-600 dark:text-green-400" />
+              <p className="text-sm text-green-700 dark:text-green-300">
+                You were referred by: <span className="font-semibold">{userReferredByUserName}</span>
+              </p>
+            </div>
+          )}
+          {isLoadingReferrerName && !userReferredByUserName && (
+             <p className="text-sm text-muted-foreground">Loading referrer information...</p>
+          )}
           <div>
             <Label htmlFor="referralCodeDisplay">Your Referral Code</Label>
             <div className="mt-1 flex items-center gap-2">
-              <Input id="referralCodeDisplay" value={userReferralCode} readOnly className="bg-muted/50" />
+              <Input id="referralCodeDisplay" value={userReferralCode || 'N/A'} readOnly className="bg-muted/50" />
               <Button variant="outline" size="icon" onClick={handleCopyReferralCode} aria-label="Copy referral code" disabled={!userReferralCode || userReferralCode === 'N/A'}>
                 <Copy className="h-4 w-4" />
               </Button>
             </div>
           </div>
           <div>
-            <h4 className="text-sm font-medium mb-2">Referral Statistics</h4>
+            <h4 className="text-sm font-medium mb-2">Your Referral Statistics</h4>
             <div className="p-4 bg-muted/50 rounded-md grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
               <div>
                 <p className="text-xs text-muted-foreground">Free Users</p>

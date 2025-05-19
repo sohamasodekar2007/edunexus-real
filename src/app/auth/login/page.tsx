@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 'use client';
 import { useState } from 'react';
@@ -15,7 +16,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Logo } from '@/components/icons';
 import { useToast } from '@/hooks/use-toast';
 import { Send } from 'lucide-react';
-import pb from '@/lib/pocketbase'; // Import PocketBase client
+import pb from '@/lib/pocketbase'; 
 
 export default function LoginPage() {
   const router = useRouter();
@@ -42,20 +43,21 @@ export default function LoginPage() {
           description: `Welcome back, ${result.userFullName}!`,
         });
         
-        // Store PocketBase auth token and user info
         if (typeof window !== 'undefined') {
-          pb.authStore.save(result.token, null); // Save token, model is null for password auth
+          pb.authStore.save(result.token, null); 
           localStorage.setItem('userId', result.userId);
           localStorage.setItem('userFullName', result.userFullName || 'User');
-          localStorage.setItem('userName', result.userName || 'User');
+          localStorage.setItem('userName', result.userName || 'User'); // First name
           localStorage.setItem('userModel', result.userModel || 'Free'); 
           localStorage.setItem('userRole', result.userRole || 'User');
           localStorage.setItem('userClass', result.userClass || 'N/A');
           localStorage.setItem('userEmail', result.userEmail || 'user@example.com');
-          localStorage.setItem('userAvatarFallback', (result.userFullName || 'U').charAt(0).toUpperCase());
+          const fallback = (result.userFullName || 'U').charAt(0).toUpperCase();
+          localStorage.setItem('userAvatarFallback', fallback);
           localStorage.setItem('userPhone', result.userPhone || 'N/A');
           localStorage.setItem('userTargetYear', result.userTargetYear?.toString() || 'N/A');
-          localStorage.setItem('userReferralCode', result.userReferralCode || 'N/A');
+          localStorage.setItem('userReferralCode', result.userReferralCode || 'N/A'); // User's own code
+          localStorage.setItem('userReferredByCode', result.userReferredByCode || ''); // Code they used
           localStorage.setItem('userReferralStats', JSON.stringify(result.userReferralStats || {}));
           localStorage.setItem('userExpiryDate', result.userExpiryDate || 'N/A');
         }

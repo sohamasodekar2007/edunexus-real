@@ -32,7 +32,7 @@ import {
   Bell,
   Sparkles,
   HelpCircle, 
-  MessageSquareQuote, // Corrected Icon Name
+  MessageSquareQuote,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { initializeLocalStorageData } from '@/lib/mock-data';
@@ -47,7 +47,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SideBase, type NavItemGroup as SideBaseNavItemGroup, type NavItem as SideBaseNavItem } from '@/components/sidebase';
-import pb from '@/lib/pocketbase'; // Import PocketBase client
+import pb from '@/lib/pocketbase'; 
 
 interface NavItem extends SideBaseNavItem {}
 interface NavItemGroup extends SideBaseNavItemGroup {}
@@ -79,7 +79,6 @@ const administrationItems: NavItem[] = [
 const navStructure: NavItemGroup[] = [
   { label: 'Main Navigation', items: mainNavigationItems },
   { label: 'Connect & Compete', items: connectAndCompeteItems },
-  // { label: 'AI Tools', items: aiToolsItems }, // AI Tools section removed
   { label: 'Administration', items: administrationItems },
 ];
 
@@ -96,12 +95,13 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const [currentUserPhone, setCurrentUserPhone] = useState<string | null>(null);
   const [currentUserTargetYear, setCurrentUserTargetYear] = useState<string | null>(null);
   const [currentUserReferralCode, setCurrentUserReferralCode] = useState<string | null>(null);
+  const [currentUserReferredByCode, setCurrentUserReferredByCode] = useState<string | null>(null);
   const [currentUserReferralStats, setCurrentUserReferralStats] = useState<object | null>(null);
   const [currentUserExpiryDate, setCurrentUserExpiryDate] = useState<string | null>(null);
 
 
   useEffect(() => {
-    initializeLocalStorageData(); // For mock data, can be removed if not needed
+    initializeLocalStorageData(); 
     if (typeof window !== 'undefined') {
       const fullName = localStorage.getItem('userFullName');
       const model = localStorage.getItem('userModel');
@@ -112,6 +112,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       const userPhone = localStorage.getItem('userPhone');
       const userTargetYear = localStorage.getItem('userTargetYear');
       const referralCode = localStorage.getItem('userReferralCode');
+      const referredByCode = localStorage.getItem('userReferredByCode');
       const referralStats = localStorage.getItem('userReferralStats');
       const expiryDate = localStorage.getItem('userExpiryDate');
       
@@ -124,6 +125,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       if (userPhone) setCurrentUserPhone(userPhone);
       if (userTargetYear) setCurrentUserTargetYear(userTargetYear);
       if (referralCode) setCurrentUserReferralCode(referralCode);
+      if (referredByCode) setCurrentUserReferredByCode(referredByCode);
       if (referralStats) {
         try {
           setCurrentUserReferralStats(JSON.parse(referralStats));
@@ -133,11 +135,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       }
       if (expiryDate) setCurrentUserExpiryDate(expiryDate);
 
-      // Check PocketBase auth state
       if (!pb.authStore.isValid) {
-        // If not valid, redirect to login, but be careful with loops if already on login
         if (pathname !== '/auth/login' && pathname !== '/auth/signup' && pathname !== '/landing') {
-          // router.push('/auth/login'); // Potentially re-enable if strict auth checks are needed on every layout load
+          // router.push('/auth/login'); // Re-enable if strict auth checks are needed on every layout load
         }
       }
     }
@@ -145,7 +145,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
-      pb.authStore.clear(); // Clear PocketBase auth token
+      pb.authStore.clear(); 
       localStorage.removeItem('userId');
       localStorage.removeItem('userFullName');
       localStorage.removeItem('userName'); 
@@ -157,6 +157,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       localStorage.removeItem('userPhone');
       localStorage.removeItem('userTargetYear');
       localStorage.removeItem('userReferralCode');
+      localStorage.removeItem('userReferredByCode');
       localStorage.removeItem('userReferralStats');
       localStorage.removeItem('userExpiryDate');
     }
