@@ -41,15 +41,15 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
 
-    /* Sidebar specific colors */
-    --sidebar-background: 250 20% 20%; /* Darker purple for sidebar */
-    --sidebar-foreground: 250 30% 90%;  /* Light text for dark sidebar */
-    --sidebar-primary: 260 75% 65%;    /* Primary color for active items in sidebar */
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 260 75% 70%;     /* Accent for hover in sidebar */
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 250 20% 15%;     /* Border for sidebar elements */
-    --sidebar-ring: 260 75% 65%;       /* Ring for sidebar focus */
+    /* Sidebar specific colors for light mode */
+    --sidebar-background: 0 0% 98%;      /* Very light gray, almost white */
+    --sidebar-foreground: 240 10% 30%;   /* Dark cool gray for text/icons */
+    --sidebar-primary: 260 75% 60%;       /* App's primary color (for focus, etc.) */
+    --sidebar-primary-foreground: 0 0% 100%; /* White */
+    --sidebar-accent: 0 0% 92%;           /* Slightly darker gray for hover/active item background */
+    --sidebar-accent-foreground: 240 10% 25%; /* Dark text for hover/active items */
+    --sidebar-border: 0 0% 88%;          /* Light gray for separators/borders */
+    --sidebar-ring: 260 75% 60%;          /* App's primary color for focus rings */
   }
 
   .dark {
@@ -87,13 +87,13 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
     
-    /* Sidebar specific colors for dark mode */
+    /* Sidebar specific colors for dark mode (remains dark) */
     --sidebar-background: 250 15% 8%; 
     --sidebar-foreground: 250 30% 85%;
     --sidebar-primary: 260 75% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 260 75% 70%;
-    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-accent: 250 15% 15%; /* Darker accent for hover on dark sidebar */
+    --sidebar-accent-foreground: 250 30% 85%; /* Keep text light on hover */
     --sidebar-border: 250 15% 5%;
     --sidebar-ring: 260 75% 65%;
   }
