@@ -18,6 +18,9 @@ async function getAdminPb() {
   } else {
     try {
       // console.log("Attempting to authenticate admin PB");
+      if (!process.env.POCKETBASE_ADMIN_EMAIL || !process.env.POCKETBASE_ADMIN_PASSWORD) {
+        throw new Error("POCKETBASE_ADMIN_EMAIL or POCKETBASE_ADMIN_PASSWORD not set in .env file.");
+      }
       await adminPb.admins.authWithPassword(
         process.env.POCKETBASE_ADMIN_EMAIL!,
         process.env.POCKETBASE_ADMIN_PASSWORD!
@@ -25,7 +28,9 @@ async function getAdminPb() {
       // console.log("Admin PB authenticated successfully");
     } catch (err) {
       console.error("Failed to authenticate admin PocketBase instance:", err);
-      throw new Error("Could not authenticate admin for server action.");
+      // Provide a more specific error message
+      const specificError = err instanceof Error ? err.message : String(err);
+      throw new Error(`Could not authenticate admin for server action. Please check POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD in your .env file. Details: ${specificError}`);
     }
   }
   return adminPb;
@@ -43,7 +48,7 @@ export async function validateReferralCodeAction(code: string): Promise<{ succes
     if (referrer) {
       return { success: true, message: `This referral code belongs to ${referrer.name}.`, referrerName: referrer.name };
     } else {
-      // Don't show "Invalid referral code" here, as per user request
+      // Do not show "Invalid referral code" here, as per user request
       return { success: false, message: "" };
     }
   } catch (error) {
@@ -63,11 +68,18 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
 
   let referrerToUpdateStats: User | null = null;
   let actualReferredByCodeForNewUser: string | null = null;
-  const adminPb = await getAdminPb(); // Get admin client for potential updates later
+  let adminPb;
+  try {
+    adminPb = await getAdminPb(); // Get admin client for potential updates later
+  } catch (adminAuthError) {
+     console.error("Admin auth failed during signup:", adminAuthError);
+     return { success: false, message: (adminAuthError as Error).message, error: (adminAuthError as Error).message };
+  }
+
 
   if (referredByCodeInput && referredByCodeInput.trim() !== '') {
     const upperCaseReferredByCode = referredByCodeInput.trim().toUpperCase();
-    actualReferredByCodeForNewUser = upperCaseReferredByCode; // Save what user entered (uppercased)
+    actualReferredByCodeForNewUser = upperCaseReferredByCode; 
     try {
       // Validate if the code belongs to an actual user
       referrerToUpdateStats = await findUserByReferralCode(upperCaseReferredByCode, adminPb);
@@ -82,10 +94,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
   try {
     const newUserReferralCode = generateReferralCode();
     const combinedName = `${name} ${surname}`.trim();
-    const avatarFallback = name.charAt(0).toUpperCase();
-    // PocketBase generates its own avatar file names. We don't set avatarUrl directly at creation.
-    // Initial avatar will be null/empty, placeholder logic on client handles display.
-
+    
     const userDataForPocketBase = {
       email: email.toLowerCase(),
       password: password,
@@ -95,7 +104,6 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       model: 'Free' as UserModel,
       role: 'User' as UserRole,
       expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0],
-      // avatarUrl: undefined, // Let PocketBase handle this. It's a file field.
       totalPoints: 0,
       referralCode: newUserReferralCode,
       referredByCode: actualReferredByCodeForNewUser, 
@@ -108,7 +116,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       targetYear: null, 
     };
 
-    const newUser = await createUserInPocketBase(userDataForPocketBase, adminPb); // Use admin client for creation
+    const newUser = await createUserInPocketBase(userDataForPocketBase, adminPb); 
 
     if (newUser && newUser.id && referrerToUpdateStats && referrerToUpdateStats.id) {
       try {
@@ -145,6 +153,9 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
                 return null;
             }).filter(Boolean).join('; ');
         }
+         if (error.status === 0) {
+          genericMessage = "Network Error: Could not connect to the server. Please check your internet connection and the server status.";
+        }
     } else if (error instanceof Error) {
         genericMessage = error.message || genericMessage;
     } else if (typeof error === 'string') {
@@ -160,7 +171,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       }
     }
     
-    if (!finalErrorMessage.trim()) {
+    if (!finalErrorMessage || !finalErrorMessage.trim()) {
         finalErrorMessage = 'An unknown error occurred during signup.';
     }
 
@@ -206,7 +217,6 @@ export async function loginUserAction(data: { email: string, password_login: str
 
     const user = authData.record as User; 
     const userFullName = user.name || 'User'; 
-    const userName = user.name?.split(' ')[0] || 'User'; 
     const avatarUrl = user.avatar ? pbGlobal.getFileUrl(user, user.avatar as string) : null;
 
 
@@ -216,7 +226,7 @@ export async function loginUserAction(data: { email: string, password_login: str
       token: authData.token, 
       userId: user.id, 
       userFullName: userFullName,
-      userName: userFullName, 
+      userName: userFullName, // Assuming userName is the full name for now as per previous logic
       userModel: user.model || null,
       userRole: user.role || null,
       userClass: user.class || null,
@@ -241,6 +251,8 @@ export async function loginUserAction(data: { email: string, password_login: str
           } else {
             errorMessage = error.data?.message || 'Invalid email or password. Please try again.';
           }
+        } else if (error.status === 0) {
+          errorMessage = "Network Error: Could not connect to the server. Please check your internet connection and the server status.";
         } else {
             errorMessage = error.data?.message || 'An error occurred during login.';
         }
@@ -264,6 +276,13 @@ export async function updateUserProfileAction({
   console.log(`updateUserProfileAction: Attempting to update user with ID: ${userId}`);
   if (!userId) {
     return { success: false, message: "User ID is required.", error: "User ID missing" };
+  }
+  let adminPb;
+  try {
+    adminPb = await getAdminPb();
+  } catch (adminAuthError) {
+     console.error("Admin auth failed during profile update:", adminAuthError);
+     return { success: false, message: (adminAuthError as Error).message, error: (adminAuthError as Error).message };
   }
 
   const dataForPocketBase: Partial<Pick<User, 'class' | 'targetYear'>> = {};
@@ -290,7 +309,6 @@ export async function updateUserProfileAction({
   }
 
   try {
-    const adminPb = await getAdminPb();
     const updatedUserRecord = await updateUserInPocketBase(userId, dataForPocketBase, adminPb);
     return { success: true, message: "Profile updated successfully!", updatedUser: updatedUserRecord };
   } catch (error) {
@@ -302,6 +320,9 @@ export async function updateUserProfileAction({
         const fieldErrors = Object.entries(error.data.data).map(([key, val]: [string, any]) => `${key}: ${val.message}`).join('; ');
         errorMessage += ` Details: ${fieldErrors}`;
       }
+       if (error.status === 0) {
+          errorMessage = "Network Error: Could not connect to the server while updating profile.";
+        }
     } else if (error instanceof Error) {
       errorMessage = error.message;
     }
@@ -341,11 +362,15 @@ export async function updateUserAvatarAction(formData: FormData): Promise<{ succ
   }
   const userId = pbGlobal.authStore.model.id;
   console.log(`updateUserAvatarAction: Updating avatar for user ID: ${userId}`);
+  let adminPb;
+  try {
+    adminPb = await getAdminPb();
+  } catch (adminAuthError) {
+     console.error("Admin auth failed during avatar update:", adminAuthError);
+     return { success: false, message: (adminAuthError as Error).message, error: (adminAuthError as Error).message };
+  }
 
   try {
-    const adminPb = await getAdminPb();
-    // PocketBase's 'users' collection uses 'avatar' as the default file field name.
-    // The formData should contain a file under the key 'avatar'.
     const updatedRecord = await adminPb.collection('users').update(userId, formData);
     return { success: true, message: "Avatar updated successfully!", updatedUserRecord: updatedRecord };
   } catch (error) {
@@ -359,6 +384,8 @@ export async function updateUserAvatarAction(formData: FormData): Promise<{ succ
       }
        if (error.status === 404) {
         errorMessage = "User record not found for avatar update. Please ensure you are logged in correctly.";
+      } else if (error.status === 0) {
+        errorMessage = "Network Error: Could not connect to the server while updating avatar.";
       }
     } else if (error instanceof Error) {
       errorMessage = error.message;
@@ -373,8 +400,14 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
   }
   const userId = pbGlobal.authStore.model.id;
   console.log(`removeUserAvatarAction: Removing avatar for user ID: ${userId}`);
+  let adminPb;
   try {
-    const adminPb = await getAdminPb();
+    adminPb = await getAdminPb();
+  } catch (adminAuthError) {
+     console.error("Admin auth failed during avatar removal:", adminAuthError);
+     return { success: false, message: (adminAuthError as Error).message, error: (adminAuthError as Error).message };
+  }
+  try {
     const updatedRecord = await adminPb.collection('users').update(userId, { 'avatar': null });
     return { success: true, message: "Avatar removed successfully!", updatedUserRecord: updatedRecord };
   } catch (error) {
@@ -388,6 +421,8 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
       }
       if (error.status === 404) {
         errorMessage = "User record not found for avatar removal. Please ensure you are logged in correctly.";
+      } else if (error.status === 0) {
+        errorMessage = "Network Error: Could not connect to the server while removing avatar.";
       }
     } else if (error instanceof Error) {
       errorMessage = error.message;
