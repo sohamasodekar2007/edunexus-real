@@ -50,6 +50,9 @@ export default function SettingsPage() {
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
   const [userModel, setUserModel] = useState<string>('N/A');
   const [isSaving, setIsSaving] = useState(false);
+  // No longer displaying referral stats, so no state needed for userReferralStats for display
+  // const [userReferralStats, setUserReferralStats] = useState<User['referralStats']>(null);
+
 
   useEffect(() => {
     let isMounted = true;
@@ -68,6 +71,7 @@ export default function SettingsPage() {
         const storedModel = localStorage.getItem('userModel');
         const storedReferralCode = localStorage.getItem('userReferralCode');
         const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
+        // const storedReferralStats = localStorage.getItem('userReferralStats'); // No longer needed for display
         const storedExpiryDate = localStorage.getItem('userExpiryDate');
 
         if (storedFullName) setUserFullName(storedFullName);
@@ -87,6 +91,14 @@ export default function SettingsPage() {
 
         setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
 
+        // if (storedReferralStats) { // No longer parsing for display
+        //   try {
+        //     // setUserReferralStats(JSON.parse(storedReferralStats));
+        //   } catch (e) {
+        //     console.error("Error parsing referral stats from localStorage", e);
+        //   }
+        // }
+
         if (storedUserReferredByCode && storedUserReferredByCode.trim() !== '') {
           if (isMounted) setIsLoadingReferrerName(true);
           getReferrerInfoForCurrentUserAction()
@@ -100,41 +112,57 @@ export default function SettingsPage() {
             .finally(() => { if (isMounted) setIsLoadingReferrerName(false); });
         }
 
-        // PocketBase real-time subscription
-        try {
-          unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
-            if (e.action === 'update' && e.record && isMounted) {
-              console.log('Real-time update for user received:', e.record);
-            }
-          });
-          console.log(`Subscribed to real-time updates for user ID: ${localUserId}`);
-        } catch (error) {
-            console.error(`[Real-time Subscription Error] Failed to subscribe to user updates for user ID: ${localUserId}. This often indicates a network issue or problem with the PocketBase server's real-time connection.`, error);
-            if (error instanceof ClientResponseError) {
-              console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Status: ${error.status}`);
-               if (error.status === 0) {
-                console.error("[Real-time Subscription Error] Status 0 indicates the PocketBase server is unreachable or the network request failed. Check your PocketBase server, ngrok tunnel (if used), and ensure NEXT_PUBLIC_POCKETBASE_URL in your .env file is correct and accessible from your browser's network.");
-              }
-              console.error(`[Real-time Subscription Error] PocketBase ClientResponseError URL: ${error.url || 'N/A'}`);
-              console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Response: ${JSON.stringify(error.response)}`);
-              console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Data: ${JSON.stringify(error.data)}`);
-              console.error("[Real-time Subscription Error] Full ClientResponseError object:", error);
-              if (error.originalError) {
-                console.error(`[Real-time Subscription Error] OriginalError Type: ${error.originalError.constructor.name}`);
-                if (error.originalError instanceof Error) {
-                  console.error(`[Real-time Subscription Error] OriginalError Message: ${error.originalError.message}`);
-                  console.error(`[Real-time Subscription Error] OriginalError Stack: ${error.originalError.stack}`);
-                } else {
-                  console.error(`[Real-time Subscription Error] OriginalError: ${String(error.originalError)}`);
+        // PocketBase real-time subscription for referralStats (even if not displayed, backend might update it)
+        // and potentially other user fields in the future.
+        if (pb) { // Ensure pb is initialized
+            const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
+            console.log(`[Real-time Subscription] Attempting to connect to WebSocket: ${realtimeUrl} for user ID: ${localUserId}`);
+            try {
+              unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
+                if (e.action === 'update' && e.record && isMounted) {
+                  console.log('[Real-time] User record updated:', e.record);
+                  // Example: if you were to update userModel or other fields live
+                  if (e.record.model && typeof window !== 'undefined') {
+                    localStorage.setItem('userModel', e.record.model as string);
+                    setUserModel(e.record.model as string);
+                  }
+                  // Update referral stats in localStorage if they change, even if not displayed directly on this page.
+                  // This keeps localStorage consistent if other parts of the app might use it.
+                  if (e.record.referralStats && typeof window !== 'undefined') {
+                     localStorage.setItem('userReferralStats', JSON.stringify(e.record.referralStats));
+                     // setUserReferralStats(e.record.referralStats as User['referralStats']); // If you re-add stats display
+                  }
                 }
-              }
+              });
+              console.log(`[Real-time Subscription] Successfully subscribed to updates for user ID: ${localUserId}`);
+            } catch (error) {
+                console.error(`[Real-time Subscription Error] Failed to subscribe to user updates for user ID: ${localUserId}. This often indicates a network issue or problem with the PocketBase server's real-time connection.`, error);
+                if (error instanceof ClientResponseError) {
+                  console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Status: ${error.status}`);
+                  if (error.status === 0) {
+                    console.error("[Real-time Subscription Error] Status 0 indicates the PocketBase server is unreachable or the network request failed. Check your PocketBase server, ngrok tunnel (if used), and ensure NEXT_PUBLIC_POCKETBASE_URL in your .env file is correct and accessible from your browser's network.");
+                  }
+                  console.error(`[Real-time Subscription Error] PocketBase ClientResponseError URL: ${error.url || 'N/A'}`);
+                  console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Response: ${JSON.stringify(error.response)}`);
+                  console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Data: ${JSON.stringify(error.data)}`);
+                  console.error("[Real-time Subscription Error] Full ClientResponseError object:", error);
+                  if (error.originalError) {
+                    console.error(`[Real-time Subscription Error] OriginalError Type: ${error.originalError.constructor.name}`);
+                    if (error.originalError instanceof Error) {
+                      console.error(`[Real-time Subscription Error] OriginalError Message: ${error.originalError.message}`);
+                      console.error(`[Real-time Subscription Error] OriginalError Stack: ${error.originalError.stack}`);
+                    } else {
+                      console.error(`[Real-time Subscription Error] OriginalError: ${String(error.originalError)}`);
+                    }
+                  }
+                }
+                toast({
+                  title: "Real-time Sync Issue",
+                  description: "Could not connect for live updates. Please check your internet connection and ensure the PocketBase server is reachable.",
+                  variant: "destructive",
+                  duration: 10000,
+                });
             }
-            toast({
-              title: "Real-time Sync Issue",
-              description: "Could not connect to live updates. Please check your internet connection and ensure the PocketBase server is reachable.",
-              variant: "destructive",
-              duration: 10000,
-            });
         }
       }
     }
@@ -144,12 +172,13 @@ export default function SettingsPage() {
     return () => {
       isMounted = false;
       if (unsubscribe) {
-        console.log(`Unsubscribing from real-time updates for user ID: ${localUserId}`);
+        const currentLocalUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : 'unknown';
+        console.log(`[Real-time Subscription] Unsubscribing from updates for user ID: ${currentLocalUserId || localUserId}`);
         unsubscribe();
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+  }, [userId]); // Re-run effect if userId changes, though it should be stable after initial load.
 
   const handleSaveChanges = async () => {
     if (!userId) {
