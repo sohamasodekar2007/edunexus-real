@@ -50,6 +50,7 @@ export default function SettingsPage() {
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
   const [userModel, setUserModel] = useState<string>('N/A');
   const [isSaving, setIsSaving] = useState(false);
+  // const [userReferralStats, setUserReferralStats] = useState<User['referralStats'] | null>(null);
 
 
   useEffect(() => {
@@ -69,6 +70,7 @@ export default function SettingsPage() {
         const storedModel = localStorage.getItem('userModel');
         const storedReferralCode = localStorage.getItem('userReferralCode');
         const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
+        // const storedReferralStats = localStorage.getItem('userReferralStats');
         const storedExpiryDate = localStorage.getItem('userExpiryDate');
 
         if (storedFullName) setUserFullName(storedFullName);
@@ -83,6 +85,17 @@ export default function SettingsPage() {
 
         if (storedModel) setUserModel(storedModel);
         if (storedReferralCode) setUserReferralCode(storedReferralCode);
+        
+        /* if (storedReferralStats) {
+          try {
+            setUserReferralStats(JSON.parse(storedReferralStats));
+          } catch (e) {
+            console.error("Error parsing referral stats from localStorage", e);
+            setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+          }
+        } else {
+           setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+        } */
         
         if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
 
@@ -103,6 +116,7 @@ export default function SettingsPage() {
 
         // PocketBase real-time subscription
         if (pb && localUserId) {
+            console.log(`[Real-time Subscription] PocketBase client baseUrl: ${pb.baseUrl}`);
             const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
             console.log(`[Real-time Subscription] Attempting to connect to WebSocket: ${realtimeUrl} for user ID: ${localUserId}`);
             try {
@@ -115,10 +129,10 @@ export default function SettingsPage() {
                   }
                   // The userReferralStats display was removed, but the logic to update localStorage
                   // can remain if other parts of the app might use it or if it's reinstated later.
-                  if (e.record.referralStats && typeof window !== 'undefined') {
+                  /* if (e.record.referralStats && typeof window !== 'undefined') {
                      localStorage.setItem('userReferralStats', JSON.stringify(e.record.referralStats));
                      // setUserReferralStats(e.record.referralStats as User['referralStats']); // If stats display is re-added
-                  }
+                  } */
                 }
               });
               console.log(`[Real-time Subscription] Successfully subscribed to updates for user ID: ${localUserId}`);
@@ -165,7 +179,7 @@ export default function SettingsPage() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Removed userId from dependency array to prevent re-subscriptions on potential userId state flicker
+  }, []); 
 
   const handleSaveChanges = async () => {
     const currentUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
@@ -398,3 +412,5 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+    
