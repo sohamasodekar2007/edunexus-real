@@ -141,7 +141,7 @@ export default function SettingsPage() {
   const handleProfilePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      if (file.size > 2 * 1024 * 1024) {
+      if (file.size > 2 * 1024 * 1024) { // Max 2MB
         toast({ title: "File Too Large", description: "Max 2MB allowed for profile picture.", variant: "destructive" });
         return;
       }
@@ -159,13 +159,14 @@ export default function SettingsPage() {
     // TODO: Add logic to remove profile picture from PocketBase
   };
 
-  const handleCopyReferralCode = () => {
-    if (userReferralCode && userReferralCode !== 'N/A') {
-      navigator.clipboard.writeText(userReferralCode)
-        .then(() => toast({ title: "Copied!", description: "Referral code copied to clipboard." }))
+  const handleCopyReferralLink = () => {
+    if (userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') {
+      const signupLink = `${window.location.origin}/auth/signup/${userReferralCode}`;
+      navigator.clipboard.writeText(signupLink)
+        .then(() => toast({ title: "Copied!", description: "Signup link copied to clipboard." }))
         .catch(err => {
-          console.error("Failed to copy referral code: ", err);
-          toast({ title: "Copy Failed", description: "Could not copy referral code.", variant: "destructive" });
+          console.error("Failed to copy signup link: ", err);
+          toast({ title: "Copy Failed", description: "Could not copy signup link.", variant: "destructive" });
         });
     }
   };
@@ -287,10 +288,21 @@ export default function SettingsPage() {
              <p className="text-sm text-muted-foreground">Loading referrer information...</p>
           )}
           <div>
-            <Label htmlFor="referralCodeDisplay">Your Referral Code</Label>
+            <Label htmlFor="referralCodeDisplay">Your Referral Signup Link</Label>
             <div className="mt-1 flex items-center gap-2">
-              <Input id="referralCodeDisplay" value={userReferralCode || 'N/A'} readOnly className="bg-muted/50" />
-              <Button variant="outline" size="icon" onClick={handleCopyReferralCode} aria-label="Copy referral code" disabled={!userReferralCode || userReferralCode === 'N/A'}>
+              <Input 
+                id="referralCodeDisplay" 
+                value={ (userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') ? `${window.location.origin}/auth/signup/${userReferralCode}` : 'N/A'} 
+                readOnly 
+                className="bg-muted/50" 
+              />
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={handleCopyReferralLink} 
+                aria-label="Copy referral signup link" 
+                disabled={!userReferralCode || userReferralCode === 'N/A'}
+              >
                 <Copy className="h-4 w-4" />
               </Button>
             </div>
