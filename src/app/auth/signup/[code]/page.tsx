@@ -1,6 +1,6 @@
 // @ts-nocheck
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, use } from 'react'; // Added 'use'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -37,7 +37,8 @@ function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
 }
 
 
-export default function SignupPageContent({ params }: { params: { code?: string } }) {
+export default function SignupPageContent({ params: paramsProp }: { params: { code?: string } }) {
+  const params = use(paramsProp); // Unwrap params using React.use()
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +46,7 @@ export default function SignupPageContent({ params }: { params: { code?: string 
   const [referralMessage, setReferralMessage] = useState<string | null>(null);
   const [referralMessageIsError, setReferralMessageIsError] = useState(false);
 
-  const referralCodeFromUrl = params.code;
+  const referralCodeFromUrl = params?.code; // Use unwrapped params
 
   const form = useForm<SignupFormData>({
     resolver: zodResolver(SignupSchema),
@@ -57,7 +58,7 @@ export default function SignupPageContent({ params }: { params: { code?: string 
       password: '',
       confirmPassword: '',
       class: undefined, 
-      referralCode: referralCodeFromUrl || '', // Pre-fill from URL
+      referralCode: referralCodeFromUrl || '', // Pre-fill from URL using unwrapped params
       terms: false,
     },
   });
