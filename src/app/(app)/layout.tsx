@@ -90,16 +90,21 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { isMobile } = useSidebar(); 
+  const [currentUserName, setCurrentUserName] = useState<string>('User'); // Default to 'User'
   const [currentUserModel, setCurrentUserModel] = useState<string | null>(null);
   const [currentUserAvatarFallback, setCurrentUserAvatarFallback] = useState<string>('S'); // Default
 
   useEffect(() => {
     initializeLocalStorageData();
     if (typeof window !== 'undefined') {
+      const name = localStorage.getItem('userName');
       const model = localStorage.getItem('userModel');
       const fallback = localStorage.getItem('userAvatarFallback');
+      if (name) {
+        setCurrentUserName(name);
+      }
       if (model) {
-        setCurrentUserModel(model);
+        setCurrentUserModel(model); // Keep as is, don't replace underscore
       }
       if (fallback) {
         setCurrentUserAvatarFallback(fallback);
@@ -163,7 +168,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{currentUserName}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <UserCircle className="mr-2 h-4 w-4" />
