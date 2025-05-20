@@ -34,10 +34,13 @@ export default function UserManagementPage() {
         setUsers(result.users as DisplayUser[]);
       } else {
         let uiErrorMessage = result.message || "Failed to load users.";
+        // This specific check provides a more helpful UI error for the common "Admin auth missing" case
         if (result.error === "Admin auth missing") {
           uiErrorMessage = "Admin authentication is required to view users. Please ensure admin credentials are set correctly in .env and the Next.js server is restarted. Check server logs for detailed errors.";
         }
         setError(uiErrorMessage);
+        // The console.error line below is for client-side debugging; it logs the error received from the server action.
+        // The actual "Admin auth missing" error originates from the server-side action failing.
         console.error("Error fetching users from action:", result.error || result.message);
       }
     } catch (e) {
