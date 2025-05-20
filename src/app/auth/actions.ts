@@ -16,6 +16,7 @@ async function getAdminPb(): Promise<PocketBase | null> {
 
   console.log(`[Admin PB Init] Attempting to get admin PB instance.`);
   console.log(`[Admin PB Init] POCKETBASE_ADMIN_EMAIL detected: ${adminEmail ? '****' : '[NOT SET]'}`);
+  // Avoid logging the password itself, just its presence
   console.log(`[Admin PB Init] POCKETBASE_ADMIN_PASSWORD detected: ${adminPassword ? '[SET]' : '[NOT SET]'}`);
 
 
@@ -60,32 +61,29 @@ async function getAdminPb(): Promise<PocketBase | null> {
 
 export async function validateReferralCodeAction(code: string): Promise<{ success: boolean; message: string; referrerName?: string }> {
   if (!code || code.trim().length === 0) {
-    return { success: false, message: "" }; // No message for empty/short codes
+    return { success: false, message: "" };
   }
   const upperCaseCode = code.trim().toUpperCase();
-  const adminPb = await getAdminPb(); // Use admin for this lookup to ensure access
+  
+  // Attempt with admin first for robust lookup
+  const adminPb = await getAdminPb();
+  let pbInstanceToUse = adminPb;
+
   if (!adminPb) {
-    // Don't reveal server-side admin auth issues to client during simple validation
-    console.warn("[Validate Referral Action] Admin PB instance not available for validation. This may lead to incorrect validation results if collection rules are strict.");
-    // Proceed with global instance, which might fail if rules are strict
-    const referrer = await findUserByReferralCode(upperCaseCode, pbGlobal);
-    if (referrer) {
-      return { success: true, message: `This referral code belongs to ${referrer.name}.`, referrerName: referrer.name };
-    } else {
-      return { success: false, message: "" }; // No error message for invalid codes
-    }
+    console.warn("[Validate Referral Action] Admin PB instance not available for validation. Falling back to global instance. This may lead to incorrect validation results if user collection list/view rules are strict.");
+    pbInstanceToUse = pbGlobal; // Fallback to global instance
   }
 
   try {
-    const referrer = await findUserByReferralCode(upperCaseCode, adminPb); 
+    const referrer = await findUserByReferralCode(upperCaseCode, pbInstanceToUse); 
     if (referrer) {
       return { success: true, message: `This referral code belongs to ${referrer.name}.`, referrerName: referrer.name };
     } else {
-      return { success: false, message: "" }; // No error message for invalid codes
+      return { success: false, message: "Invalid referral code. Please use another one." };
     }
   } catch (error) {
     console.error('Error validating referral code action:', error);
-    return { success: false, message: "" }; // No error message
+    return { success: false, message: "Error validating code. Please try again." };
   }
 }
 
@@ -115,8 +113,8 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       role: 'User' as UserRole,
       expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0], // Default expiry
       totalPoints: 0,
-      referralCode: newUserReferralCode, // User's own new referral code
-      referredByCode: upperCaseReferredByCode, // Code they used to sign up, if any
+      referralCode: newUserReferralCode, 
+      referredByCode: upperCaseReferredByCode, 
       referralStats: {
         referred_free: 0,
         referred_chapterwise: 0,
@@ -131,8 +129,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
 
     console.log("[Signup Action] Attempting to create user with data (password omitted):", { ...userDataForPocketBase, password: '***' });
     
-    // Use global pb instance for creating user (relies on public createRule for 'users' collection)
-    newUser = await createUserInPocketBase(userDataForPocketBase, pbGlobal);
+    newUser = await createUserInPocketBase(userDataForPocketBase, pbGlobal); // Use global for user creation
     console.log("[Signup Action] User created successfully:", newUser.id);
 
   } catch (error) {
@@ -185,7 +182,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
           const currentStats = referrerToUpdateStats.referralStats || { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 };
           const newReferrerStats: User['referralStats'] = {
             ...currentStats,
-            referred_free: (currentStats.referred_free || 0) + 1,
+            referred_free: (currentStats.referred_free || 0) + 1, // For now, all new signups are 'Free'
           };
           await updateUserReferralStats(referrerToUpdateStats.id, newReferrerStats, adminPbForReferrerUpdate);
           console.log(`[Signup Action] Referral stats updated for referrer: ${referrerToUpdateStats.name} to`, newReferrerStats);
@@ -196,7 +193,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
         console.warn(`[Signup Action Warning] Failed to update referral stats for ${upperCaseReferredByCode}. User signup itself was successful. Error:`, statsError);
       }
     } else {
-      console.warn(`[Signup Action Warning] Admin PB instance not available. Referrer stats not updated for code ${upperCaseReferredByCode}. User signup was successful.`);
+      console.warn(`[Signup Action Warning] Admin PB instance not available for updating referrer stats for code ${upperCaseReferredByCode}. New user signup was successful, but referrer stats not updated.`);
     }
   }
 
@@ -328,9 +325,9 @@ export async function updateUserProfileAction({
 
   const adminPb = await getAdminPb();
   if (!adminPb) {
-     const authErrorMsg = "Profile update failed: Admin authentication could not be established for this server action. Please ensure POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD are correctly set in .env and the server is restarted, or check PocketBase server connectivity.";
+     const authErrorMsg = "Profile update failed: Admin authentication required for this server action. Ensure POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD are correctly set in .env and the server is restarted, or check PocketBase server connectivity.";
     console.warn(`[Update Profile Action] Admin PB instance not available. User: ${userId}. Cannot update profile.`);
-    return { success: false, message: authErrorMsg, error: "Admin auth missing or update permission denied" };
+    return { success: false, message: authErrorMsg, error: "Admin auth missing" };
   }
 
   try {
@@ -367,9 +364,9 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
     return { referrerName: null, error: "User not authenticated." };
   }
 
-  const currentUserRecord = await findUserById(currentAuthUser.id, pbGlobal); // Use global, as it's about the current user's data
+  const currentUserRecord = await findUserById(currentAuthUser.id, pbGlobal); 
   if (!currentUserRecord || !currentUserRecord.referredByCode) {
-    return { referrerName: null }; // No referral code used or user not found
+    return { referrerName: null }; 
   }
 
   const adminPb = await getAdminPb();
@@ -404,12 +401,13 @@ export async function updateUserAvatarAction(formData: FormData): Promise<{ succ
 
   const adminPb = await getAdminPb();  
   if (!adminPb) {
-    const authErrorMsg = "Avatar update failed: Admin authentication could not be established for this server action. Please ensure POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD are correctly set in .env and the server is restarted, or check PocketBase server connectivity.";
+    const authErrorMsg = "Avatar update failed: Admin authentication required for this server action. Ensure POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD are correctly set in .env and the server is restarted, or check PocketBase server connectivity.";
     console.warn(`[Update Avatar Action] Admin PB instance not available. User: ${userId}. Cannot update avatar.`);
     return { success: false, message: authErrorMsg, error: "Admin auth missing" };
   }
 
   try {
+    // The 'avatar' field in FormData should match the PocketBase collection's file field name
     const updatedRecord = await updateUserInPocketBase(userId, formData, adminPb); 
     console.log(`[Update Avatar Action (using admin PB)] Avatar updated successfully for user ${userId}. New avatar filename: ${updatedRecord.avatar}`);
     return { success: true, message: "Avatar updated successfully!", updatedUserRecord: updatedRecord };
@@ -447,7 +445,7 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
 
   const adminPb = await getAdminPb();
   if (!adminPb) {
-    const authErrorMsg = "Avatar removal failed: Admin authentication could not be established for this server action. Please ensure POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD are correctly set in .env and the server is restarted, or check PocketBase server connectivity.";
+    const authErrorMsg = "Avatar removal failed: Admin authentication required for this server action. Ensure POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD are correctly set in .env and the server is restarted, or check PocketBase server connectivity.";
     console.warn(`[Remove Avatar Action] Admin PB instance not available. User: ${userId}. Cannot remove avatar.`);
     return { success: false, message: authErrorMsg, error: "Admin auth missing" };
   }
@@ -479,7 +477,7 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
   }
 }
 
-// Placeholder for addQuestionAction
+
 export async function addQuestionAction(formData: FormData): Promise<{ success: boolean; message: string; error?: string; questionId?: string }> {
   console.log("[Add Question Action] Received form data keys:", Array.from(formData.keys()));
   
@@ -489,76 +487,9 @@ export async function addQuestionAction(formData: FormData): Promise<{ success: 
   }
 
   try {
-    // Construct the data object for PocketBase from formData
-    // Note: PocketBase SDK can often take FormData directly if field names match
-    // For fields like 'isPYQ' (boolean), ensure correct conversion if not directly handled
-    
-    const dataToSave: { [key: string]: any } = {};
-    // Example: Convert boolean strings from FormData
-    for (const [key, value] of formData.entries()) {
-      if (key === 'isPYQ') {
-        dataToSave[key] = value === 'true';
-      } else if (value instanceof File) {
-        dataToSave[key] = value; // PocketBase handles File objects in FormData
-      } else if (typeof value === 'string' && value.trim() !== '') { // Only add non-empty strings
-        dataToSave[key] = value;
-      } else if (typeof value === 'string' && value.trim() === '' && (key === 'pyqDate' || key === 'tags')) {
-        // Allow empty strings for optional fields like pyqDate, or handle tags if empty is valid
-        // For tags (JSON), an empty string might mean an empty array or null.
-        // This needs careful handling based on how you want to store empty optional fields.
-        // For now, let's assume empty strings for optional text/date fields become null or are omitted if PB handles it.
-        // For JSON 'tags', if empty string, it should probably be null or an empty array.
-        if (key === 'tags' && value.trim() === '') {
-            dataToSave[key] = null; // Or [] if your schema expects an array
-        } else if (key === 'pyqDate' && value.trim() === '') {
-            dataToSave[key] = null;
-        }
-        // else don't add empty strings for other fields to avoid sending them if they are truly optional and not set
-      }
-    }
-     // Ensure numeric fields are numbers if they exist and are not empty
-    if (dataToSave.pyqYear && typeof dataToSave.pyqYear === 'string' && dataToSave.pyqYear.trim() !== '') {
-      const year = parseInt(dataToSave.pyqYear, 10);
-      if (!isNaN(year)) {
-        dataToSave.pyqYear = year;
-      } else {
-        delete dataToSave.pyqYear; // Or handle as validation error
-      }
-    } else if (dataToSave.pyqYear === '') {
-        delete dataToSave.pyqYear;
-    }
-
-
-    // Remove fields that are conditionally not set and might be empty strings
-    if (!dataToSave.isPYQ) {
-      delete dataToSave.pyqExamName;
-      delete dataToSave.pyqYear;
-      delete dataToSave.pyqDate;
-      delete dataToSave.pyqShift;
-    } else {
-        // If isPYQ is true, but some PYQ fields are empty, decide how to handle:
-        // Option 1: Delete them if they are empty strings (PocketBase might make them null)
-        // Option 2: Send them as null (requires checking if PocketBase accepts empty string for optional fields or prefers null)
-        if (dataToSave.pyqExamName === '') delete dataToSave.pyqExamName;
-        // pyqYear is handled above
-        if (dataToSave.pyqDate === '' || dataToSave.pyqDate === null) delete dataToSave.pyqDate;
-        if (dataToSave.pyqShift === '' || dataToSave.pyqShift === 'N/A') delete dataToSave.pyqShift;
-
-
-    }
-
-
-    console.log("[Add Question Action] Data to save to PocketBase:", dataToSave);
-
-    // It's often better to pass the FormData object directly if your field names match
-    // and PocketBase SDK can handle it, especially for file uploads.
-    // However, for type conversion (boolean, number) and conditional logic, building an object is safer.
-    // If passing an object, ensure file fields are correctly handled or upload them separately.
-    // For simplicity now, assuming text fields primarily and placeholder for direct FormData usage.
-    // Let's try passing FormData directly for file handling.
-    
-    // The following is simplified. You might need to iterate through formData and build an object
-    // if direct FormData passing has issues with non-file types or type conversions.
+    // PocketBase SDK's `create` method can directly consume FormData,
+    // especially useful when files are involved.
+    // Ensure field names in FormData match your PocketBase collection schema.
     const newQuestionRecord = await adminPb.collection('question_bank').create(formData);
 
     console.log("[Add Question Action] Question added successfully to PocketBase:", newQuestionRecord.id);
@@ -568,10 +499,14 @@ export async function addQuestionAction(formData: FormData): Promise<{ success: 
     console.error("[Add Question Action] Error adding question to PocketBase:", error);
     let errorMessage = "Failed to add question.";
     if (error instanceof ClientResponseError) {
+      console.error("[Add Question Action] PocketBase ClientResponseError details:", JSON.stringify(error.data));
       errorMessage = error.data?.message || errorMessage;
       if (error.data?.data) {
         const fieldErrors = Object.entries(error.data.data).map(([key, val]: [string, any]) => `${key}: ${val.message}`).join('; ');
         errorMessage += ` Details: ${fieldErrors}`;
+      }
+       if (error.status === 400 && error.data?.data?.isPYQ?.message?.includes("cannot be blank")) {
+        errorMessage = "Validation Error: 'Is PYQ' field is required. Please check the form.";
       }
     } else if (error instanceof Error) {
       errorMessage = error.message;

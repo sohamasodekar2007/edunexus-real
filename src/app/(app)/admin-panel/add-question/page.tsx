@@ -1,7 +1,8 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,27 +11,41 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { PlusCircle, BookOpen, Brain, Tag, HelpCircle, CalendarDays, Edit, Image as ImageIcon, Type, ListChecks, Trash2, Loader2 } from 'lucide-react';
-// import { addQuestionAction } from '@/app/auth/actions'; // Will be uncommented later
+import { PlusCircle, BookOpen, Brain, Tag, HelpCircle, CalendarDays, Edit, Image as ImageIconLucide, Type, ListChecks, Trash2, Loader2, UploadCloud } from 'lucide-react';
+import { addQuestionAction } from '@/app/auth/actions';
 
-// Define types for form state - can be expanded
 type QuestionFormData = {
   subject: string;
   lessonName: string;
+  lessonTopic: string;
   difficulty: string;
-  tags: string; // Comma-separated for now
+  tags: string;
   isPYQ: boolean;
   pyqExamName: string;
   pyqYear: string;
   pyqDate: string;
   pyqShift: string;
-  questionType: string;
-  // ... more fields will be added
+  questionType: 'text' | 'image' | 'text_image';
+  questionText: string;
+  questionImage: File | null;
+  optionsFormat: 'text_options' | 'image_options'; // Relevant for text_image questionType
+  optionAText: string;
+  optionAImage: File | null;
+  optionBText: string;
+  optionBImage: File | null;
+  optionCText: string;
+  optionCImage: File | null;
+  optionDText: string;
+  optionDImage: File | null;
+  correctOption: 'A' | 'B' | 'C' | 'D' | '';
+  explanationText: string;
+  explanationImage: File | null;
 };
 
 const initialFormData: QuestionFormData = {
   subject: '',
   lessonName: '',
+  lessonTopic: '',
   difficulty: '',
   tags: '',
   isPYQ: false,
@@ -39,56 +54,104 @@ const initialFormData: QuestionFormData = {
   pyqDate: '',
   pyqShift: '',
   questionType: 'text',
+  questionText: '',
+  questionImage: null,
+  optionsFormat: 'text_options',
+  optionAText: '',
+  optionAImage: null,
+  optionBText: '',
+  optionBImage: null,
+  optionCText: '',
+  optionCImage: null,
+  optionDText: '',
+  optionDImage: null,
+  correctOption: '',
+  explanationText: '',
+  explanationImage: null,
 };
 
 export default function AddQuestionPage() {
   const { toast } = useToast();
   const [formData, setFormData] = useState<QuestionFormData>(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
-  // const [lessonSuggestions, setLessonSuggestions] = useState<string[]>([]); // For autocomplete later
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Image Preview States
+  const [questionImagePreview, setQuestionImagePreview] = useState<string | null>(null);
+  const [optionAImagePreview, setOptionAImagePreview] = useState<string | null>(null);
+  const [optionBImagePreview, setOptionBImagePreview] = useState<string | null>(null);
+  const [optionCImagePreview, setOptionCImagePreview] = useState<string | null>(null);
+  const [optionDImagePreview, setOptionDImagePreview] = useState<string | null>(null);
+  const [explanationImagePreview, setExplanationImagePreview] = useState<string | null>(null);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (name: keyof QuestionFormData, value: string) => {
     setFormData(prev => ({ ...prev, [name]: value }));
+    if (name === 'questionType') {
+        // Reset options format if question type changes to something that doesn't use it
+        if (value === 'text' || value === 'image') {
+            setFormData(prev => ({ ...prev, optionsFormat: 'text_options' }));
+        }
+    }
   };
 
   const handleCheckboxChange = (name: keyof QuestionFormData, checked: boolean) => {
     setFormData(prev => ({ ...prev, [name]: checked }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>, fieldName: keyof QuestionFormData, setPreview: (url: string | null) => void) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData(prev => ({ ...prev, [fieldName]: file }));
+      setPreview(URL.createObjectURL(file));
+    } else {
+      setFormData(prev => ({ ...prev, [fieldName]: null }));
+      setPreview(null);
+    }
+  };
+
+  const handleReset = () => {
+    setFormData(initialFormData);
+    setQuestionImagePreview(null);
+    setOptionAImagePreview(null);
+    setOptionBImagePreview(null);
+    setOptionCImagePreview(null);
+    setOptionDImagePreview(null);
+    setExplanationImagePreview(null);
+  }
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("Form Data Submitted:", formData);
-
-    // Placeholder for server action call
-    // const questionDataForAction = new FormData();
-    // Object.entries(formData).forEach(([key, value]) => {
-    //   if (typeof value === 'boolean') {
-    //     questionDataForAction.append(key, value.toString());
-    //   } else if (value !== null && value !== undefined) {
-    //     questionDataForAction.append(key, value as string);
-    //   }
-    // });
-    // // Append file fields here when implemented
+    
+    const dataToSubmit = new FormData();
+    for (const key in formData) {
+      const value = formData[key as keyof QuestionFormData];
+      if (value instanceof File) {
+        dataToSubmit.append(key, value);
+      } else if (typeof value === 'boolean') {
+        dataToSubmit.append(key, value.toString());
+      } else if (value !== null && value !== undefined && value !== '') {
+         dataToSubmit.append(key, value as string);
+      }
+    }
+    
+    // Ensure empty optional fields that shouldn't be sent if empty are handled.
+    // For instance, if a PYQ date is not set, it shouldn't be an empty string.
+    // PocketBase often handles this well if the field is optional and not in FormData.
+    // The current loop for dataToSubmit already skips null/undefined/empty strings which is good.
 
     try {
-      // const result = await addQuestionAction(questionDataForAction);
-      // if (result.success) {
-      //   toast({ title: "Success", description: "Question added successfully!" });
-      //   setFormData(initialFormData); // Reset form
-      // } else {
-      //   toast({ title: "Error", description: result.error || "Failed to add question.", variant: "destructive" });
-      // }
-      toast({ title: "Submit (Placeholder)", description: "Form submission logic to be implemented." });
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-
+      const result = await addQuestionAction(dataToSubmit);
+      if (result.success) {
+        toast({ title: "Success", description: "Question added successfully!" });
+        handleReset();
+      } else {
+        toast({ title: "Error", description: result.error || "Failed to add question.", variant: "destructive" });
+      }
     } catch (error) {
       console.error("Submission error:", error);
       toast({ title: "Error", description: "An unexpected error occurred.", variant: "destructive" });
@@ -96,6 +159,14 @@ export default function AddQuestionPage() {
       setIsLoading(false);
     }
   };
+
+  const renderFileInput = (name: keyof QuestionFormData, preview: string | null, setPreview: (url: string | null) => void, label: string) => (
+    <div className="space-y-2">
+      <Label htmlFor={name}>{label}</Label>
+      <Input id={name} name={name} type="file" accept="image/*" onChange={(e) => handleFileChange(e, name, setPreview)} className="mt-1" />
+      {preview && <Image src={preview} alt={`${label} preview`} width={100} height={100} className="mt-2 rounded-md border" data-ai-hint="question image preview" />}
+    </div>
+  );
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 space-y-8">
@@ -117,9 +188,7 @@ export default function AddQuestionPage() {
             <div>
               <Label htmlFor="subject">Subject</Label>
               <Select name="subject" value={formData.subject} onValueChange={(value) => handleSelectChange('subject', value)}>
-                <SelectTrigger id="subject" className="mt-1">
-                  <SelectValue placeholder="Select Subject" />
-                </SelectTrigger>
+                <SelectTrigger id="subject" className="mt-1"><SelectValue placeholder="Select Subject" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Physics">Physics</SelectItem>
                   <SelectItem value="Chemistry">Chemistry</SelectItem>
@@ -130,15 +199,16 @@ export default function AddQuestionPage() {
             </div>
             <div>
               <Label htmlFor="lessonName">Lesson Name</Label>
-              <Input id="lessonName" name="lessonName" value={formData.lessonName} onChange={handleInputChange} placeholder="e.g., Kinematics, Chemical Bonding" className="mt-1" />
-              {/* Add suggestions/autocomplete later */}
+              <Input id="lessonName" name="lessonName" value={formData.lessonName} onChange={handleInputChange} placeholder="e.g., Kinematics" className="mt-1" />
+            </div>
+            <div>
+              <Label htmlFor="lessonTopic">Lesson Topic (Optional)</Label>
+              <Input id="lessonTopic" name="lessonTopic" value={formData.lessonTopic} onChange={handleInputChange} placeholder="e.g., Projectile Motion" className="mt-1" />
             </div>
             <div>
               <Label htmlFor="difficulty">Difficulty Level</Label>
               <Select name="difficulty" value={formData.difficulty} onValueChange={(value) => handleSelectChange('difficulty', value)}>
-                <SelectTrigger id="difficulty" className="mt-1">
-                  <SelectValue placeholder="Select Difficulty" />
-                </SelectTrigger>
+                <SelectTrigger id="difficulty" className="mt-1"><SelectValue placeholder="Select Difficulty" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Easy">Easy</SelectItem>
                   <SelectItem value="Medium">Medium</SelectItem>
@@ -146,9 +216,9 @@ export default function AddQuestionPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label htmlFor="tags">Tags (comma-separated)</Label>
-              <Input id="tags" name="tags" value={formData.tags} onChange={handleInputChange} placeholder="e.g., conceptual, numerical, formula-based" className="mt-1" />
+            <div className="md:col-span-2">
+              <Label htmlFor="tags">Tags (comma-separated, optional)</Label>
+              <Input id="tags" name="tags" value={formData.tags} onChange={handleInputChange} placeholder="e.g., conceptual, numerical" className="mt-1" />
             </div>
           </CardContent>
         </Card>
@@ -161,18 +231,14 @@ export default function AddQuestionPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center space-x-2">
               <Checkbox id="isPYQ" name="isPYQ" checked={formData.isPYQ} onCheckedChange={(checked) => handleCheckboxChange('isPYQ', checked as boolean)} />
-              <Label htmlFor="isPYQ" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Is this a Previous Year Question?
-              </Label>
+              <Label htmlFor="isPYQ" className="text-sm font-medium">Is this a Previous Year Question?</Label>
             </div>
             {formData.isPYQ && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 border-t mt-4">
                 <div>
                   <Label htmlFor="pyqExamName">Exam Name</Label>
                   <Select name="pyqExamName" value={formData.pyqExamName} onValueChange={(value) => handleSelectChange('pyqExamName', value)}>
-                    <SelectTrigger id="pyqExamName" className="mt-1">
-                      <SelectValue placeholder="Select Exam" />
-                    </SelectTrigger>
+                    <SelectTrigger id="pyqExamName" className="mt-1"><SelectValue placeholder="Select Exam" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="JEE Main">JEE Main</SelectItem>
                       <SelectItem value="JEE Advanced">JEE Advanced</SelectItem>
@@ -197,15 +263,13 @@ export default function AddQuestionPage() {
                     <div>
                       <Label htmlFor="pyqShift">Shift (Optional)</Label>
                        <Select name="pyqShift" value={formData.pyqShift} onValueChange={(value) => handleSelectChange('pyqShift', value)}>
-                        <SelectTrigger id="pyqShift" className="mt-1">
-                          <SelectValue placeholder="Select Shift" />
-                        </SelectTrigger>
+                        <SelectTrigger id="pyqShift" className="mt-1"><SelectValue placeholder="Select Shift" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="N/A">N/A</SelectItem>
                           <SelectItem value="Shift 1">Shift 1</SelectItem>
                           <SelectItem value="Shift 2">Shift 2</SelectItem>
-                          <SelectItem value="Morning">Morning</SelectItem>
-                          <SelectItem value="Afternoon">Afternoon</SelectItem>
+                           <SelectItem value="Morning">Morning</SelectItem>
+                           <SelectItem value="Afternoon">Afternoon</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -216,19 +280,17 @@ export default function AddQuestionPage() {
           </CardContent>
         </Card>
 
-        {/* Section 3: Question Type & Content */}
+        {/* Section 3: Question Content */}
         <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center"><Edit className="mr-2 h-5 w-5 text-accent" />Question Content</CardTitle>
-            <CardDescription>Define the type and content of the question itself.</CardDescription>
+            <CardDescription>Define the type and content of the question.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-             <div>
+            <div>
               <Label htmlFor="questionType">Question Type</Label>
-              <Select name="questionType" value={formData.questionType} onValueChange={(value) => handleSelectChange('questionType', value)}>
-                <SelectTrigger id="questionType" className="mt-1">
-                  <SelectValue placeholder="Select Question Type" />
-                </SelectTrigger>
+              <Select name="questionType" value={formData.questionType} onValueChange={(value) => handleSelectChange('questionType', value as QuestionFormData['questionType'] )}>
+                <SelectTrigger id="questionType" className="mt-1"><SelectValue placeholder="Select Question Type" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="text">Text Question</SelectItem>
                   <SelectItem value="image">Image Question</SelectItem>
@@ -236,27 +298,76 @@ export default function AddQuestionPage() {
                 </SelectContent>
               </Select>
             </div>
-            {/* Placeholder for content inputs based on questionType */}
-            <div className="p-4 border-dashed border-muted-foreground/50 rounded-md text-center text-muted-foreground">
-              Question content input area (Text, Image, or Text+Image) will appear here based on selection.
-              <br />
-              (Implementation for this section is pending)
-            </div>
+            {formData.questionType === 'text' && (
+              <div>
+                <Label htmlFor="questionText">Question Text (Supports MathJax/LaTeX)</Label>
+                <Textarea id="questionText" name="questionText" value={formData.questionText} onChange={handleInputChange} placeholder="Enter question text..." className="mt-1 min-h-[100px]" />
+              </div>
+            )}
+            {formData.questionType === 'image' && (
+              renderFileInput('questionImage', questionImagePreview, setQuestionImagePreview, "Question Image")
+            )}
+            {formData.questionType === 'text_image' && (
+              <>
+                <div>
+                  <Label htmlFor="questionText">Question Text (Supports MathJax/LaTeX)</Label>
+                  <Textarea id="questionText" name="questionText" value={formData.questionText} onChange={handleInputChange} placeholder="Enter question text..." className="mt-1 min-h-[100px]" />
+                </div>
+                {renderFileInput('questionImage', questionImagePreview, setQuestionImagePreview, "Question Image (for diagram, etc.)")}
+              </>
+            )}
           </CardContent>
         </Card>
         
         {/* Section 4: Options */}
-         <Card className="shadow-lg">
+        <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center"><ListChecks className="mr-2 h-5 w-5 text-accent" />Options</CardTitle>
-            <CardDescription>Provide the answer choices for the question.</CardDescription>
+            <CardDescription>Provide the answer choices.</CardDescription>
           </CardHeader>
-          <CardContent>
-             <div className="p-4 border-dashed border-muted-foreground/50 rounded-md text-center text-muted-foreground">
-              Options input area (Text or Image) will appear here based on Question Type.
-              <br />
-              (Implementation for this section is pending)
-            </div>
+          <CardContent className="space-y-6">
+            {formData.questionType === 'text_image' && (
+              <div>
+                <Label htmlFor="optionsFormat">Options Format</Label>
+                <Select name="optionsFormat" value={formData.optionsFormat} onValueChange={(value) => handleSelectChange('optionsFormat', value as QuestionFormData['optionsFormat'] )}>
+                  <SelectTrigger id="optionsFormat" className="mt-1"><SelectValue placeholder="Select Options Format" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="text_options">Text Options</SelectItem>
+                    <SelectItem value="image_options">Image Options</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {(formData.questionType === 'text' || formData.questionType === 'image' || (formData.questionType === 'text_image' && formData.optionsFormat === 'text_options')) && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="optionAText">Option A (Text)</Label>
+                  <Textarea id="optionAText" name="optionAText" value={formData.optionAText} onChange={handleInputChange} placeholder="Option A text..." className="mt-1" />
+                </div>
+                <div>
+                  <Label htmlFor="optionBText">Option B (Text)</Label>
+                  <Textarea id="optionBText" name="optionBText" value={formData.optionBText} onChange={handleInputChange} placeholder="Option B text..." className="mt-1" />
+                </div>
+                <div>
+                  <Label htmlFor="optionCText">Option C (Text)</Label>
+                  <Textarea id="optionCText" name="optionCText" value={formData.optionCText} onChange={handleInputChange} placeholder="Option C text..." className="mt-1" />
+                </div>
+                <div>
+                  <Label htmlFor="optionDText">Option D (Text)</Label>
+                  <Textarea id="optionDText" name="optionDText" value={formData.optionDText} onChange={handleInputChange} placeholder="Option D text..." className="mt-1" />
+                </div>
+              </div>
+            )}
+
+            {(formData.questionType === 'text_image' && formData.optionsFormat === 'image_options') && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderFileInput('optionAImage', optionAImagePreview, setOptionAImagePreview, "Option A Image")}
+                {renderFileInput('optionBImage', optionBImagePreview, setOptionBImagePreview, "Option B Image")}
+                {renderFileInput('optionCImage', optionCImagePreview, setOptionCImagePreview, "Option C Image")}
+                {renderFileInput('optionDImage', optionDImagePreview, setOptionDImagePreview, "Option D Image")}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -266,17 +377,29 @@ export default function AddQuestionPage() {
             <CardTitle className="flex items-center"><Brain className="mr-2 h-5 w-5 text-accent" />Explanation & Correct Answer</CardTitle>
             <CardDescription>Specify the correct answer and provide an explanation.</CardDescription>
           </CardHeader>
-          <CardContent>
-             <div className="p-4 border-dashed border-muted-foreground/50 rounded-md text-center text-muted-foreground">
-              Correct option selector and explanation input (Text/Image) will appear here.
-              <br />
-              (Implementation for this section is pending)
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="correctOption">Correct Option</Label>
+              <Select name="correctOption" value={formData.correctOption} onValueChange={(value) => handleSelectChange('correctOption', value as QuestionFormData['correctOption'])}>
+                <SelectTrigger id="correctOption" className="mt-1"><SelectValue placeholder="Select Correct Option" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="A">A</SelectItem>
+                  <SelectItem value="B">B</SelectItem>
+                  <SelectItem value="C">C</SelectItem>
+                  <SelectItem value="D">D</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
+            <div>
+              <Label htmlFor="explanationText">Explanation Text (Supports MathJax/LaTeX, Optional)</Label>
+              <Textarea id="explanationText" name="explanationText" value={formData.explanationText} onChange={handleInputChange} placeholder="Enter explanation text..." className="mt-1 min-h-[100px]" />
+            </div>
+            {renderFileInput('explanationImage', explanationImagePreview, setExplanationImagePreview, "Explanation Image (Optional)")}
           </CardContent>
         </Card>
 
         <CardFooter className="flex justify-end gap-4 pt-6">
-          <Button type="button" variant="outline" onClick={() => setFormData(initialFormData)} disabled={isLoading}>
+          <Button type="button" variant="outline" onClick={handleReset} disabled={isLoading}>
             <Trash2 className="mr-2 h-4 w-4" /> Reset Form
           </Button>
           <Button type="submit" disabled={isLoading}>
