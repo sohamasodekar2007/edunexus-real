@@ -18,7 +18,8 @@ import {
   UserCircle,
   LogOut,
   Bell,
-} from 'lucide-react'; // Removed Users from here
+  PlusCircle, // Added for Add Question
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -37,7 +38,7 @@ interface AdminNavItemGroup extends SideBaseNavItemGroup {}
 
 const adminNavigationItems: AdminNavItem[] = [
   { href: '/admin-panel', label: 'Dashboard', icon: ShieldAlert, matchExact: true },
-  // { href: '/admin-panel/users', label: 'User Management', icon: Users }, // Removed User Management
+  { href: '/admin-panel/add-question', label: 'Add Question', icon: PlusCircle },
   { href: '/admin-panel/tests', label: 'Test Management', icon: ListChecks },
   { href: '/admin-panel/dpps', label: 'DPP Management', icon: ClipboardList },
   { href: '/admin-panel/site-settings', label: 'Site Settings', icon: Settings2 },
