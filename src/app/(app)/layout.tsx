@@ -48,6 +48,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SideBase, type NavItemGroup as SideBaseNavItemGroup, type NavItem as SideBaseNavItem } from '@/components/sidebase';
 import pb from '@/lib/pocketbase'; 
+import type { UserModel, UserRole } from '@/types';
 
 interface NavItem extends SideBaseNavItem {}
 interface NavItemGroup extends SideBaseNavItemGroup {}
@@ -82,13 +83,15 @@ const navStructure: NavItemGroup[] = [
   { label: 'Administration', items: administrationItems },
 ];
 
+const showUpgradeForPlans: UserModel[] = ['Free', 'Dpp', 'Full_length', 'Chapterwise'];
+
 export default function AppLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { isMobile } = useSidebar(); 
   const [currentUserFullName, setCurrentUserFullName] = useState<string>('User');
-  const [currentUserModel, setCurrentUserModel] = useState<string | null>(null);
-  const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
+  const [currentUserModel, setCurrentUserModel] = useState<UserModel | null>(null);
+  const [currentUserRole, setCurrentUserRole] = useState<UserRole | null>(null);
   const [currentUserAvatarFallback, setCurrentUserAvatarFallback] = useState<string>('U');
   const [currentUserAvatarUrl, setCurrentUserAvatarUrl] = useState<string | null>(null);
   const [currentUserClass, setCurrentUserClass] = useState<string | null>(null);
@@ -105,8 +108,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     initializeLocalStorageData(); 
     if (typeof window !== 'undefined') {
       const fullName = localStorage.getItem('userFullName');
-      const model = localStorage.getItem('userModel');
-      const role = localStorage.getItem('userRole');
+      const model = localStorage.getItem('userModel') as UserModel;
+      const role = localStorage.getItem('userRole') as UserRole;
       const fallback = localStorage.getItem('userAvatarFallback');
       const avatarUrl = localStorage.getItem('userAvatarUrl');
       const userClass = localStorage.getItem('userClass'); 
@@ -149,21 +152,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
       pb.authStore.clear(); 
-      localStorage.removeItem('userId');
-      localStorage.removeItem('userFullName');
-      localStorage.removeItem('userName'); 
-      localStorage.removeItem('userModel');
-      localStorage.removeItem('userRole');
-      localStorage.removeItem('userAvatarFallback');
-      localStorage.removeItem('userAvatarUrl');
-      localStorage.removeItem('userClass');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userPhone');
-      localStorage.removeItem('userTargetYear');
-      localStorage.removeItem('userReferralCode');
-      localStorage.removeItem('userReferredByCode');
-      localStorage.removeItem('userReferralStats');
-      localStorage.removeItem('userExpiryDate');
+      ['userId', 'userFullName', 'userName', 'userModel', 'userRole', 'userAvatarFallback', 'userAvatarUrl', 'userClass', 'userEmail', 'userPhone', 'userTargetYear', 'userReferralCode', 'userReferredByCode', 'userReferralStats', 'userExpiryDate'].forEach(key => localStorage.removeItem(key));
     }
     router.push('/landing');
   };
@@ -209,14 +198,17 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               </h1>
             </div>
 
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="hidden sm:inline-flex items-center text-primary border-primary"
-            >
-              <Sparkles className="mr-1 sm:mr-2 h-4 w-4" /> 
-              Upgrade
-            </Button>
+            {currentUserModel && showUpgradeForPlans.includes(currentUserModel) && (
+                <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="inline-flex items-center text-primary border-primary"
+                    onClick={() => router.push('/upgrade')} // Example action
+                >
+                    <Sparkles className="mr-1 sm:mr-2 h-4 w-4" /> 
+                    Upgrade
+                </Button>
+            )}
             {currentUserModel && <Badge variant="secondary" className="hidden sm:inline-flex">Plan: {currentUserModel}</Badge>}
             <Button variant="ghost" size="icon" className="rounded-full">
               <Bell className="h-5 w-5" />
@@ -277,11 +269,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </DropdownMenu>
           </header>
         )}
-        <main className="flex-1 overflow-auto bg-muted/30">
+        <main className={`flex-1 overflow-auto ${showMainAppHeader ? 'bg-muted/30' : 'bg-background'}`}>
           {children}
         </main>
       </SidebarInset>
     </div>
   );
 }
-
