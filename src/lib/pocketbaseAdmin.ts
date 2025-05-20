@@ -23,7 +23,7 @@ async function initializeAdminClient(): Promise<PocketBase | null> {
     return null;
   }
   if (!pocketbaseUrl) {
-    console.error("[PocketBase Admin Init Failure]: NEXT_PUBLIC_POCKETBASE_URL not set in .env file.");
+    console.error("[PocketBase Admin Init Failure]: NEXT_PUBLIC_POCKETBASE_URL not set in .env file. This should be the root URL of your PocketBase instance.");
     return null;
   }
 
@@ -33,6 +33,7 @@ async function initializeAdminClient(): Promise<PocketBase | null> {
   try {
     const expectedAdminAuthUrl = `${pocketbaseUrl.replace(/\/$/, '')}/api/admins/auth-with-password`;
     console.log(`[PocketBase Admin Init] Expected full admin authentication URL: ${expectedAdminAuthUrl}`);
+    
     await client.admins.authWithPassword(adminEmail, adminPassword, {
       autoRefreshThreshold: 30 * 60 // Auto-refresh if token expires in next 30 mins
     });
@@ -47,6 +48,8 @@ async function initializeAdminClient(): Promise<PocketBase | null> {
         console.error(`[PocketBase Admin Init Failure]: Admin authentication failed: Endpoint /api/admins/auth-with-password not found (404). This usually means NEXT_PUBLIC_POCKETBASE_URL in your .env file (current value: ${pocketbaseUrl}) is incorrect. It should be the ROOT URL of your PocketBase instance (e.g., https://your-domain.com or http://127.0.0.1:8090), not including '/api' or other subpaths.`);
       } else if (err.status === 400) {
         console.error("[PocketBase Admin Init Failure]: Admin authentication failed: Invalid admin email or password (400). Please verify POCKETBASE_ADMIN_EMAIL and POCKETBASE_ADMIN_PASSWORD in your .env file.");
+      } else if (err.status === 0) {
+        console.error("[PocketBase Admin Init Failure]: Admin authentication failed: Network error (status 0). Could not connect to PocketBase server. Ensure the server is running and NEXT_PUBLIC_POCKETBASE_URL is correct and accessible.");
       }
     }
     return null;
@@ -70,8 +73,6 @@ export async function getPocketBaseAdmin(): Promise<PocketBase | null> {
     if (client && client.authStore.isValid && client.authStore.isAdmin) {
       return client;
     }
-    // Reset promise if auth failed to allow retry on next call, though this might not be ideal
-    // depending on whether the error is transient or due to bad config.
     adminAuthPromise = null; 
     return null;
   } catch (error) {
