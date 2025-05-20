@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Label } from '@/components/ui/label'; // Added import
 import { useToast } from '@/hooks/use-toast';
 import { getReferrerInfoForCurrentUserAction, getLiveReferralStatsAction } from '@/app/auth/actions';
 import pb from '@/lib/pocketbase';
@@ -31,21 +31,21 @@ export default function ReferralsPage() {
 
   const fetchLiveStats = useCallback(async () => {
     setIsLoadingStats(true);
-    setErrorLoadingStats(null); // Reset error before fetching
+    setErrorLoadingStats(null);
     try {
       const result = await getLiveReferralStatsAction();
       if (result.success && result.stats) {
         setLiveReferralStats(result.stats);
       } else {
         const errorMessage = result.message || "Could not load live referral statistics.";
-        console.error("Failed to fetch live referral stats. Server action response:", { message: errorMessage, internalCode: result.error });
+        // Log the full result object for better debugging
+        console.error("Failed to fetch live referral stats. Full server action result:", result);
         setErrorLoadingStats(errorMessage);
         toast({
           title: "Stats Error",
           description: errorMessage,
           variant: "destructive",
         });
-        // Fallback to empty stats if fetch fails, to prevent crashes
         setLiveReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
       }
     } catch (error) {
@@ -66,7 +66,7 @@ export default function ReferralsPage() {
 
   useEffect(() => {
     let isMounted = true;
-    
+
     async function initializeData() {
       if (typeof window !== 'undefined' && isMounted) {
         const storedUserId = localStorage.getItem('userId');
@@ -91,11 +91,11 @@ export default function ReferralsPage() {
             .catch(err => console.error("Error calling getReferrerInfoForCurrentUserAction:", err))
             .finally(() => { if (isMounted) setIsLoadingReferrerName(false); });
         }
-        
+
         if (pb.authStore.isValid) {
            fetchLiveStats();
         } else {
-            setIsLoadingStats(false); 
+            setIsLoadingStats(false);
             setLiveReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
             setErrorLoadingStats("User not authenticated. Please log in to view referral stats.");
         }
@@ -131,7 +131,7 @@ export default function ReferralsPage() {
         });
     }
   };
-  
+
   const defaultStats: NonNullable<User['referralStats']> = { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 };
   const statsToDisplay = liveReferralStats || defaultStats;
 
