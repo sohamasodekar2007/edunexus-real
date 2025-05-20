@@ -1,34 +1,35 @@
-
 // @ts-nocheck
 'use server';
 import pbGlobal from '@/lib/pocketbase';
-import PocketBase, { ClientResponseError } from 'pocketbase';
+import { ClientResponseError } from 'pocketbase';
 import { LoginSchema, SignupSchema, type SignupFormData } from '@/lib/validationSchemas';
 import { generateReferralCode } from '@/lib/authUtils';
 import { createUserInPocketBase, findUserByReferralCode, updateUserReferralStats, findUserById, updateUserInPocketBase } from '@/lib/userDataService';
 import type { User, UserModel, UserRole, UserClass } from '@/types';
 import { format } from 'date-fns';
+import { getPocketBaseAdmin, requirePocketBaseAdmin } from '@/lib/pocketbaseAdmin';
 
-
-// This function is no longer needed as we are simplifying auth and not using super-admin
-// const getAdminPb = async (): Promise<PocketBase | null> => { ... }
 
 export async function validateReferralCodeAction(code: string): Promise<{ success: boolean; message: string; referrerName?: string }> {
   if (!code || code.trim().length === 0) {
+    // No message for empty or short codes, UI handles this by not showing a message.
     return { success: false, message: "" };
   }
   const upperCaseCode = code.trim().toUpperCase();
 
   try {
+    // Does not require admin auth if collection view rules are public or allow auth users
     const referrer = await findUserByReferralCode(upperCaseCode, pbGlobal);
     if (referrer) {
       return { success: true, message: `This referral code belongs to ${referrer.name}.`, referrerName: referrer.name };
     } else {
+      // No error message for invalid codes, signup proceeds, code saved in referredByCode.
       return { success: false, message: "" };
     }
   } catch (error) {
     console.error('[Validate Referral Code Action] Error validating referral code:', error);
-    return { success: false, message: "Error validating code. Please try again." };
+    // Don't show server errors for this validation to the user directly.
+    return { success: false, message: "" };
   }
 }
 
@@ -54,24 +55,25 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       name: combinedName,
       phone,
       class: userClass || null,
-      model: 'Free' as UserModel,
-      role: 'User' as UserRole,
-      expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0],
+      model: 'Free' as UserModel, // New users default to 'Free' model
+      role: 'User' as UserRole,   // New users default to 'User' role
+      expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0], // Default expiry
       totalPoints: 0,
       referralCode: newUserReferralCode,
-      referredByCode: upperCaseReferredByCode,
-      referralStats: {
+      referredByCode: upperCaseReferredByCode, // Store the code they signed up with
+      referralStats: { // Initialize referral stats for the new user
         referred_free: 0,
         referred_chapterwise: 0,
         referred_full_length: 0,
         referred_combo: 0,
       },
       targetYear: null,
-      avatar: null,
-      emailVisibility: true,
-      verified: false,
+      avatar: null, // Default avatar
+      emailVisibility: true, // Default email visibility
+      verified: false, // Default verification status
     };
     
+    // Create user with global PB instance (relies on public create rule for users collection)
     newUser = await createUserInPocketBase(userDataForPocketBase, pbGlobal);
     console.log("[Signup Action] User created successfully with pbGlobal:", newUser.id);
 
@@ -113,27 +115,27 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
     return { success: false, message: `Signup failed: ${finalErrorMessage}`, error: finalErrorMessage };
   }
 
+  // If signup was successful and a referral code was used, attempt to update the referrer's stats
   if (newUser && newUser.id && upperCaseReferredByCode) {
     console.log(`[Signup Action] New user ${newUser.id} signed up with referral code: ${upperCaseReferredByCode}. Attempting to find referrer and update stats.`);
     try {
-      const referrerToUpdateStats = await findUserByReferralCode(upperCaseReferredByCode, pbGlobal);
-      if (referrerToUpdateStats && referrerToUpdateStats.id) {
-        console.log(`[Signup Action] Found referrer: ${referrerToUpdateStats.id} (${referrerToUpdateStats.name}). Current stats:`, referrerToUpdateStats.referralStats);
-        const currentStats = referrerToUpdateStats.referralStats || { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 };
-        const newReferrerStats: User['referralStats'] = {
-          ...currentStats,
-          referred_free: (currentStats.referred_free || 0) + 1,
-        };
-        // This part will attempt to use pbGlobal. It might fail if rules are restrictive for updating other users.
-        // No admin auth is used here anymore. If this fails, it logs a warning.
-        try {
-            await updateUserReferralStats(referrerToUpdateStats.id, newReferrerStats, pbGlobal);
-            console.log(`[Signup Action] Referral stats update attempted for referrer: ${referrerToUpdateStats.name} to`, newReferrerStats);
-        } catch (statsUpdateError) {
-            console.warn(`[Signup Action Warning] Failed to update referral stats for ${referrerToUpdateStats.name} using standard user auth. This might be due to collection permissions. User signup itself was successful. Error:`, statsUpdateError);
+      const adminPb = await getPocketBaseAdmin(); // Attempt to get admin client for updating referrer
+      if (adminPb) {
+        const referrerToUpdateStats = await findUserByReferralCode(upperCaseReferredByCode, adminPb);
+        if (referrerToUpdateStats && referrerToUpdateStats.id) {
+          console.log(`[Signup Action] Found referrer: ${referrerToUpdateStats.id} (${referrerToUpdateStats.name}). Current stats:`, referrerToUpdateStats.referralStats);
+          const currentStats = referrerToUpdateStats.referralStats || { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 };
+          const newReferrerStats: User['referralStats'] = {
+            ...currentStats,
+            referred_free: (currentStats.referred_free || 0) + 1, // Increment free tier for now
+          };
+          await updateUserReferralStats(referrerToUpdateStats.id, newReferrerStats, adminPb);
+          console.log(`[Signup Action] Referral stats update attempted for referrer: ${referrerToUpdateStats.name} to`, newReferrerStats);
+        } else {
+          console.warn(`[Signup Action] No valid referrer found with code ${upperCaseReferredByCode} when attempting to update stats with admin client. Stats not updated.`);
         }
       } else {
-        console.warn(`[Signup Action] No valid referrer found with code ${upperCaseReferredByCode} when attempting to update stats. Stats not updated.`);
+         console.warn("[Signup Action] Admin client not available for updating referrer stats. Referrer stats update skipped. This might be due to missing admin credentials in .env or admin auth failure.");
       }
     } catch (statsError) {
       console.warn(`[Signup Action Warning] Error during referral stats update process for ${upperCaseReferredByCode}. User signup itself was successful. Error:`, statsError);
@@ -156,8 +158,8 @@ export async function loginUserAction(data: { email: string, password_login: str
   userEmail?: string,
   userPhone?: string | null,
   userTargetYear?: number | null,
-  userReferralCode?: string | null,
-  userReferredByCode?: string | null,
+  userReferralCode?: string | null, // User's own referral code
+  userReferredByCode?: string | null, // The code this user signed up with
   userReferralStats?: User['referralStats'] | null,
   userExpiryDate?: string | null,
   userAvatarUrl?: string | null,
@@ -181,7 +183,7 @@ export async function loginUserAction(data: { email: string, password_login: str
 
     const user = authData.record as unknown as User;
     const userFullName = user.name || 'User';
-    const userName = userFullName;
+    const userName = userFullName.split(' ')[0] || 'User'; // Get first name for userName
     const avatarFilename = user.avatar;
     const avatarUrl = avatarFilename ? pbGlobal.getFileUrl(user, avatarFilename as string) : null;
 
@@ -191,7 +193,7 @@ export async function loginUserAction(data: { email: string, password_login: str
       token: authData.token,
       userId: user.id,
       userFullName: userFullName,
-      userName: userName,
+      userName: userName, // Store first name
       userModel: user.model || null,
       userRole: user.role || null,
       userClass: user.class || null,
@@ -207,17 +209,17 @@ export async function loginUserAction(data: { email: string, password_login: str
 
   } catch (error) {
     console.error('[Login Action Error]:', error);
-    let errorMessage = 'Invalid email or password.';
+    let errorMessage = 'Login Failed: Invalid email or password.';
      if (error instanceof ClientResponseError) {
         console.error('[Login Action Error] PocketBase ClientResponseError details:', JSON.stringify(error.data));
-        if (error.status === 400) {
+        if (error.status === 400) { // Bad Request - typically invalid credentials
            errorMessage = 'Login Failed: Failed to authenticate. Please check your email and password.';
-        } else if (error.status === 0) {
+        } else if (error.status === 0) { // Network error
           errorMessage = "Login Failed: Network Error. Could not connect to the server. Please check your internet connection and the server status.";
-        } else {
+        } else { // Other errors
            errorMessage = error.data?.message || `Login error (status ${error.status}). Please try again.`;
         }
-    } else if (error instanceof Error) {
+    } else if (error instanceof Error) { // Non-PocketBase errors
         errorMessage = error.message;
     }
     return { success: false, message: errorMessage, error: errorMessage };
@@ -259,20 +261,17 @@ export async function updateUserProfileAction({
   }
 
   console.log(`[Update Profile Action] Data to send to PocketBase for user ${userId}:`, dataForPocketBase);
-
+  
   // This action will use pbGlobal. Relies on PocketBase rules for user self-update (e.g., @request.auth.id = id)
-  // The client-side must be authenticated, and Next.js server actions framework must correctly propagate that auth context.
+  // The client-side must be authenticated, and Next.js server actions framework should correctly propagate that auth context.
   if (!pbGlobal.authStore.isValid || pbGlobal.authStore.model?.id !== userId) {
       console.warn("[Update Profile Action] Warning: Current server-side auth context in pbGlobal does not match target userId or is invalid. Update might fail due to PocketBase rules. Client-side must be authenticated, and its token should be used by pbGlobal for this request.");
-      // Forcing a more generic error if this state is detected, as it's an unexpected state for user self-update.
-      // return { success: false, message: "Authentication context error. Please re-login and try again.", error: "Server auth context mismatch." };
-      // Allowing to proceed; PocketBase will ultimately decide based on the token it receives.
+      // This is more of a server-side sanity check. PocketBase will ultimately decide based on the token IT receives.
+      // If the token is not correctly propagated by the server action framework, this will fail at PocketBase.
   }
 
   try {
-    // Attempting with pbGlobal. PocketBase will check if @request.auth.id = id for updateRule,
-    // assuming pbGlobal carries the client's token for this server action.
-    const updatedUserRecord = await updateUserInPocketBase(userId, dataForPocketBase, pbGlobal);
+    const updatedUserRecord = await updateUserInPocketBase(userId, dataForPocketBase, pbGlobal); // Use pbGlobal
     console.log(`[Update Profile Action] Profile updated successfully for user ${userId}:`, updatedUserRecord);
     return { success: true, message: "Profile updated successfully!", updatedUser: updatedUserRecord };
   } catch (error) {
@@ -281,7 +280,7 @@ export async function updateUserProfileAction({
      if (error instanceof ClientResponseError) {
         errorMessage = error.data?.message || errorMessage;
         if (error.status === 403) {
-           errorMessage = "Permission Denied: You may not have permission to update this profile. Ensure you are updating your own profile and collection rules allow it.";
+           errorMessage = "Permission Denied: You may not have permission to update this profile. Ensure you are updating your own profile and collection rules allow it (@request.auth.id = id).";
         } else if (error.status === 404) {
            errorMessage = "User not found. Could not update profile.";
         }
@@ -301,6 +300,7 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
 
   let currentUserRecord;
   try {
+    // Use pbGlobal, relies on user being able to view their own record or public view rule.
     currentUserRecord = await findUserById(currentAuthUser.id, pbGlobal);
   } catch (e) {
      console.error("[Get Referrer Info Action] Error fetching current user's record:", e);
@@ -312,6 +312,9 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
   }
 
   try {
+    // Use pbGlobal; relies on users being able to view other users if needed, or specific rules.
+    // If this needs admin rights to find ANY user by referral code, it would need adminPb.
+    // However, finding by referralCode might be a public or semi-public operation.
     const referrer = await findUserByReferralCode(currentUserRecord.referredByCode, pbGlobal);
     if (referrer && referrer.name) {
       return { referrerName: referrer.name };
@@ -395,23 +398,17 @@ export async function addQuestionAction(formData: FormData): Promise<{ success: 
   console.log("[Add Question Action] Attempting to add question.");
   console.log("[Add Question Action] Received form data keys:", Array.from(formData.keys()));
 
-  // We are relying on the client-side check in admin-panel/layout.tsx to ensure only
-  // users with role 'Admin' (from localStorage) can access the page that calls this action.
-  // PocketBase's collection rule for `question_bank` (CreateRule: "") will allow the creation.
-  // If the CreateRule was "@request.auth.id != "" && @request.auth.role = "Admin"", then PocketBase
-  // would check the auth token sent with the request.
-  // For a "CreateRule: """ (empty string), no auth is needed at the DB level for create.
+  // This action will use pbGlobal. The request to PocketBase will carry the
+  // auth token of the user who initiated this server action (if any, and if Next.js propagates it).
+  // PocketBase's collection rules for 'question_bank' (CreateRule: @request.auth.id != "" && @request.auth.role = "Admin")
+  // will then determine if the action is permitted.
 
-  // Removed server-side auth checks as per user request and new permissive DB rule for create.
-  // if (!pbGlobal.authStore.isValid) {
-  //   const authErrorMessage = "User is not authenticated. Cannot add question. Please ensure you are logged in with an Admin account.";
-  //   console.warn(`[Add Question Action] ${authErrorMessage}`);
-  //   return { success: false, message: authErrorMessage, error: "User not authenticated." };
-  // }
-  // if (pbGlobal.authStore.model?.role !== 'Admin') {
-  //   const roleErrorMessage = `User role is '${pbGlobal.authStore.model?.role}', not 'Admin'. Cannot add question.`;
-  //   console.warn(`[Add Question Action] ${roleErrorMessage}`);
-  //   return { success: false, message: roleErrorMessage, error: "Insufficient permissions." };
+  // Server-side sanity check (optional, as PB rules are the ultimate authority)
+  // This check assumes pbGlobal.authStore is populated by Next.js server action context
+  // if (!pbGlobal.authStore.isValid || pbGlobal.authStore.model?.role !== 'Admin') {
+  //    console.warn("[Add Question Action] Server-side auth check: User is not authenticated as Admin according to pbGlobal.authStore. PocketBase rules will be the final check.");
+  //    // Allowing to proceed to PocketBase, which will enforce its rules.
+  //    // If PocketBase also rejects, the error will be caught below.
   // }
 
   try {
@@ -427,26 +424,91 @@ export async function addQuestionAction(formData: FormData): Promise<{ success: 
     if (error instanceof ClientResponseError) {
       console.error("[Add Question Action] PocketBase ClientResponseError details:", JSON.stringify(error.data, null, 2));
       
-      if (error.data?.data) {
+      if (error.data?.data) { // PocketBase validation errors
         detailedFieldErrors = Object.entries(error.data.data).map(([key, val]: [string, any]) => `${key}: ${val.message}`).join('; ');
       }
       
-      if (detailedFieldErrors) {
-        errorMessage = `Failed to create record. Details: ${detailedFieldErrors}`;
-      } else if (error.data?.message) {
-        errorMessage = error.data.message;
-      } else {
-        errorMessage = "Failed to create record. Please check inputs and ensure all required fields are filled correctly.";
-      }
-
       if (error.status === 403) { // Forbidden by PocketBase rule
-        errorMessage = "Permission Denied by PocketBase: You do not have permission to add questions. Ensure your account has the 'Admin' role and the 'question_bank' collection Create Rule in PocketBase is correctly set (e.g., '@request.auth.id != \"\" && @request.auth.role = \"Admin\"' or empty for public).";
+        errorMessage = "Permission Denied: You do not have permission to add questions. Ensure your account has the 'Admin' role and you are logged in.";
+      } else if (detailedFieldErrors) {
+        errorMessage = `Failed to create record due to validation errors. Details: ${detailedFieldErrors}`;
+      } else if (error.data?.message) {
+        errorMessage = error.data.message; // General message from PocketBase
       } else if (error.status === 0) {
-        errorMessage = "Network Error: Could not connect to PocketBase to add the question. Please check your internet connection and the server status.";
+         errorMessage = "Network Error: Could not connect to PocketBase to add the question. Please check your internet connection and the server status.";
+      } else {
+        errorMessage = `Failed to create record. Please check inputs. (Status: ${error.status})`;
       }
-    } else if (error instanceof Error) {
+    } else if (error instanceof Error) { // Other unexpected errors
       errorMessage = error.message;
     }
     return { success: false, message: errorMessage, error: "PocketBase operation failed. See server logs for detailed error data and client toast for specifics." };
+  }
+}
+
+export async function getLiveReferralStatsAction(): Promise<{
+  success: boolean;
+  stats?: User['referralStats'];
+  message?: string;
+  error?: string;
+}> {
+  console.log('[Get Live Referral Stats Action] Attempting to fetch live referral stats.');
+  const adminPb = await requirePocketBaseAdmin(); // This will throw if admin auth fails
+  if (!adminPb) {
+    // This case should ideally not be reached if requirePocketBaseAdmin throws
+    return { success: false, message: "Admin client not available for fetching live referral stats.", error: "Admin auth failed" };
+  }
+
+  const currentAuthUser = pbGlobal.authStore.model;
+  if (!currentAuthUser || !currentAuthUser.id || !currentAuthUser.referralCode) {
+    console.warn("[Get Live Referral Stats Action] No authenticated user or referral code found.");
+    return { success: false, message: "User not authenticated or no referral code available.", error: "User auth/referral code missing" };
+  }
+  const currentUserReferralCode = currentAuthUser.referralCode;
+
+  try {
+    const referredUsers = await adminPb.collection('users').getFullList({
+      filter: `referredByCode = "${currentUserReferralCode}"`,
+    });
+
+    const liveStats: User['referralStats'] = {
+      referred_free: 0,
+      referred_chapterwise: 0,
+      referred_full_length: 0,
+      referred_combo: 0,
+      // Add referred_dpp if you plan to track it
+    };
+
+    referredUsers.forEach(user => {
+      switch (user.model) {
+        case 'Free':
+          liveStats.referred_free = (liveStats.referred_free || 0) + 1;
+          break;
+        case 'Chapterwise':
+          liveStats.referred_chapterwise = (liveStats.referred_chapterwise || 0) + 1;
+          break;
+        case 'Full_length':
+          liveStats.referred_full_length = (liveStats.referred_full_length || 0) + 1;
+          break;
+        case 'Combo':
+          liveStats.referred_combo = (liveStats.referred_combo || 0) + 1;
+          break;
+        // Add case for 'Dpp' if needed
+        default:
+          break;
+      }
+    });
+    console.log('[Get Live Referral Stats Action] Successfully calculated stats:', liveStats);
+    return { success: true, stats: liveStats };
+
+  } catch (error) {
+    console.error("[Get Live Referral Stats Action] Error fetching or calculating stats:", error);
+    let errorMessage = "Failed to calculate live referral stats.";
+    if (error instanceof ClientResponseError) {
+      errorMessage = error.data?.message || errorMessage;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    return { success: false, message: errorMessage, error: errorMessage };
   }
 }

@@ -7,47 +7,66 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
+import { getReferrerInfoForCurrentUserAction, getLiveReferralStatsAction } from '@/app/auth/actions';
 import pb from '@/lib/pocketbase';
 import type { User } from '@/types';
 import { Gift, Link2, Copy, Users, BarChart3, Info, Loader2, ArrowLeft, Share2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ClientResponseError } from 'pocketbase';
 
 export default function ReferralsPage() {
   const router = useRouter();
   const { toast } = useToast();
 
   const [userReferralCode, setUserReferralCode] = useState<string>('N/A');
-  const [userReferralStats, setUserReferralStats] = useState<User['referralStats'] | null>(null);
+  const [liveReferralStats, setLiveReferralStats] = useState<User['referralStats'] | null>(null);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [userReferredByUserName, setUserReferredByUserName] = useState<string | null>(null);
   const [isLoadingReferrerName, setIsLoadingReferrerName] = useState(false);
   const [hasUserReferredByCodeInStorage, setHasUserReferredByCodeInStorage] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
 
+  const fetchLiveStats = useCallback(async () => {
+    setIsLoadingStats(true);
+    try {
+      const result = await getLiveReferralStatsAction();
+      if (result.success && result.stats) {
+        setLiveReferralStats(result.stats);
+      } else {
+        console.error("Failed to fetch live referral stats:", result.message, result.error);
+        toast({
+          title: "Stats Error",
+          description: result.message || "Could not load live referral statistics.",
+          variant: "destructive",
+        });
+        // Fallback to empty stats if fetch fails, to prevent crashes
+        setLiveReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+      }
+    } catch (error) {
+      console.error("Critical error fetching live referral stats:", error);
+      toast({
+        title: "Stats Error",
+        description: "An unexpected error occurred while fetching referral statistics.",
+        variant: "destructive",
+      });
+      setLiveReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+    } finally {
+      setIsLoadingStats(false);
+    }
+  }, [toast]);
+
+
   useEffect(() => {
     let isMounted = true;
-    let unsubscribe: (() => void) | null = null;
-
-    async function initializeDataAndSubscribe() {
+    
+    async function initializeData() {
       if (typeof window !== 'undefined' && isMounted) {
         const storedUserId = localStorage.getItem('userId');
         const storedReferralCode = localStorage.getItem('userReferralCode');
-        const storedReferralStats = localStorage.getItem('userReferralStats');
         const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
 
         if (storedUserId) setUserId(storedUserId);
         if (storedReferralCode) setUserReferralCode(storedReferralCode);
-
-        if (storedReferralStats) {
-          try {
-            setUserReferralStats(JSON.parse(storedReferralStats));
-          } catch (e) {
-            console.error("Error parsing referral stats from localStorage", e);
-            setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
-          }
-        } else {
-            setUserReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
-        }
 
         const referredByCodeExists = storedUserReferredByCode && storedUserReferredByCode.trim() !== '';
         setHasUserReferredByCodeInStorage(referredByCodeExists);
@@ -64,72 +83,23 @@ export default function ReferralsPage() {
             .catch(err => console.error("Error calling getReferrerInfoForCurrentUserAction:", err))
             .finally(() => { if (isMounted) setIsLoadingReferrerName(false); });
         }
-
-        // Real-time subscription for user's own referralStats
-        if (storedUserId && pb.authStore.isValid && pb.authStore.model?.id === storedUserId) {
-          const localUserId = storedUserId;
-          console.log(`[Referrals Page - Real-time Subscription] Attempting to subscribe for user ID: ${localUserId}`);
-          console.log(`[Real-time Subscription] PocketBase client baseUrl: ${pb.baseUrl}`);
-          const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
-          console.log(`[Real-time Subscription] Attempting to connect to WebSocket: ${realtimeUrl} for user ID: ${localUserId}`);
-          try {
-            unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
-              if (e.action === 'update' && e.record && isMounted) {
-                console.log('[Referrals Page - Real-time] User record updated:', e.record);
-                const updatedStats = e.record.referralStats as User['referralStats'];
-                if (updatedStats && JSON.stringify(updatedStats) !== JSON.stringify(userReferralStats)) {
-                  console.log('[Referrals Page - Real-time] Referral stats changed, updating state and localStorage.');
-                  setUserReferralStats(updatedStats);
-                  localStorage.setItem('userReferralStats', JSON.stringify(updatedStats));
-                }
-              }
-            });
-            console.log(`[Referrals Page - Real-time Subscription] Successfully subscribed for user ID: ${localUserId}`);
-          } catch (error) {
-            console.error(`[Real-time Subscription Error] Failed for user ID: ${localUserId}.`, error);
-            console.error(`[Real-time Subscription Error] pb.baseUrl at time of error: ${pb?.baseUrl}`);
-            if (error instanceof ClientResponseError) {
-                console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Status: ${error.status}`);
-                 if (error.status === 0) {
-                    console.error("[Real-time Subscription Error] Status 0 indicates the PocketBase server is unreachable or the network request failed. Check your PocketBase server, ngrok tunnel (if used), and ensure NEXT_PUBLIC_POCKETBASE_URL in your .env file is correct and accessible from your browser's network.");
-                  }
-                console.error(`[Real-time Subscription Error] PocketBase ClientResponseError URL: ${error.url || 'N/A'}`);
-                console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Response: ${JSON.stringify(error.response)}`);
-                console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Data: ${JSON.stringify(error.data)}`);
-                console.error("[Real-time Subscription Error] Full ClientResponseError object:", error);
-                if (error.originalError) {
-                  console.error(`[Real-time Subscription Error] OriginalError Type: ${error.originalError.constructor.name}`);
-                  if (error.originalError instanceof Error) {
-                    console.error(`[Real-time Subscription Error] OriginalError Message: ${error.originalError.message}`);
-                    console.error(`[Real-time Subscription Error] OriginalError Stack: ${error.originalError.stack}`);
-                  } else {
-                    console.error(`[Real-time Subscription Error] OriginalError: ${String(error.originalError)}`);
-                  }
-                }
-                toast({
-                  title: "Real-time Sync Issue",
-                  description: "Could not connect for live updates. Please verify NEXT_PUBLIC_POCKETBASE_URL, ngrok tunnel, and PocketBase server status. Also check for browser/network issues blocking WebSockets.",
-                  variant: "destructive",
-                  duration: 15000,
-                });
-            }
-          }
+        
+        // Fetch live calculated stats
+        if (pb.authStore.isValid) { // Only fetch if user is logged in
+           fetchLiveStats();
+        } else {
+            setIsLoadingStats(false); // Not logged in, no stats to fetch
+            setLiveReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
         }
       }
     }
 
-    initializeDataAndSubscribe();
+    initializeData();
 
     return () => {
       isMounted = false;
-      if (unsubscribe) {
-        const localUserIdOnUnmount = userId || 'unknown_user_on_unmount';
-        console.log(`[Referrals Page - Real-time Subscription] Unsubscribing for user ID: ${localUserIdOnUnmount}`);
-        unsubscribe();
-      }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, toast]);
+  }, [fetchLiveStats]); // Added fetchLiveStats to dependency array
 
   const handleCopyReferralLink = () => {
     if (userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') {
@@ -154,8 +124,8 @@ export default function ReferralsPage() {
     }
   };
   
-  const defaultStats: User['referralStats'] = { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 };
-  const statsToDisplay = userReferralStats || defaultStats;
+  const defaultStats: NonNullable<User['referralStats']> = { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 };
+  const statsToDisplay = liveReferralStats || defaultStats;
 
 
   return (
@@ -231,26 +201,35 @@ export default function ReferralsPage() {
             Your Referral Statistics
           </CardTitle>
           <CardDescription>
-            Track how many users have signed up using your referral code.
+            Track how many users have signed up using your referral code, based on their current plan.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 bg-muted/50 rounded-md text-center">
-            <p className="text-sm font-medium text-muted-foreground">Free Users Referred</p>
-            <p className="text-3xl font-bold text-primary">{statsToDisplay.referred_free}</p>
-          </div>
-          <div className="p-4 bg-muted/50 rounded-md text-center">
-            <p className="text-sm font-medium text-muted-foreground">Chapterwise Plan</p>
-            <p className="text-3xl font-bold text-primary">{statsToDisplay.referred_chapterwise}</p>
-          </div>
-          <div className="p-4 bg-muted/50 rounded-md text-center">
-            <p className="text-sm font-medium text-muted-foreground">Full-Length Plan</p>
-            <p className="text-3xl font-bold text-primary">{statsToDisplay.referred_full_length}</p>
-          </div>
-          <div className="p-4 bg-muted/50 rounded-md text-center">
-            <p className="text-sm font-medium text-muted-foreground">Combo Plan</p>
-            <p className="text-3xl font-bold text-primary">{statsToDisplay.referred_combo}</p>
-          </div>
+          {isLoadingStats ? (
+            <div className="sm:col-span-2 lg:col-span-4 flex items-center justify-center p-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p className="ml-3 text-muted-foreground">Loading statistics...</p>
+            </div>
+          ) : (
+            <>
+              <div className="p-4 bg-muted/50 rounded-md text-center">
+                <p className="text-sm font-medium text-muted-foreground">Free Users Referred</p>
+                <p className="text-3xl font-bold text-primary">{statsToDisplay.referred_free}</p>
+              </div>
+              <div className="p-4 bg-muted/50 rounded-md text-center">
+                <p className="text-sm font-medium text-muted-foreground">Chapterwise Plan</p>
+                <p className="text-3xl font-bold text-primary">{statsToDisplay.referred_chapterwise}</p>
+              </div>
+              <div className="p-4 bg-muted/50 rounded-md text-center">
+                <p className="text-sm font-medium text-muted-foreground">Full-Length Plan</p>
+                <p className="text-3xl font-bold text-primary">{statsToDisplay.referred_full_length}</p>
+              </div>
+              <div className="p-4 bg-muted/50 rounded-md text-center">
+                <p className="text-sm font-medium text-muted-foreground">Combo Plan</p>
+                <p className="text-3xl font-bold text-primary">{statsToDisplay.referred_combo}</p>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 
