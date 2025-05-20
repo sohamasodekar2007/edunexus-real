@@ -1,6 +1,7 @@
 
 'use client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Sidebar,
   SidebarContent,
@@ -16,10 +17,23 @@ import {
 } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Logo } from '@/components/icons';
-import { MoreHorizontal } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { 
+  MoreHorizontal,
+  CreditCard,
+  Gift,
+  SunMoon,
+  Settings as SettingsIcon, // Renamed to avoid conflict
+  HelpCircle 
+} from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-// These types should match the ones used in AppLayout or a shared types definition
 export interface NavItem {
   href: string;
   label: string;
@@ -40,6 +54,13 @@ interface SideBaseProps {
 
 export function SideBase({ navStructure, pathname }: SideBaseProps) {
   const { state: sidebarState } = useSidebar();
+  const router = useRouter();
+
+  // Placeholder for theme toggle logic
+  const handleToggleTheme = () => {
+    console.log("Toggle theme clicked");
+    // Actual theme toggling logic would go here
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -81,16 +102,42 @@ export function SideBase({ navStructure, pathname }: SideBaseProps) {
           ))}
         </ScrollArea>
       </SidebarContent>
-       <SidebarFooter className="p-2 border-t border-sidebar-border">
-         <SidebarMenu>
-          <SidebarMenuItem>
-              <SidebarMenuButton tooltip="More Options">
+      <SidebarFooter className="p-2 border-t border-sidebar-border">
+         <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton tooltip="More Options" className="w-full">
                   <MoreHorizontal className="h-5 w-5" />
                   <span>More</span>
               </SidebarMenuButton>
-          </SidebarMenuItem>
-         </SidebarMenu>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="top" align="start" className="w-56 mb-2 ml-2">
+              <DropdownMenuLabel>Options</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push('/upgrade')}>
+                <CreditCard className="mr-2 h-4 w-4" />
+                <span>Upgrade Plan</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/referrals')}>
+                <Gift className="mr-2 h-4 w-4" />
+                <span>Referrals</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleToggleTheme}>
+                <SunMoon className="mr-2 h-4 w-4" />
+                <span>Toggle Theme</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/settings')}>
+                <SettingsIcon className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/support')}>
+                <HelpCircle className="mr-2 h-4 w-4" />
+                <span>Help & Support</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
       </SidebarFooter>
     </Sidebar>
   );
 }
+
