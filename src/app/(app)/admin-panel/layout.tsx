@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/ui/button';
 import {
   ShieldAlert,
-  Users,
   ListChecks,
   ClipboardList,
   Settings2,
@@ -19,7 +18,7 @@ import {
   UserCircle,
   LogOut,
   Bell,
-} from 'lucide-react';
+} from 'lucide-react'; // Removed Users from here
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -38,7 +37,7 @@ interface AdminNavItemGroup extends SideBaseNavItemGroup {}
 
 const adminNavigationItems: AdminNavItem[] = [
   { href: '/admin-panel', label: 'Dashboard', icon: ShieldAlert, matchExact: true },
-  { href: '/admin-panel/users', label: 'User Management', icon: Users },
+  // { href: '/admin-panel/users', label: 'User Management', icon: Users }, // Removed User Management
   { href: '/admin-panel/tests', label: 'Test Management', icon: ListChecks },
   { href: '/admin-panel/dpps', label: 'DPP Management', icon: ClipboardList },
   { href: '/admin-panel/site-settings', label: 'Site Settings', icon: Settings2 },
@@ -157,7 +156,7 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 px-6 py-4 overflow-auto">
           {children}
         </main>
       </SidebarInset>
