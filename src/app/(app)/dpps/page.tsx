@@ -1,15 +1,18 @@
 
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Dpp, Question, BookmarkedQuestion } from '@/types';
-import useLocalStorage from '@/hooks/use-local-storage';
-import { mockDpps, LOCAL_STORAGE_KEYS } from '@/lib/mock-data';
+// import useLocalStorage from '@/hooks/use-local-storage'; // Not used for now
+// import { mockDpps, LOCAL_STORAGE_KEYS } from '@/lib/mock-data'; // Not used for now
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Bookmark, BookCheck, CalendarDays, Edit3, Atom, FlaskConical, Sigma, Leaf, ArrowLeft, ChevronRight } from 'lucide-react';
+import { Bookmark, BookCheck, CalendarDays, Edit3, Atom, FlaskConical, Sigma, Leaf, ArrowLeft, ChevronRight, Loader2, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
+import { getLessonsBySubjectAction } from '@/app/auth/actions';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 
 const subjects = [
   { name: 'Physics', icon: Atom, dataAiHint: "physics science" },
@@ -19,35 +22,54 @@ const subjects = [
 ];
 
 export default function DppsPage() {
-  const [dpps, setDpps] = useLocalStorage<Dpp[]>(LOCAL_STORAGE_KEYS.dpps, mockDpps);
-  const [bookmarkedQuestions, setBookmarkedQuestions] = useLocalStorage<BookmarkedQuestion[]>(LOCAL_STORAGE_KEYS.bookmarkedQuestions, []);
   const { toast } = useToast();
 
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+  const [lessons, setLessons] = useState<string[]>([]);
+  const [isLoadingLessons, setIsLoadingLessons] = useState(false);
+  const [lessonsError, setLessonsError] = useState<string | null>(null);
 
-  const toggleBookmark = (question: Question, dpp: Dpp) => {
-    const existingBookmark = bookmarkedQuestions.find(bq => bq.questionId === question.id && bq.sourceId === dpp.id && bq.sourceType === 'dpp');
-    if (existingBookmark) {
-      setBookmarkedQuestions(prev => prev.filter(bq => bq.id !== existingBookmark.id));
-      toast({ title: "Bookmark Removed", description: `"${question.text.substring(0,30)}..." removed from notebook.` });
-    } else {
-      const newBookmark: BookmarkedQuestion = {
-        id: `${dpp.id}-${question.id}-${Date.now()}`,
-        questionId: question.id,
-        questionText: question.text,
-        sourceId: dpp.id,
-        sourceType: 'dpp',
-      };
-      setBookmarkedQuestions(prev => [...prev, newBookmark]);
-      toast({ title: "Bookmarked!", description: `"${question.text.substring(0,30)}..." added to notebook.` });
+  const fetchLessons = useCallback(async (subject: string) => {
+    if (!subject) return;
+    setIsLoadingLessons(true);
+    setLessonsError(null);
+    setLessons([]);
+    try {
+      const result = await getLessonsBySubjectAction(subject);
+      if (result.success && result.lessons) {
+        setLessons(result.lessons);
+      } else {
+        setLessonsError(result.message || "Failed to load lessons.");
+        toast({
+          title: "Error fetching lessons",
+          description: result.message || "Could not retrieve lessons for this subject.",
+          variant: "destructive",
+        });
+      }
+    } catch (e) {
+      console.error("Critical error fetching lessons:", e);
+      const errorMessage = e instanceof Error ? e.message : "An unexpected error occurred.";
+      setLessonsError(errorMessage);
+      toast({
+        title: "Error",
+        description: `Could not retrieve lessons: ${errorMessage}`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoadingLessons(false);
     }
-  };
+  }, [toast]);
 
-  const isBookmarked = (questionId: string, dppId: string) => {
-    return bookmarkedQuestions.some(bq => bq.questionId === questionId && bq.sourceId === dppId && bq.sourceType === 'dpp');
-  };
+  useEffect(() => {
+    if (selectedSubject) {
+      fetchLessons(selectedSubject);
+    } else {
+      // Clear lessons when no subject is selected
+      setLessons([]);
+      setLessonsError(null);
+    }
+  }, [selectedSubject, fetchLessons]);
 
-  const filteredDpps = selectedSubject ? dpps.filter(dpp => dpp.subject === selectedSubject) : [];
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6">
@@ -81,52 +103,53 @@ export default function DppsPage() {
       ) : (
         <>
           <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold text-primary">DPPs for {selectedSubject}</h1>
+            <h1 className="text-3xl font-bold text-primary">Lessons for {selectedSubject}</h1>
             <Button variant="outline" onClick={() => setSelectedSubject(null)}>
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to Subjects
             </Button>
           </div>
 
-          {filteredDpps.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">No DPPs available for {selectedSubject} yet. Check back soon!</p>
-          ) : (
+          {isLoadingLessons && (
+            <div className="flex justify-center items-center py-8">
+              <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              <p className="ml-4 text-lg text-muted-foreground">Loading lessons...</p>
+            </div>
+          )}
+
+          {!isLoadingLessons && lessonsError && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error Loading Lessons</AlertTitle>
+              <AlertDescription>
+                {lessonsError}
+                <Button variant="link" onClick={() => fetchLessons(selectedSubject)} className="p-0 h-auto ml-2">Retry</Button>
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          {!isLoadingLessons && !lessonsError && lessons.length === 0 && (
+            <p className="text-muted-foreground text-center py-8 text-lg">No lessons found for {selectedSubject} yet. Check back soon!</p>
+          )}
+
+          {!isLoadingLessons && !lessonsError && lessons.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredDpps.map((dpp) => (
-                <Card key={dpp.id} className="flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300">
+              {lessons.map((lessonName, index) => (
+                <Card key={index} className="shadow-md hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle>{dpp.title}</CardTitle>
-                    <CardDescription className="flex flex-wrap items-center gap-2">
-                      <span className="flex items-center"><CalendarDays className="mr-1 h-4 w-4" /> {format(new Date(dpp.date), 'MMMM d, yyyy')}</span>
-                      {dpp.subject && <Badge variant="outline">{dpp.subject}</Badge>}
-                      <span>{dpp.problems.length} Problems</span>
-                    </CardDescription>
+                    <CardTitle className="truncate">{lessonName}</CardTitle>
+                    <CardDescription>DPPs for this lesson</CardDescription>
                   </CardHeader>
-                  <CardContent className="flex-grow">
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Stay sharp with these daily challenges.
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      Select this lesson to view available Daily Practice Problems.
                     </p>
-                    <h4 className="font-medium mb-2">Sample Problems:</h4>
-                    <ul className="space-y-2 text-sm">
-                      {dpp.problems.slice(0, 2).map(problem => (
-                        <li key={problem.id} className="flex justify-between items-start">
-                          <span className="truncate pr-2" title={problem.text}>{problem.text.substring(0,50)}{problem.text.length > 50 ? '...' : ''}</span>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-7 w-7 shrink-0"
-                            onClick={() => toggleBookmark(problem, dpp)}
-                            aria-label={isBookmarked(problem.id, dpp.id) ? "Remove bookmark" : "Add bookmark"}
-                          >
-                            {isBookmarked(problem.id, dpp.id) ? <BookCheck className="h-4 w-4 text-primary" /> : <Bookmark className="h-4 w-4" />}
-                          </Button>
-                        </li>
-                      ))}
-                       {dpp.problems.length === 0 && <li className="text-muted-foreground">No sample problems in this DPP.</li>}
-                    </ul>
                   </CardContent>
                   <CardFooter>
-                    <Button className="w-full">
-                      <Edit3 className="mr-2 h-4 w-4" /> Start Solving
+                    <Button 
+                      className="w-full" 
+                      onClick={() => toast({ title: "Coming Soon!", description: `DPPs for lesson "${lessonName}" will be available soon.`})}
+                    >
+                      <Edit3 className="mr-2 h-4 w-4" /> View DPPs
                     </Button>
                   </CardFooter>
                 </Card>
