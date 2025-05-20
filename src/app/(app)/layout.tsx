@@ -35,7 +35,8 @@ import {
   MessageSquareQuote,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { initializeLocalStorageData } from '@/lib/mock-data';
+// Removed initializeLocalStorageData as it's less critical with PocketBase backend
+// import { initializeLocalStorageData } from '@/lib/mock-data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -105,7 +106,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
 
   useEffect(() => {
-    initializeLocalStorageData(); 
+    // initializeLocalStorageData(); // This might be removed if mock data is no longer needed
     if (typeof window !== 'undefined') {
       const fullName = localStorage.getItem('userFullName');
       const model = localStorage.getItem('userModel') as UserModel;
@@ -203,7 +204,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                     variant="outline" 
                     size="sm" 
                     className="inline-flex items-center text-primary border-primary"
-                    onClick={() => router.push('/upgrade')} // Example action
+                    onClick={() => router.push('/upgrade')}
                 >
                     <Sparkles className="mr-1 sm:mr-2 h-4 w-4" /> 
                     Upgrade
@@ -269,7 +270,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </DropdownMenu>
           </header>
         )}
-        <main className={`flex-1 overflow-auto ${showMainAppHeader ? 'bg-muted/30' : 'bg-background'}`}>
+        <main className={`flex-1 overflow-auto ${pathname.startsWith('/admin-panel') ? 'bg-background' : 'bg-muted/30'}`}>
           {children}
         </main>
       </SidebarInset>

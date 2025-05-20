@@ -1,11 +1,14 @@
 
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, ShoppingBag, BookOpen, Zap, RefreshCw, Target } from 'lucide-react';
+import { CheckCircle, ShoppingBag, BookOpen, Zap, RefreshCw, Target, PartyPopper, ArrowLeft } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import type { UserModel } from '@/types';
 
 interface PlanFeature {
   text: string;
@@ -21,12 +24,13 @@ interface SubscriptionPlan {
   period: string;
   features: PlanFeature[];
   buttonText: string;
-  buttonHref?: string; // Optional: for future payment integration
+  buttonHref?: string; 
   isFeatured?: boolean;
-  dataAiHint?: string; // For placeholder images if we were using them
+  dataAiHint?: string;
+  mapsToModel?: UserModel; // To map plan card to user model
 }
 
-const plans: SubscriptionPlan[] = [
+const allPlans: SubscriptionPlan[] = [
   {
     id: 'chapterwise',
     icon: BookOpen,
@@ -42,6 +46,7 @@ const plans: SubscriptionPlan[] = [
     ],
     buttonText: 'Get Chapterwise Plan',
     isFeatured: false,
+    mapsToModel: 'Chapterwise',
   },
   {
     id: 'fullLength',
@@ -58,6 +63,7 @@ const plans: SubscriptionPlan[] = [
     ],
     buttonText: 'Get Full-Length Plan',
     isFeatured: false,
+    mapsToModel: 'Full_length',
   },
   {
     id: 'combo',
@@ -75,9 +81,10 @@ const plans: SubscriptionPlan[] = [
     ],
     buttonText: 'Get Combo Plan',
     isFeatured: true,
+    mapsToModel: 'Combo',
   },
   {
-    id: 'pyq',
+    id: 'pyq', // Assuming this maps to 'Dpp' model
     icon: RefreshCw,
     title: 'Latest PYQ Access',
     description: 'Stay ahead with access to the most recent Previous Year Questions and DPPs.',
@@ -91,10 +98,63 @@ const plans: SubscriptionPlan[] = [
     ],
     buttonText: 'Get PYQ Access',
     isFeatured: false,
+    mapsToModel: 'Dpp',
   },
 ];
 
 export default function UpgradePage() {
+  const router = useRouter();
+  const [currentUserModel, setCurrentUserModel] = useState<UserModel | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const model = localStorage.getItem('userModel') as UserModel | null;
+      setCurrentUserModel(model);
+      setIsLoading(false);
+    }
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p>Loading plans...</p>
+      </div>
+    );
+  }
+
+  if (currentUserModel === 'Combo') {
+    return (
+      <div className="min-h-screen bg-background text-foreground py-8 sm:py-12 px-4 flex flex-col items-center justify-center">
+        <Card className="w-full max-w-md text-center shadow-xl">
+          <CardHeader>
+            <PartyPopper className="h-16 w-16 text-primary mx-auto mb-4" />
+            <CardTitle className="text-2xl sm:text-3xl font-bold text-primary">Congratulations!</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-lg text-muted-foreground mb-6">
+              You are on the top-tier <strong>Combo Ultimate</strong> plan. You have access to all features!
+            </p>
+          </CardContent>
+          <CardFooter>
+            <Button onClick={() => router.push('/dashboard')} className="w-full">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Go to Dashboard
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    );
+  }
+
+  const plansToShow = allPlans.filter(plan => {
+    if (!currentUserModel || currentUserModel === 'Free' || currentUserModel === 'Teacher') {
+      return true; // Show all plans for Free or Teacher users
+    }
+    // Hide the plan if the user is already on it
+    return plan.mapsToModel !== currentUserModel;
+  });
+
+
   return (
     <div className="min-h-screen bg-background text-foreground py-8 sm:py-12 px-4">
       <div className="container mx-auto">
@@ -108,64 +168,74 @@ export default function UpgradePage() {
           </p>
         </header>
 
-        <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 items-stretch">
-          {plans.map((plan) => (
-            <Card
-              key={plan.id}
-              className={`flex flex-col rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 ${
-                plan.isFeatured ? 'border-2 border-primary ring-2 ring-primary/50 relative' : 'border'
-              }`}
-            >
-              {plan.isFeatured && (
-                <Badge
-                  variant="default"
-                  className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-sm font-semibold"
+        {plansToShow.length > 0 ? (
+            <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 items-stretch">
+            {plansToShow.map((plan) => (
+                <Card
+                key={plan.id}
+                className={`flex flex-col rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 ${
+                    plan.isFeatured ? 'border-2 border-primary ring-2 ring-primary/50 relative' : 'border'
+                }`}
                 >
-                  Most Popular
-                </Badge>
-              )}
-              <CardHeader className="pt-8">
-                <div className="flex items-center justify-center mb-3">
-                  <plan.icon className={`h-10 w-10 ${plan.isFeatured ? 'text-primary' : 'text-accent'}`} />
-                </div>
-                <CardTitle className="text-2xl font-semibold text-center">{plan.title}</CardTitle>
-                <CardDescription className="text-center min-h-[3em] text-sm mt-1">
-                  {plan.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-grow space-y-4 pt-2 pb-6">
-                <div className="text-center mb-4">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="text-muted-foreground text-sm">{plan.period}</span>
-                </div>
-                <ul className="space-y-2 text-sm">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <CheckCircle
-                        className={`h-5 w-5 mr-2 shrink-0 ${
-                          feature.available ? 'text-green-500' : 'text-muted-foreground/50'
-                        }`}
-                      />
-                      <span className={!feature.available ? 'text-muted-foreground/70 line-through' : ''}>
-                        {feature.text}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter className="mt-auto pb-6">
-                <Button
-                  size="lg"
-                  className={`w-full ${plan.isFeatured ? '' : 'bg-primary/80 hover:bg-primary'}`}
-                  variant={plan.isFeatured ? 'default' : 'secondary'}
-                  onClick={() => alert(`Proceeding to ${plan.buttonText}... (Payment integration needed)`)}
-                >
-                  {plan.buttonText}
+                {plan.isFeatured && (
+                    <Badge
+                    variant="default"
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-sm font-semibold"
+                    >
+                    Most Popular
+                    </Badge>
+                )}
+                <CardHeader className="pt-8">
+                    <div className="flex items-center justify-center mb-3">
+                    <plan.icon className={`h-10 w-10 ${plan.isFeatured ? 'text-primary' : 'text-accent'}`} />
+                    </div>
+                    <CardTitle className="text-2xl font-semibold text-center">{plan.title}</CardTitle>
+                    <CardDescription className="text-center min-h-[3em] text-sm mt-1">
+                    {plan.description}
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow space-y-4 pt-2 pb-6">
+                    <div className="text-center mb-4">
+                    <span className="text-4xl font-bold">{plan.price}</span>
+                    <span className="text-muted-foreground text-sm">{plan.period}</span>
+                    </div>
+                    <ul className="space-y-2 text-sm">
+                    {plan.features.map((feature, index) => (
+                        <li key={index} className="flex items-start">
+                        <CheckCircle
+                            className={`h-5 w-5 mr-2 shrink-0 ${
+                            feature.available ? 'text-green-500' : 'text-muted-foreground/50'
+                            }`}
+                        />
+                        <span className={!feature.available ? 'text-muted-foreground/70 line-through' : ''}>
+                            {feature.text}
+                        </span>
+                        </li>
+                    ))}
+                    </ul>
+                </CardContent>
+                <CardFooter className="mt-auto pb-6">
+                    <Button
+                    size="lg"
+                    className={`w-full ${plan.isFeatured ? '' : 'bg-primary/80 hover:bg-primary'}`}
+                    variant={plan.isFeatured ? 'default' : 'secondary'}
+                    onClick={() => alert(`Proceeding to ${plan.buttonText}... (Payment integration needed)`)}
+                    >
+                    {plan.buttonText}
+                    </Button>
+                </CardFooter>
+                </Card>
+            ))}
+            </main>
+        ) : (
+            <div className="text-center py-12">
+                <h2 className="text-2xl font-semibold text-muted-foreground">No upgrade options available for your current plan.</h2>
+                <Button onClick={() => router.push('/dashboard')} className="mt-6">
+                    <ArrowLeft className="mr-2 h-4 w-4" /> Go to Dashboard
                 </Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </main>
+            </div>
+        )}
+
 
         <footer className="text-center mt-12 sm:mt-16 text-sm text-muted-foreground">
           <p>All prices are inclusive of applicable taxes. Subscriptions are typically for a one-year period.</p>
