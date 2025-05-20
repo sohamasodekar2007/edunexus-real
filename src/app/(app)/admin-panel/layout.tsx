@@ -18,7 +18,8 @@ import {
   UserCircle,
   LogOut,
   Bell,
-  PlusCircle, // Added for Add Question
+  PlusCircle,
+  Users, // Added Users icon
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -39,6 +40,7 @@ interface AdminNavItemGroup extends SideBaseNavItemGroup {}
 const adminNavigationItems: AdminNavItem[] = [
   { href: '/admin-panel', label: 'Dashboard', icon: ShieldAlert, matchExact: true },
   { href: '/admin-panel/add-question', label: 'Add Question', icon: PlusCircle },
+  { href: '/admin-panel/users', label: 'User Management', icon: Users }, // Re-added User Management
   { href: '/admin-panel/tests', label: 'Test Management', icon: ListChecks },
   { href: '/admin-panel/dpps', label: 'DPP Management', icon: ClipboardList },
   { href: '/admin-panel/site-settings', label: 'Site Settings', icon: Settings2 },
@@ -92,6 +94,11 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
       }
     }
     if (pathname === '/admin-panel') return 'Dashboard';
+    if (pathname === '/admin-panel/add-question') return 'Add Question';
+    if (pathname.startsWith('/admin-panel/users')) return 'User Management'; // Added for active label
+    if (pathname.startsWith('/admin-panel/tests')) return 'Test Management';
+    if (pathname.startsWith('/admin-panel/dpps')) return 'DPP Management';
+    if (pathname.startsWith('/admin-panel/site-settings')) return 'Site Settings';
     return 'Admin Panel';
   };
 
