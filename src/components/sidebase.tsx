@@ -23,7 +23,8 @@ import {
   Gift,
   SunMoon,
   Settings as SettingsIcon, 
-  HelpCircle 
+  HelpCircle,
+  LayoutDashboard
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -59,7 +60,7 @@ export function SideBase({ navStructure, pathname }: SideBaseProps) {
   const router = useRouter();
 
   const handleToggleTheme = () => {
-    console.log("Toggle theme clicked");
+    console.log("Toggle theme clicked - (Implementation needed)");
     // Implement theme toggle logic here
   };
 
@@ -140,7 +141,7 @@ export function SideBase({ navStructure, pathname }: SideBaseProps) {
                 <CreditCard className="mr-2 h-4 w-4" />
                 <span>Upgrade Plan</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push('/settings')}>
+              <DropdownMenuItem onClick={() => router.push('/referrals')}>
                 <Gift className="mr-2 h-4 w-4" />
                 <span>Referrals</span>
               </DropdownMenuItem>
