@@ -1,11 +1,27 @@
 
+import type { Metadata } from 'next';
+import { use } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ShieldCheck, BarChart3, Users, Settings, ExternalLink } from 'lucide-react';
 import Link from "next/link";
 
-export default function AdminDashboardPage() {
+export const metadata: Metadata = {
+  title: 'Admin - Dashboard',
+};
+
+export default function AdminDashboardPage({
+  params,
+  searchParams,
+}: {
+  params: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  // Ensure params and searchParams are unwrapped before any potential enumeration
+  use(params);
+  use(searchParams);
+
   return (
-    <div className="container mx-auto py-6 px-4 md:px-6 space-y-6">
+    <div className="space-y-6">
       <section className="mb-8">
         <h1 className="text-3xl font-bold flex items-center">
           <ShieldCheck className="mr-3 h-8 w-8 text-primary" />
@@ -55,17 +71,17 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link href="/admin-panel/users" className="p-4 border rounded-md hover:bg-muted/50 flex justify-between items-center transition-colors">
-              <span>User Management (Coming Soon)</span>
+              <span>User Management (Handled via PocketBase)</span>
               <ExternalLink className="h-4 w-4 text-muted-foreground" />
             </Link>
             <Link href="/admin-panel/tests" className="p-4 border rounded-md hover:bg-muted/50 flex justify-between items-center transition-colors">
-              <span>Test & DPP Configuration (Coming Soon)</span>
+              <span>Test Configuration (Coming Soon)</span>
               <ExternalLink className="h-4 w-4 text-muted-foreground" />
             </Link>
-            <div className="p-4 border rounded-md hover:bg-muted/50 flex justify-between items-center transition-colors cursor-not-allowed opacity-60">
-               <span>System Analytics (Coming Soon)</span>
-               <ExternalLink className="h-4 w-4 text-muted-foreground" />
-            </div>
+             <Link href="/admin-panel/dpps" className="p-4 border rounded-md hover:bg-muted/50 flex justify-between items-center transition-colors">
+              <span>DPP Configuration (Coming Soon)</span>
+              <ExternalLink className="h-4 w-4 text-muted-foreground" />
+            </Link>
             <Link href="/admin-panel/site-settings" className="p-4 border rounded-md hover:bg-muted/50 flex justify-between items-center transition-colors">
               <span>Global Settings (Coming Soon)</span>
               <ExternalLink className="h-4 w-4 text-muted-foreground" />

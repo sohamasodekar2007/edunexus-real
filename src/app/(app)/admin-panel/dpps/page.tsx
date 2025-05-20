@@ -1,10 +1,26 @@
 
+import type { Metadata } from 'next';
+import { use } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ClipboardList } from "lucide-react";
 
-export default function DppManagementPage() {
+export const metadata: Metadata = {
+  title: 'Admin - DPP Management',
+};
+
+export default function DppManagementPage({
+  params,
+  searchParams,
+}: {
+  params: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  // Ensure params and searchParams are unwrapped before any potential enumeration
+  use(params);
+  use(searchParams);
+
   return (
-    <div className="container mx-auto py-6 px-4 md:px-6">
+    <div className="space-y-6">
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center text-2xl">
