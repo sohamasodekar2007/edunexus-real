@@ -10,9 +10,10 @@ import { useToast } from '@/hooks/use-toast';
 import { getReferrerInfoForCurrentUserAction, getLiveReferralStatsAction } from '@/app/auth/actions';
 import pb from '@/lib/pocketbase';
 import type { User } from '@/types';
-import { Gift, Link2, Copy, Users, BarChart3, Info, Loader2, ArrowLeft, Share2 } from 'lucide-react';
+import { Gift, Link2, Copy, Users, BarChart3, Info, Loader2, ArrowLeft, Share2, AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ClientResponseError } from 'pocketbase';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function ReferralsPage() {
   const router = useRouter();
@@ -25,28 +26,35 @@ export default function ReferralsPage() {
   const [isLoadingReferrerName, setIsLoadingReferrerName] = useState(false);
   const [hasUserReferredByCodeInStorage, setHasUserReferredByCodeInStorage] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [errorLoadingStats, setErrorLoadingStats] = useState<string | null>(null);
+
 
   const fetchLiveStats = useCallback(async () => {
     setIsLoadingStats(true);
+    setErrorLoadingStats(null); // Reset error before fetching
     try {
       const result = await getLiveReferralStatsAction();
       if (result.success && result.stats) {
         setLiveReferralStats(result.stats);
       } else {
-        console.error("Failed to fetch live referral stats:", result.message, result.error);
+        const errorMessage = result.message || "Could not load live referral statistics.";
+        console.error("Failed to fetch live referral stats:", errorMessage, result.error);
+        setErrorLoadingStats(errorMessage);
         toast({
           title: "Stats Error",
-          description: result.message || "Could not load live referral statistics.",
+          description: errorMessage,
           variant: "destructive",
         });
         // Fallback to empty stats if fetch fails, to prevent crashes
         setLiveReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
       }
     } catch (error) {
+      const criticalErrorMessage = "An unexpected error occurred while fetching referral statistics.";
       console.error("Critical error fetching live referral stats:", error);
+      setErrorLoadingStats(criticalErrorMessage);
       toast({
         title: "Stats Error",
-        description: "An unexpected error occurred while fetching referral statistics.",
+        description: criticalErrorMessage,
         variant: "destructive",
       });
       setLiveReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
@@ -84,12 +92,12 @@ export default function ReferralsPage() {
             .finally(() => { if (isMounted) setIsLoadingReferrerName(false); });
         }
         
-        // Fetch live calculated stats
-        if (pb.authStore.isValid) { // Only fetch if user is logged in
+        if (pb.authStore.isValid) {
            fetchLiveStats();
         } else {
-            setIsLoadingStats(false); // Not logged in, no stats to fetch
+            setIsLoadingStats(false); 
             setLiveReferralStats({ referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 });
+            setErrorLoadingStats("User not authenticated. Please log in to view referral stats.");
         }
       }
     }
@@ -99,7 +107,7 @@ export default function ReferralsPage() {
     return () => {
       isMounted = false;
     };
-  }, [fetchLiveStats]); // Added fetchLiveStats to dependency array
+  }, [fetchLiveStats]);
 
   const handleCopyReferralLink = () => {
     if (userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') {
@@ -144,7 +152,7 @@ export default function ReferralsPage() {
         <CardHeader>
           <CardTitle className="text-2xl flex items-center">
             <Share2 className="mr-3 h-6 w-6 text-accent" />
-            Share Your Referral Link
+            Share Your Referral Link & Code
           </CardTitle>
           <CardDescription>
             Share your code or link with friends. When they sign up, your referral stats will update here!
@@ -204,14 +212,25 @@ export default function ReferralsPage() {
             Track how many users have signed up using your referral code, based on their current plan.
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <CardContent>
           {isLoadingStats ? (
-            <div className="sm:col-span-2 lg:col-span-4 flex items-center justify-center p-8">
+            <div className="flex items-center justify-center p-8">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <p className="ml-3 text-muted-foreground">Loading statistics...</p>
             </div>
+          ) : errorLoadingStats ? (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error Loading Statistics</AlertTitle>
+              <AlertDescription>
+                {errorLoadingStats}
+                {errorLoadingStats.includes("Admin client initialization") && (
+                  <p className="mt-2 text-xs">Please ensure server admin credentials are correct in the .env file and the Next.js server is restarted. Check server logs for detailed errors.</p>
+                )}
+              </AlertDescription>
+            </Alert>
           ) : (
-            <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-4 bg-muted/50 rounded-md text-center">
                 <p className="text-sm font-medium text-muted-foreground">Free Users Referred</p>
                 <p className="text-3xl font-bold text-primary">{statsToDisplay.referred_free}</p>
@@ -228,7 +247,7 @@ export default function ReferralsPage() {
                 <p className="text-sm font-medium text-muted-foreground">Combo Plan</p>
                 <p className="text-3xl font-bold text-primary">{statsToDisplay.referred_combo}</p>
               </div>
-            </>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -275,4 +294,3 @@ export default function ReferralsPage() {
     </div>
   );
 }
-
