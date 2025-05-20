@@ -16,12 +16,12 @@ export async function validateReferralCodeAction(code: string): Promise<{ succes
   }
   const upperCaseCode = code.trim().toUpperCase();
 
-  // Uses global pb instance, relies on public read access or appropriate user collection rules
   try {
     const referrer = await findUserByReferralCode(upperCaseCode, pbGlobal);
     if (referrer) {
       return { success: true, message: `This referral code belongs to ${referrer.name}.`, referrerName: referrer.name };
     } else {
+      // For this flow, don't indicate "invalid code" explicitly. Let signup proceed.
       return { success: false, message: "" };
     }
   } catch (error) {
@@ -57,7 +57,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0],
       totalPoints: 0,
       referralCode: newUserReferralCode,
-      referredByCode: upperCaseReferredByCode,
+      referredByCode: upperCaseReferredByCode, // Save the entered code, valid or not
       referralStats: {
         referred_free: 0,
         referred_chapterwise: 0,
@@ -71,7 +71,6 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
     };
     
     console.log("[Signup Action] Attempting to create user with data (password omitted):", { ...userDataForPocketBase, password: '***', passwordConfirm: '***' });
-    // User creation uses pbGlobal, relying on public createRule for users collection
     newUser = await createUserInPocketBase(userDataForPocketBase, pbGlobal); 
     console.log("[Signup Action] User created successfully with pbGlobal:", newUser.id);
 
@@ -113,15 +112,11 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
     return { success: false, message: `Signup failed: ${finalErrorMessage}`, error: finalErrorMessage };
   }
 
-  // Update referrer stats IF a valid referral code was used
+  // Update referrer stats IF a valid referral code was used AND a referrer was found
   if (newUser && newUser.id && upperCaseReferredByCode) {
-    console.log(`[Signup Action] New user ${newUser.id} signed up with referral code: ${upperCaseReferredByCode}. Attempting to update referrer stats.`);
-    // This part will likely fail now if not using an admin client,
-    // as a regular user (the new user) typically cannot update another user's (the referrer's) stats.
-    // For simplicity, we'll let it attempt and log an error server-side if it fails.
-    // A more robust solution would involve a different mechanism for crediting referrals or specific PocketBase rules.
+    console.log(`[Signup Action] New user ${newUser.id} signed up with referral code: ${upperCaseReferredByCode}. Attempting to find referrer and update stats.`);
     try {
-      const referrerToUpdateStats = await findUserByReferralCode(upperCaseReferredByCode, pbGlobal); // Using pbGlobal
+      const referrerToUpdateStats = await findUserByReferralCode(upperCaseReferredByCode, pbGlobal); 
       if (referrerToUpdateStats && referrerToUpdateStats.id) {
         console.log(`[Signup Action] Found referrer: ${referrerToUpdateStats.id} (${referrerToUpdateStats.name}). Current stats:`, referrerToUpdateStats.referralStats);
         const currentStats = referrerToUpdateStats.referralStats || { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0 };
@@ -129,13 +124,15 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
           ...currentStats,
           referred_free: (currentStats.referred_free || 0) + 1,
         };
-        await updateUserReferralStats(referrerToUpdateStats.id, newReferrerStats, pbGlobal); // Using pbGlobal
-        console.log(`[Signup Action] Referral stats updated for referrer: ${referrerToUpdateStats.name} to`, newReferrerStats);
+        // This part will attempt to use pbGlobal. It may fail if rules are restrictive for updating other users.
+        // If POCKETBASE_ADMIN_EMAIL/PASSWORD were set, we'd use getAdminPb() here.
+        await updateUserReferralStats(referrerToUpdateStats.id, newReferrerStats, pbGlobal);
+        console.log(`[Signup Action] Referral stats update attempted for referrer: ${referrerToUpdateStats.name} to`, newReferrerStats);
       } else {
         console.warn(`[Signup Action] No valid referrer found with code ${upperCaseReferredByCode} when attempting to update stats. Stats not updated.`);
       }
     } catch (statsError) {
-      console.warn(`[Signup Action Warning] Failed to update referral stats for ${upperCaseReferredByCode} (using pbGlobal). User signup itself was successful. Error:`, statsError);
+      console.warn(`[Signup Action Warning] Failed to update referral stats for ${upperCaseReferredByCode} (using pbGlobal). User signup itself was successful. This might be due to collection permissions. Error:`, statsError);
     }
   }
 
@@ -259,24 +256,27 @@ export async function updateUserProfileAction({
 
   console.log(`[Update Profile Action] Data to send to PocketBase for user ${userId}:`, dataForPocketBase);
   
-  // Using pbGlobal. Relies on PocketBase rules for user self-update (e.g., @request.auth.id = id)
+  // This action will use pbGlobal. It relies on PocketBase rules for user self-update (e.g., @request.auth.id = id)
   // and the server action framework correctly propagating the client's auth context.
+  // If pbGlobal isn't correctly authed as the user, this will fail.
   if (!pbGlobal.authStore.isValid || pbGlobal.authStore.model?.id !== userId) {
-      console.warn("[Update Profile Action] Warning: Attempting update with pbGlobal, but current auth context does not match target userId or is invalid. Update might fail due to PocketBase rules.");
+      console.warn("[Update Profile Action] Warning: Attempting update with pbGlobal, but current server-side auth context in pbGlobal does not match target userId or is invalid. Update might fail due to PocketBase rules. Client-side must be authenticated.");
   }
 
+
   try {
+    // Attempting with pbGlobal. PocketBase will check if @request.auth.id = id for updateRule.
     const updatedUserRecord = await updateUserInPocketBase(userId, dataForPocketBase, pbGlobal);
-    console.log(`[Update Profile Action] Profile updated successfully for user ${userId} (using pbGlobal):`, updatedUserRecord);
+    console.log(`[Update Profile Action] Profile updated successfully for user ${userId} (using pbGlobal for user self-update):`, updatedUserRecord);
     return { success: true, message: "Profile updated successfully!", updatedUser: updatedUserRecord };
   } catch (error) {
     console.error(`[Update Profile Action Error - Global Instance] Failed to update profile for user ${userId}:`, error);
     let errorMessage = "Failed to update profile. Check PocketBase rules (e.g., users can update their own records).";
      if (error instanceof ClientResponseError) {
         errorMessage = error.data?.message || errorMessage;
-        if (error.status === 403) {
-           errorMessage = "Permission Denied: You may not have permission to update this profile.";
-        } else if (error.status === 404) {
+        if (error.status === 403) { // Forbidden
+           errorMessage = "Permission Denied: You may not have permission to update this profile. Ensure you are updating your own profile and collection rules allow it.";
+        } else if (error.status === 404) { // Not Found
            errorMessage = "User not found. Could not update profile.";
         }
      } else if (error instanceof Error) {
@@ -287,14 +287,17 @@ export async function updateUserProfileAction({
 }
 
 export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerName: string | null; error?: string }> {
+  // This action assumes pbGlobal on the server might have the current user's auth context
+  // if the server action framework passes it. Otherwise, this needs client-side initiation or token passing.
   const currentAuthUser = pbGlobal.authStore.model;
   if (!currentAuthUser || !currentAuthUser.id) {
     console.warn("[Get Referrer Info Action] No authenticated user found in pbGlobal.authStore for server action.");
-    return { referrerName: null, error: "User not authenticated." };
+    return { referrerName: null, error: "User not authenticated or user context not available to server action." };
   }
 
   let currentUserRecord;
   try {
+    // Fetch the full record for the current user to get their referredByCode
     currentUserRecord = await findUserById(currentAuthUser.id, pbGlobal); 
   } catch (e) {
      console.error("[Get Referrer Info Action] Error fetching current user's record:", e);
@@ -303,7 +306,7 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
   
 
   if (!currentUserRecord || !currentUserRecord.referredByCode) {
-    return { referrerName: null }; 
+    return { referrerName: null }; // No referral code used or found
   }
 
   // Use pbGlobal for this read operation. Relies on appropriate view rules for users collection.
@@ -323,6 +326,8 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
 
 
 export async function updateUserAvatarAction(formData: FormData): Promise<{ success: boolean; message: string; error?: string; updatedUserRecord?: any }> {
+   // This action will use pbGlobal. Relies on PocketBase rules for user self-update of avatar.
+   // The client making the call to this server action must be authenticated.
    const currentAuthUserId = pbGlobal.authStore.model?.id;
    if (!currentAuthUserId) {
     const authErrorMessage = "User not authenticated or user ID not available to server action. Please ensure you are logged in.";
@@ -330,10 +335,10 @@ export async function updateUserAvatarAction(formData: FormData): Promise<{ succ
     return { success: false, message: authErrorMessage, error: "Authentication required or user context missing." };
   }
   const userId = currentAuthUserId; 
-  console.log(`[Update Avatar Action] Updating avatar for user ID: ${userId} using pbGlobal.`);
+  console.log(`[Update Avatar Action] Updating avatar for user ID: ${userId} using pbGlobal (user self-update).`);
 
-  // Using pbGlobal. Relies on PocketBase rules for user self-update of avatar.
   try {
+    // Attempting with pbGlobal. PocketBase will check if @request.auth.id = id for updateRule.
     const updatedRecord = await updateUserInPocketBase(userId, formData, pbGlobal);
     console.log(`[Update Avatar Action - Global Instance] Avatar updated successfully for user ${userId}. New avatar filename: ${updatedRecord.avatar}`);
     return { success: true, message: "Avatar updated successfully!", updatedUserRecord: updatedRecord };
@@ -342,9 +347,9 @@ export async function updateUserAvatarAction(formData: FormData): Promise<{ succ
     let errorMessage = "Failed to update avatar. Check PocketBase rules for user avatar updates.";
     if (error instanceof ClientResponseError) {
         errorMessage = error.data?.message || errorMessage;
-         if (error.status === 403) {
-           errorMessage = "Permission Denied: You may not have permission to update this avatar.";
-        } else if (error.status === 404) {
+         if (error.status === 403) { // Forbidden
+           errorMessage = "Permission Denied: You may not have permission to update this avatar. Ensure you are updating your own avatar and collection rules allow it.";
+        } else if (error.status === 404) { // Not Found
            errorMessage = "User not found. Could not update avatar.";
         }
     } else if (error instanceof Error) {
@@ -355,6 +360,7 @@ export async function updateUserAvatarAction(formData: FormData): Promise<{ succ
 }
 
 export async function removeUserAvatarAction(): Promise<{ success: boolean; message: string; error?: string; updatedUserRecord?: any }> {
+   // This action will use pbGlobal. Relies on PocketBase rules for user self-update of avatar.
    const currentAuthUserId = pbGlobal.authStore.model?.id;
    if (!currentAuthUserId) {
     const authErrorMessage = "User not authenticated or user ID not available to server action. Please ensure you are logged in.";
@@ -362,10 +368,10 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
     return { success: false, message: authErrorMessage, error: "Authentication required or user context missing." };
   }
   const userId = currentAuthUserId; 
-  console.log(`[Remove Avatar Action] Removing avatar for user ID: ${userId} using pbGlobal.`);
+  console.log(`[Remove Avatar Action] Removing avatar for user ID: ${userId} using pbGlobal (user self-update).`);
 
-  // Using pbGlobal. Relies on PocketBase rules for user self-update of avatar.
   try {
+    // Attempting with pbGlobal. PocketBase will check if @request.auth.id = id for updateRule.
     const updatedRecord = await updateUserInPocketBase(userId, { 'avatar': null }, pbGlobal);
     console.log(`[Remove Avatar Action - Global Instance] Avatar removed successfully for user ${userId}.`);
     return { success: true, message: "Avatar removed successfully!", updatedUserRecord: updatedRecord };
@@ -374,9 +380,9 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
     let errorMessage = "Failed to remove avatar. Check PocketBase rules for user avatar updates.";
     if (error instanceof ClientResponseError) {
       errorMessage = error.data?.message || errorMessage;
-        if (error.status === 403) {
-           errorMessage = "Permission Denied: You may not have permission to remove this avatar.";
-        } else if (error.status === 404) {
+        if (error.status === 403) { // Forbidden
+           errorMessage = "Permission Denied: You may not have permission to remove this avatar. Ensure you are updating your own avatar and collection rules allow it.";
+        } else if (error.status === 404) { // Not Found
            errorMessage = "User not found. Could not remove avatar.";
         }
     } else if (error instanceof Error) {
@@ -388,33 +394,31 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
 
 
 export async function addQuestionAction(formData: FormData): Promise<{ success: boolean; message: string; error?: string; questionId?: string }> {
-  console.log("[Add Question Action] Attempting to add question using current user's auth context.");
-
-  // The client-side admin panel layout should already ensure only 'Admin' role users can access this.
-  // We rely on PocketBase rules for the `question_bank` collection to enforce this.
-  // The rule should be: @request.auth.id != "" && @request.auth.role = "Admin"
-
-  // Check if the pbGlobal instance has an authenticated user context.
-  // This check is a safeguard but might not be fully reliable if Next.js server actions
-  // don't perfectly propagate the client's authStore to the server-side pbGlobal instance.
-  // The ultimate authority is PocketBase's rule engine.
-  if (!pbGlobal.authStore.isValid || !pbGlobal.authStore.model) {
-    console.warn("[Add Question Action] pbGlobal.authStore is not valid or model is null on the server. The PocketBase request might be unauthenticated or use a default server identity. Ensure PocketBase rules for 'question_bank' correctly verify the user's 'Admin' role based on the request's auth token.");
-    // We will proceed and let PocketBase rules determine access.
-  } else if (pbGlobal.authStore.model.role !== 'Admin') {
-     const roleMessage = `User role is '${pbGlobal.authStore.model.role}', not 'Admin'. Action will likely be denied by PocketBase rules.`;
-     console.warn(`[Add Question Action] ${roleMessage}`);
-     // Proceed and let PocketBase rules deny if necessary.
-  }
-
-
+  console.log("[Add Question Action] Attempting to add question.");
   console.log("[Add Question Action] Received form data keys:", Array.from(formData.keys()));
 
+  // We are relying on PocketBase rules: @request.auth.id != "" && @request.auth.role = "Admin"
+  // The pbGlobal instance, when used in a server action called by an authenticated client,
+  // should carry the client's auth token. PocketBase will then enforce the rule.
+
+  // Client-side layout already guards access to the Add Question page for Admins.
+  // An additional server-side check on pbGlobal.authStore.model?.role here might be redundant
+  // if Next.js auth propagation to server-side pbGlobal isn't perfectly reliable.
+  // The ultimate authority is PocketBase's rule engine using the token from the request.
+
+  if (!pbGlobal.authStore.isValid) {
+    const authErrorMessage = "User is not authenticated. Cannot add question. Please ensure you are logged in with an Admin account.";
+    console.warn(`[Add Question Action] ${authErrorMessage} (pbGlobal.authStore.isValid is false on server)`);
+    return { success: false, message: authErrorMessage, error: "Authentication required for this action." };
+  }
+  
+  // This server-side check on pbGlobal.authStore.model might not always reflect the client's actual role
+  // if auth context isn't fully propagated to pbGlobal in server actions.
+  // PocketBase's collection rule is the definitive check.
+  console.log(`[Add Question Action] Current pbGlobal authStore model role (on server): ${pbGlobal.authStore.model?.role}`);
+
+
   try {
-    // Using pbGlobal. This assumes that when the server action is called from an authenticated client,
-    // the PocketBase SDK automatically uses that client's auth token.
-    // The `question_bank` collection's CreateRule: `@request.auth.id != "" && @request.auth.role = "Admin"`
-    // will be enforced by PocketBase.
     const newQuestionRecord = await pbGlobal.collection('question_bank').create(formData);
     console.log("[Add Question Action] Question added successfully to PocketBase:", newQuestionRecord.id);
     return { success: true, message: "Question added successfully!", questionId: newQuestionRecord.id };
@@ -423,22 +427,36 @@ export async function addQuestionAction(formData: FormData): Promise<{ success: 
     console.error("[Add Question Action] Error adding question to PocketBase:", error);
     let errorMessage = "Failed to add question.";
     if (error instanceof ClientResponseError) {
+      // PocketBase specific error
       console.error("[Add Question Action] PocketBase ClientResponseError details:", JSON.stringify(error.data, null, 2));
-      errorMessage = error.data?.message || errorMessage;
-      if (error.data?.data) {
-        const fieldErrors = Object.entries(error.data.data).map(([key, val]: [string, any]) => `${key}: ${val.message}`).join('; ');
-        errorMessage += ` Details: ${fieldErrors}`;
+      
+      let detailedFieldErrors = "";
+      if (error.data?.data) { // Field-specific errors
+        detailedFieldErrors = Object.entries(error.data.data).map(([key, val]: [string, any]) => `${key}: ${val.message}`).join('; ');
       }
-      if (error.status === 403) { 
-        errorMessage = "Permission Denied: You do not have permission to add questions. Ensure your account has the 'Admin' role and the 'question_bank' collection rules in PocketBase are set to '@request.auth.id != \"\" && @request.auth.role = \"Admin\"'.";
-      } else if (error.status === 0) { 
-        errorMessage = "Network Error: Could not connect to PocketBase to add the question. Please check your internet connection and the server status.";
+      
+      // Construct the final message
+      if (detailedFieldErrors) {
+        errorMessage = `Failed to create record. Details: ${detailedFieldErrors}`;
+      } else if (error.data?.message) {
+        errorMessage = error.data.message; // Use PocketBase's main message
       } else {
-        errorMessage = `PocketBase error (${error.status}): ${errorMessage}`;
+        errorMessage = "Failed to create record. Please check inputs."; // Fallback
       }
+
+      if (error.status === 403) { // Forbidden
+        errorMessage = "Permission Denied: You do not have permission to add questions. Ensure your account has the 'Admin' role and the 'question_bank' collection rules in PocketBase are correctly set to '@request.auth.id != \"\" && @request.auth.role = \"Admin\"'.";
+      } else if (error.status === 0) { // Network error
+        errorMessage = "Network Error: Could not connect to PocketBase to add the question. Please check your internet connection and the server status.";
+      }
+      // For other statuses, use the already constructed errorMessage.
     } else if (error instanceof Error) {
       errorMessage = error.message;
     }
-    return { success: false, message: errorMessage, error: errorMessage };
+    return { success: false, message: errorMessage, error: "PocketBase operation failed. See server logs for detailed error data and client toast for specifics." };
   }
 }
+
+// getAllUsersAction removed as per previous request.
+// If User Management is re-added, this needs to be restored and use requirePocketBaseAdmin()
+// as the listRule for users is typically admin-only.

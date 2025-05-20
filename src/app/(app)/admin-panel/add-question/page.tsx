@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
@@ -26,10 +25,10 @@ type QuestionFormData = {
   pyqYear: string;
   pyqDate: string;
   pyqShift: string;
-  questionType: 'text' | 'image' | 'text_image';
+  questionType: 'text' | 'image' | 'text_image' | '';
   questionText: string;
   questionImage: File | null;
-  optionsFormat: 'text_options' | 'image_options';
+  optionsFormat: 'text_options' | 'image_options' | '';
   optionAText: string;
   optionAImage: File | null;
   optionBText: string;
@@ -54,10 +53,10 @@ const initialFormData: QuestionFormData = {
   pyqYear: '',
   pyqDate: '',
   pyqShift: '',
-  questionType: 'text',
+  questionType: '',
   questionText: '',
   questionImage: null,
-  optionsFormat: 'text_options',
+  optionsFormat: '',
   optionAText: '',
   optionAImage: null,
   optionBText: '',
@@ -87,7 +86,7 @@ export default function AddQuestionPage() {
     if (formData.questionType === 'image') {
       setFormData(prev => ({
         ...prev,
-        optionAText: 'Option A',
+        optionAText: 'Option A', // Auto-fill for image questions
         optionBText: 'Option B',
         optionCText: 'Option C',
         optionDText: 'Option D',
@@ -96,10 +95,22 @@ export default function AddQuestionPage() {
     } else if (formData.questionType === 'text') {
         setFormData(prev => ({
             ...prev,
-            optionsFormat: 'text_options'
+            optionsFormat: 'text_options', // Text questions also use text options
+            optionAText: prev.optionAText === 'Option A' ? '' : prev.optionAText, // Clear if auto-filled
+            optionBText: prev.optionBText === 'Option B' ? '' : prev.optionBText,
+            optionCText: prev.optionCText === 'Option C' ? '' : prev.optionCText,
+            optionDText: prev.optionDText === 'Option D' ? '' : prev.optionDText,
+        }));
+    } else if (formData.questionType === 'text_image') {
+        setFormData(prev => ({
+            ...prev,
+             optionsFormat: prev.optionsFormat || 'text_options', // Default to text_options if not set
+             optionAText: prev.optionAText === 'Option A' ? '' : prev.optionAText,
+             optionBText: prev.optionBText === 'Option B' ? '' : prev.optionBText,
+             optionCText: prev.optionCText === 'Option C' ? '' : prev.optionCText,
+             optionDText: prev.optionDText === 'Option D' ? '' : prev.optionDText,
         }));
     }
-    // For 'text_image', optionsFormat is handled by its own Select component
   }, [formData.questionType]);
 
 
@@ -119,16 +130,16 @@ export default function AddQuestionPage() {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>, fieldName: keyof QuestionFormData, setPreview: (url: string | null) => void) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFormData(prev => ({ ...prev, [fieldName]: file }));
+      setFormData(prev => ({ ...prev, [fieldName]: file as File | null }));
       setPreview(URL.createObjectURL(file));
     } else {
       setFormData(prev => ({ ...prev, [fieldName]: null }));
       setPreview(null);
     }
   };
-
+  
   const handlePasteImage = async (
-    fieldName: keyof Pick<QuestionFormData, 'questionImage' | 'optionAImage' | 'optionBImage' | 'optionCImage' | 'optionDImage' | 'explanationImage'>, // Ensure only image fields
+    fieldName: keyof Pick<QuestionFormData, 'questionImage' | 'optionAImage' | 'optionBImage' | 'optionCImage' | 'optionDImage' | 'explanationImage'>,
     setPreview: (url: string | null) => void
   ) => {
     if (!navigator.clipboard || !navigator.clipboard.read) {
@@ -149,10 +160,8 @@ export default function AddQuestionPage() {
           const blob = await item.getType(imageType);
           const file = new File([blob], `pasted_image.${imageType.split('/')[1]}`, { type: imageType });
           setFormData(prev => ({ ...prev, [fieldName]: file }));
-          if (setPreview) {
-            setPreview(URL.createObjectURL(file));
-          }
-          toast({ title: "Image Pasted", description: `Image pasted successfully into ${fieldName}.` });
+          setPreview(URL.createObjectURL(file));
+          toast({ title: "Image Pasted", description: `Image pasted successfully into ${String(fieldName)}.` });
           return; 
         }
       }
@@ -162,7 +171,6 @@ export default function AddQuestionPage() {
       toast({ title: "Paste Failed", description: "Could not read image from clipboard. Ensure you have an image copied.", variant: "destructive" });
     }
   };
-
 
   const handleReset = () => {
     setFormData(initialFormData);
@@ -179,20 +187,26 @@ export default function AddQuestionPage() {
     setIsLoading(true);
     
     const dataToSubmit = new FormData();
-    // Helper to append if value is not null, undefined, or empty string (for optional text fields)
-    const appendIfPresent = (key: string, value: string | boolean | File | null | undefined) => {
-      if (value instanceof File) {
-        dataToSubmit.append(key, value);
-      } else if (typeof value === 'boolean') {
-        dataToSubmit.append(key, value.toString());
-      } else if (value !== null && value !== undefined && value !== '') {
-         dataToSubmit.append(key, value as string);
-      }
-    };
-
-    for (const key in formData) {
-      appendIfPresent(key, formData[key as keyof QuestionFormData]);
-    }
+    
+    // Iterate over all keys in initialFormData to ensure all fields are considered
+    (Object.keys(initialFormData) as Array<keyof QuestionFormData>).forEach(key => {
+        const value = formData[key];
+        if (value instanceof File) {
+            dataToSubmit.append(key, value);
+        } else if (typeof value === 'boolean') {
+            dataToSubmit.append(key, value.toString()); // "true" or "false"
+        } else if (value !== null && value !== undefined) { 
+            // Send even if it's an empty string for required fields, let PocketBase validate
+            // Optional fields that are empty string and should be null might need server-side handling or explicit null setting here
+            if (formData[key] !== initialFormData[key] || 
+                (key === 'subject' || key === 'lessonName' || key === 'difficulty' || key === 'questionType' || key === 'correctOption' || key === 'isPYQ')
+            ) { // Always send required fields or changed fields
+                 dataToSubmit.append(key, String(value));
+            } else if (value !== '') { // For optional fields, only send if not empty
+                 dataToSubmit.append(key, String(value));
+            }
+        }
+    });
     
     try {
       const result = await addQuestionAction(dataToSubmit);
@@ -200,7 +214,7 @@ export default function AddQuestionPage() {
         toast({ title: "Success", description: "Question added successfully!" });
         handleReset();
       } else {
-        toast({ title: "Error", description: result.error || "Failed to add question.", variant: "destructive" });
+        toast({ title: "Error", description: result.message || "Failed to add question.", variant: "destructive" });
       }
     } catch (error) {
       console.error("Submission error:", error);
@@ -212,8 +226,8 @@ export default function AddQuestionPage() {
 
   const renderFileInput = (name: keyof QuestionFormData, preview: string | null, setPreview: (url: string | null) => void, label: string) => (
     <div className="space-y-2">
-      <Label htmlFor={name}>{label}</Label>
-      <Input id={name} name={name} type="file" accept="image/*" onChange={(e) => handleFileChange(e, name, setPreview)} className="mt-1" />
+      <Label htmlFor={name as string}>{label}</Label>
+      <Input id={name as string} name={name as string} type="file" accept="image/*" onChange={(e) => handleFileChange(e, name, setPreview)} className="mt-1" />
       {preview && <Image src={preview} alt={`${label} preview`} width={100} height={100} className="mt-2 rounded-md border" data-ai-hint="question image preview" />}
     </div>
   );
@@ -235,7 +249,7 @@ export default function AddQuestionPage() {
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="subject">Subject</Label>
+              <Label htmlFor="subject">Subject <span className="text-destructive">*</span></Label>
               <Select name="subject" value={formData.subject} onValueChange={(value) => handleSelectChange('subject', value)}>
                 <SelectTrigger id="subject" className="mt-1"><SelectValue placeholder="Select Subject" /></SelectTrigger>
                 <SelectContent>
@@ -247,7 +261,7 @@ export default function AddQuestionPage() {
               </Select>
             </div>
             <div>
-              <Label htmlFor="lessonName">Lesson Name</Label>
+              <Label htmlFor="lessonName">Lesson Name <span className="text-destructive">*</span></Label>
               <Input id="lessonName" name="lessonName" value={formData.lessonName} onChange={handleInputChange} placeholder="e.g., Kinematics" className="mt-1" />
             </div>
             <div>
@@ -255,7 +269,7 @@ export default function AddQuestionPage() {
               <Input id="lessonTopic" name="lessonTopic" value={formData.lessonTopic} onChange={handleInputChange} placeholder="e.g., Projectile Motion" className="mt-1" />
             </div>
             <div>
-              <Label htmlFor="difficulty">Difficulty Level</Label>
+              <Label htmlFor="difficulty">Difficulty Level <span className="text-destructive">*</span></Label>
               <Select name="difficulty" value={formData.difficulty} onValueChange={(value) => handleSelectChange('difficulty', value)}>
                 <SelectTrigger id="difficulty" className="mt-1"><SelectValue placeholder="Select Difficulty" /></SelectTrigger>
                 <SelectContent>
@@ -279,7 +293,7 @@ export default function AddQuestionPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center space-x-2">
               <Checkbox id="isPYQ" name="isPYQ" checked={formData.isPYQ} onCheckedChange={(checked) => handleCheckboxChange('isPYQ', checked as boolean)} />
-              <Label htmlFor="isPYQ" className="text-sm font-medium">Is this a Previous Year Question?</Label>
+              <Label htmlFor="isPYQ" className="text-sm font-medium">Is this a Previous Year Question? <span className="text-destructive">*</span></Label>
             </div>
             {formData.isPYQ && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 border-t mt-4">
@@ -316,8 +330,6 @@ export default function AddQuestionPage() {
                           <SelectItem value="N/A">N/A</SelectItem>
                           <SelectItem value="Shift 1">Shift 1</SelectItem>
                           <SelectItem value="Shift 2">Shift 2</SelectItem>
-                           <SelectItem value="Morning">Morning</SelectItem>
-                           <SelectItem value="Afternoon">Afternoon</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -330,12 +342,12 @@ export default function AddQuestionPage() {
 
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="flex items-center"><Edit className="mr-2 h-5 w-5 text-accent" />Question Content</CardTitle>
+            <CardTitle className="flex items-center"><Edit className="mr-2 h-5 w-5 text-accent" />Question Content <span className="text-destructive">*</span></CardTitle>
             <CardDescription>Define the type and content of the question.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="questionType">Question Type</Label>
+              <Label htmlFor="questionType">Question Type <span className="text-destructive">*</span></Label>
               <Select name="questionType" value={formData.questionType} onValueChange={(value) => handleSelectChange('questionType', value as QuestionFormData['questionType'] )}>
                 <SelectTrigger id="questionType" className="mt-1"><SelectValue placeholder="Select Question Type" /></SelectTrigger>
                 <SelectContent>
@@ -347,12 +359,12 @@ export default function AddQuestionPage() {
             </div>
             {formData.questionType === 'text' && (
               <div>
-                <Label htmlFor="questionText">Question Text (Supports MathJax/LaTeX)</Label>
+                <Label htmlFor="questionText">Question Text (Supports MathJax/LaTeX) <span className="text-destructive">*</span></Label>
                 <Textarea id="questionText" name="questionText" value={formData.questionText} onChange={handleInputChange} placeholder="Enter question text..." className="mt-1 min-h-[100px]" />
               </div>
             )}
             {(formData.questionType === 'image' || formData.questionType === 'text_image') && (
-              <div className="space-y-2">
+               <div className="space-y-2">
                 {renderFileInput('questionImage', questionImagePreview, setQuestionImagePreview, "Question Image")}
                 <Button
                   type="button"
@@ -367,7 +379,7 @@ export default function AddQuestionPage() {
             )}
              {formData.questionType === 'text_image' && (
               <div>
-                <Label htmlFor="questionText">Accompanying Text (Supports MathJax/LaTeX)</Label>
+                <Label htmlFor="questionText">Accompanying Text (Supports MathJax/LaTeX, Optional)</Label>
                 <Textarea id="questionText" name="questionText" value={formData.questionText} onChange={handleInputChange} placeholder="Enter accompanying text for the image question..." className="mt-1 min-h-[100px]" />
               </div>
             )}
@@ -376,13 +388,13 @@ export default function AddQuestionPage() {
         
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="flex items-center"><ListChecks className="mr-2 h-5 w-5 text-accent" />Options</CardTitle>
+            <CardTitle className="flex items-center"><ListChecks className="mr-2 h-5 w-5 text-accent" />Options <span className="text-destructive">*</span></CardTitle>
             <CardDescription>Provide the answer choices.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {(formData.questionType === 'text_image') && (
               <div>
-                <Label htmlFor="optionsFormat">Options Format</Label>
+                <Label htmlFor="optionsFormat">Options Format <span className="text-destructive">*</span></Label>
                 <Select name="optionsFormat" value={formData.optionsFormat} onValueChange={(value) => handleSelectChange('optionsFormat', value as QuestionFormData['optionsFormat'] )}>
                   <SelectTrigger id="optionsFormat" className="mt-1"><SelectValue placeholder="Select Options Format" /></SelectTrigger>
                   <SelectContent>
@@ -396,22 +408,22 @@ export default function AddQuestionPage() {
             {(formData.questionType === 'text' || formData.questionType === 'image' || (formData.questionType === 'text_image' && formData.optionsFormat === 'text_options')) && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="optionAText">Option A (Text)</Label>
+                  <Label htmlFor="optionAText">Option A (Text) <span className="text-destructive">*</span></Label>
                   <Textarea id="optionAText" name="optionAText" value={formData.optionAText} onChange={handleInputChange} placeholder="Option A text..." className="mt-1" 
                     readOnly={formData.questionType === 'image'} />
                 </div>
                 <div>
-                  <Label htmlFor="optionBText">Option B (Text)</Label>
+                  <Label htmlFor="optionBText">Option B (Text) <span className="text-destructive">*</span></Label>
                   <Textarea id="optionBText" name="optionBText" value={formData.optionBText} onChange={handleInputChange} placeholder="Option B text..." className="mt-1"
                     readOnly={formData.questionType === 'image'} />
                 </div>
                 <div>
-                  <Label htmlFor="optionCText">Option C (Text)</Label>
+                  <Label htmlFor="optionCText">Option C (Text) <span className="text-destructive">*</span></Label>
                   <Textarea id="optionCText" name="optionCText" value={formData.optionCText} onChange={handleInputChange} placeholder="Option C text..." className="mt-1" 
                     readOnly={formData.questionType === 'image'} />
                 </div>
                 <div>
-                  <Label htmlFor="optionDText">Option D (Text)</Label>
+                  <Label htmlFor="optionDText">Option D (Text) <span className="text-destructive">*</span></Label>
                   <Textarea id="optionDText" name="optionDText" value={formData.optionDText} onChange={handleInputChange} placeholder="Option D text..." className="mt-1"
                     readOnly={formData.questionType === 'image'} />
                 </div>
@@ -436,7 +448,7 @@ export default function AddQuestionPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="correctOption">Correct Option</Label>
+              <Label htmlFor="correctOption">Correct Option <span className="text-destructive">*</span></Label>
               <Select name="correctOption" value={formData.correctOption} onValueChange={(value) => handleSelectChange('correctOption', value as QuestionFormData['correctOption'])}>
                 <SelectTrigger id="correctOption" className="mt-1"><SelectValue placeholder="Select Correct Option" /></SelectTrigger>
                 <SelectContent>
@@ -468,5 +480,3 @@ export default function AddQuestionPage() {
     </div>
   );
 }
-
-
