@@ -5,8 +5,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label'; // Added import
-import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
 import pb from '@/lib/pocketbase';
@@ -68,8 +67,11 @@ export default function ReferralsPage() {
 
         // Real-time subscription for user's own referralStats
         if (storedUserId && pb.authStore.isValid && pb.authStore.model?.id === storedUserId) {
-          const localUserId = storedUserId; // Use a local const for the subscription
+          const localUserId = storedUserId;
           console.log(`[Referrals Page - Real-time Subscription] Attempting to subscribe for user ID: ${localUserId}`);
+          console.log(`[Real-time Subscription] PocketBase client baseUrl: ${pb.baseUrl}`);
+          const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
+          console.log(`[Real-time Subscription] Attempting to connect to WebSocket: ${realtimeUrl} for user ID: ${localUserId}`);
           try {
             unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
               if (e.action === 'update' && e.record && isMounted) {
@@ -84,8 +86,33 @@ export default function ReferralsPage() {
             });
             console.log(`[Referrals Page - Real-time Subscription] Successfully subscribed for user ID: ${localUserId}`);
           } catch (error) {
-            console.error(`[Referrals Page - Real-time Subscription Error] Failed for user ID: ${localUserId}.`, error);
-            // Toast notification for real-time failure could be added here if desired
+            console.error(`[Real-time Subscription Error] Failed for user ID: ${localUserId}.`, error);
+            console.error(`[Real-time Subscription Error] pb.baseUrl at time of error: ${pb?.baseUrl}`);
+            if (error instanceof ClientResponseError) {
+                console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Status: ${error.status}`);
+                 if (error.status === 0) {
+                    console.error("[Real-time Subscription Error] Status 0 indicates the PocketBase server is unreachable or the network request failed. Check your PocketBase server, ngrok tunnel (if used), and ensure NEXT_PUBLIC_POCKETBASE_URL in your .env file is correct and accessible from your browser's network.");
+                  }
+                console.error(`[Real-time Subscription Error] PocketBase ClientResponseError URL: ${error.url || 'N/A'}`);
+                console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Response: ${JSON.stringify(error.response)}`);
+                console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Data: ${JSON.stringify(error.data)}`);
+                console.error("[Real-time Subscription Error] Full ClientResponseError object:", error);
+                if (error.originalError) {
+                  console.error(`[Real-time Subscription Error] OriginalError Type: ${error.originalError.constructor.name}`);
+                  if (error.originalError instanceof Error) {
+                    console.error(`[Real-time Subscription Error] OriginalError Message: ${error.originalError.message}`);
+                    console.error(`[Real-time Subscription Error] OriginalError Stack: ${error.originalError.stack}`);
+                  } else {
+                    console.error(`[Real-time Subscription Error] OriginalError: ${String(error.originalError)}`);
+                  }
+                }
+                toast({
+                  title: "Real-time Sync Issue",
+                  description: "Could not connect for live updates. Please verify NEXT_PUBLIC_POCKETBASE_URL, ngrok tunnel, and PocketBase server status. Also check for browser/network issues blocking WebSockets.",
+                  variant: "destructive",
+                  duration: 15000,
+                });
+            }
           }
         }
       }
@@ -102,7 +129,7 @@ export default function ReferralsPage() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]); // Removed userReferralStats from dependency array to prevent re-subscription loops
+  }, [userId, toast]);
 
   const handleCopyReferralLink = () => {
     if (userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') {
@@ -112,6 +139,17 @@ export default function ReferralsPage() {
         .catch(err => {
           console.error("Failed to copy signup link: ", err);
           toast({ title: "Copy Failed", description: "Could not copy signup link.", variant: "destructive" });
+        });
+    }
+  };
+
+  const handleCopyReferralCode = () => {
+    if (userReferralCode && userReferralCode !== 'N/A') {
+      navigator.clipboard.writeText(userReferralCode)
+        .then(() => toast({ title: "Copied!", description: "Referral code copied to clipboard." }))
+        .catch(err => {
+          console.error("Failed to copy referral code: ", err);
+          toast({ title: "Copy Failed", description: "Could not copy referral code.", variant: "destructive" });
         });
     }
   };
@@ -139,16 +177,36 @@ export default function ReferralsPage() {
             Share Your Referral Link
           </CardTitle>
           <CardDescription>
-            Share this link with friends. When they sign up, your referral stats will update here!
+            Share your code or link with friends. When they sign up, your referral stats will update here!
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           <div>
-            <Label htmlFor="referralLinkDisplay">Your Unique Signup Link</Label>
+            <Label htmlFor="referralCodeDisplay">Your Referral Code</Label>
             <div className="mt-1 flex items-center gap-2">
               <Input
-                id="referralLinkDisplay"
-                value={(userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') ? `${window.location.origin}/auth/signup/${userReferralCode}` : 'N/A - Login to see your code'}
+                id="referralCodeDisplay"
+                value={userReferralCode}
+                readOnly
+                className="bg-muted/50"
+              />
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleCopyReferralCode}
+                aria-label="Copy referral code"
+                disabled={!userReferralCode || userReferralCode === 'N/A'}
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="referralLinkDisplayFull">Your Unique Signup Link</Label>
+            <div className="mt-1 flex items-center gap-2">
+              <Input
+                id="referralLinkDisplayFull"
+                value={(userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') ? `${window.location.origin}/auth/signup/${userReferralCode}` : 'N/A - Login to see your link'}
                 readOnly
                 className="bg-muted/50"
               />
