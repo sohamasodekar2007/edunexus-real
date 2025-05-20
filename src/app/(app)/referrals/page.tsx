@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label'; // Added import
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
@@ -100,7 +101,8 @@ export default function ReferralsPage() {
         unsubscribe();
       }
     };
-  }, [userId, userReferralStats]); // Added userReferralStats to dependency to re-evaluate if it changes from elsewhere (though primarily updated by subscription)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]); // Removed userReferralStats from dependency array to prevent re-subscription loops
 
   const handleCopyReferralLink = () => {
     if (userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') {
