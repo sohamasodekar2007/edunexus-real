@@ -22,7 +22,7 @@ import {
   CreditCard,
   Gift,
   SunMoon,
-  Settings as SettingsIcon, // Renamed to avoid conflict
+  Settings as SettingsIcon, 
   HelpCircle 
 } from 'lucide-react';
 import {
@@ -45,6 +45,8 @@ export interface NavItemGroup {
   label?: string;
   items: NavItem[];
   isCollapsible?: boolean;
+  labelHref?: string; // New: URL for the label if it's clickable
+  labelIcon?: React.ElementType; // New: Icon for the clickable label
 }
 
 interface SideBaseProps {
@@ -56,10 +58,8 @@ export function SideBase({ navStructure, pathname }: SideBaseProps) {
   const { state: sidebarState } = useSidebar();
   const router = useRouter();
 
-  // Placeholder for theme toggle logic
   const handleToggleTheme = () => {
     console.log("Toggle theme clicked");
-    // Actual theme toggling logic would go here
   };
 
   return (
@@ -75,9 +75,31 @@ export function SideBase({ navStructure, pathname }: SideBaseProps) {
           {navStructure.map((group, groupIndex) => (
             <SidebarGroup key={group.label || `group-${groupIndex}`}>
               {group.label && (
-                <SidebarGroupLabel className="group-data-[collapsible=icon]:my-2 group-data-[collapsible=icon]:h-auto group-data-[collapsible=icon]:justify-center">
-                  {sidebarState === 'collapsed' ? <MoreHorizontal className="h-4 w-4" /> : group.label}
-                </SidebarGroupLabel>
+                group.labelHref ? (
+                  <Link href={group.labelHref} passHref legacyBehavior>
+                    <SidebarGroupLabel 
+                      asChild 
+                      className="cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:bg-sidebar-accent focus-visible:text-sidebar-accent-foreground group-data-[collapsible=icon]:my-2 group-data-[collapsible=icon]:h-auto group-data-[collapsible=icon]:justify-center"
+                    >
+                      <a className="flex w-full items-center gap-2"> {/* Ensure 'a' tag fills and aligns content */}
+                        {sidebarState === 'collapsed' && group.labelIcon ? (
+                          <group.labelIcon className="h-5 w-5" /> 
+                        ) : sidebarState === 'collapsed' && !group.labelIcon ? (
+                           <MoreHorizontal className="h-4 w-4" /> 
+                        ) : (
+                          <>
+                            {group.labelIcon && <group.labelIcon className="h-5 w-5" />}
+                            <span>{group.label}</span>
+                          </>
+                        )}
+                      </a>
+                    </SidebarGroupLabel>
+                  </Link>
+                ) : (
+                  <SidebarGroupLabel className="group-data-[collapsible=icon]:my-2 group-data-[collapsible=icon]:h-auto group-data-[collapsible=icon]:justify-center">
+                    {sidebarState === 'collapsed' ? <MoreHorizontal className="h-4 w-4" /> : group.label}
+                  </SidebarGroupLabel>
+                )
               )}
               <SidebarMenu>
                 {group.items.map((item) => (
@@ -140,4 +162,3 @@ export function SideBase({ navStructure, pathname }: SideBaseProps) {
     </Sidebar>
   );
 }
-

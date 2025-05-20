@@ -19,7 +19,7 @@ import {
   LogOut,
   Bell,
   PlusCircle,
-  // Users, // Removed Users icon if no longer needed by other items
+  LayoutDashboard, 
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -40,14 +40,18 @@ interface AdminNavItemGroup extends SideBaseNavItemGroup {}
 const adminNavigationItems: AdminNavItem[] = [
   { href: '/admin-panel', label: 'Dashboard', icon: ShieldAlert, matchExact: true },
   { href: '/admin-panel/add-question', label: 'Add Question', icon: PlusCircle },
-  // { href: '/admin-panel/users', label: 'User Management', icon: Users }, // Removed User Management
   { href: '/admin-panel/tests', label: 'Test Management', icon: ListChecks },
   { href: '/admin-panel/dpps', label: 'DPP Management', icon: ClipboardList },
   { href: '/admin-panel/site-settings', label: 'Site Settings', icon: Settings2 },
 ];
 
 const adminNavStructure: AdminNavItemGroup[] = [
-  { label: 'Admin Menu', items: adminNavigationItems },
+  { 
+    label: 'Exit to Dashboard', 
+    labelHref: '/dashboard',
+    labelIcon: LayoutDashboard,
+    items: adminNavigationItems 
+  },
 ];
 
 export default function AdminPanelLayout({ children }: { children: ReactNode }) {
@@ -80,27 +84,23 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
       pb.authStore.clear();
-      ['userId', 'userFullName', 'userName', 'userModel', 'userRole', 'userAvatarFallback', 'userClass', 'userEmail', 'userPhone', 'userTargetYear', 'userReferralCode', 'userReferredByCode', 'userReferralStats', 'userExpiryDate', 'userAvatarUrl'].forEach(key => localStorage.removeItem(key));
+      ['userId', 'userFullName', 'userName', 'userModel', 'userRole', 'userAvatarFallback', 'userAvatarUrl', 'userClass', 'userEmail', 'userPhone', 'userTargetYear', 'userReferralCode', 'userReferredByCode', 'userReferralStats', 'userExpiryDate'].forEach(key => localStorage.removeItem(key));
     }
     router.push('/landing');
   };
 
   const getActiveLabel = () => {
-    for (const group of adminNavStructure) {
-      for (const item of group.items) {
-        if (item.matchExact ? pathname === item.href : pathname.startsWith(item.href)) {
-          return item.label;
-        }
+    // Check main navigation items first
+    for (const item of adminNavigationItems) {
+      if (item.matchExact ? pathname === item.href : pathname.startsWith(item.href)) {
+        return item.label;
       }
     }
+    // Fallback for the admin dashboard itself if no sub-item matches
     if (pathname === '/admin-panel') return 'Dashboard';
-    if (pathname === '/admin-panel/add-question') return 'Add Question';
-    // if (pathname.startsWith('/admin-panel/users')) return 'User Management'; // Removed
-    if (pathname.startsWith('/admin-panel/tests')) return 'Test Management';
-    if (pathname.startsWith('/admin-panel/dpps')) return 'DPP Management';
-    if (pathname.startsWith('/admin-panel/site-settings')) return 'Site Settings';
-    return 'Admin Panel';
+    return 'Admin Panel'; // Generic fallback
   };
+  
 
   if (isLoading) {
     return <div className="flex min-h-screen items-center justify-center"><p>Loading Admin Panel...</p></div>;
@@ -153,7 +153,7 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push('/dashboard')}>
-                <ShieldAlert className="mr-2 h-4 w-4" /> 
+                <LayoutDashboard className="mr-2 h-4 w-4" /> 
                 Exit Admin
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -164,7 +164,7 @@ export default function AdminPanelLayout({ children }: { children: ReactNode }) 
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex-1 px-6 py-4 overflow-auto">
+        <main className="flex-1 overflow-auto">
           {children}
         </main>
       </SidebarInset>
