@@ -38,7 +38,7 @@ export default function ReferralsPage() {
         setLiveReferralStats(result.stats);
       } else {
         const errorMessage = result.message || "Could not load live referral statistics.";
-        console.error("Failed to fetch live referral stats:", errorMessage, result.error);
+        console.error("Failed to fetch live referral stats. Server action response:", { message: errorMessage, internalCode: result.error });
         setErrorLoadingStats(errorMessage);
         toast({
           title: "Stats Error",
@@ -219,13 +219,15 @@ export default function ReferralsPage() {
               <p className="ml-3 text-muted-foreground">Loading statistics...</p>
             </div>
           ) : errorLoadingStats ? (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="mt-4">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Error Loading Statistics</AlertTitle>
               <AlertDescription>
                 {errorLoadingStats}
                 {errorLoadingStats.includes("Admin client initialization") && (
-                  <p className="mt-2 text-xs">Please ensure server admin credentials are correct in the .env file and the Next.js server is restarted. Check server logs for detailed errors.</p>
+                  <p className="mt-2 text-xs">
+                    Please ensure PocketBase admin credentials (POCKETBASE_ADMIN_EMAIL, POCKETBASE_ADMIN_PASSWORD) and NEXT_PUBLIC_POCKETBASE_URL are correctly set in your .env file, and the Next.js server is restarted. Check server logs for detailed errors.
+                  </p>
                 )}
               </AlertDescription>
             </Alert>
@@ -294,3 +296,4 @@ export default function ReferralsPage() {
     </div>
   );
 }
+
