@@ -45,8 +45,8 @@ export interface NavItemGroup {
   label?: string;
   items: NavItem[];
   isCollapsible?: boolean;
-  labelHref?: string; // New: URL for the label if it's clickable
-  labelIcon?: React.ElementType; // New: Icon for the clickable label
+  labelHref?: string; 
+  labelIcon?: React.ElementType; 
 }
 
 interface SideBaseProps {
@@ -60,6 +60,7 @@ export function SideBase({ navStructure, pathname }: SideBaseProps) {
 
   const handleToggleTheme = () => {
     console.log("Toggle theme clicked");
+    // Implement theme toggle logic here
   };
 
   return (
@@ -139,7 +140,7 @@ export function SideBase({ navStructure, pathname }: SideBaseProps) {
                 <CreditCard className="mr-2 h-4 w-4" />
                 <span>Upgrade Plan</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push('/referrals')}>
+              <DropdownMenuItem onClick={() => router.push('/settings')}>
                 <Gift className="mr-2 h-4 w-4" />
                 <span>Referrals</span>
               </DropdownMenuItem>
