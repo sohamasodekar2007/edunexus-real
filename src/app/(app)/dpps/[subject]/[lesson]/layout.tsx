@@ -1,4 +1,3 @@
-
 import type { ReactNode } from 'react';
 
 export default function LessonPageLayout({ children }: { children: ReactNode }) {
