@@ -10,6 +10,7 @@ import type { User, UserModel, UserRole, UserClass, QuestionDisplayInfo, PYQInfo
 import { format } from 'date-fns';
 import { cookies } from 'next/headers';
 import PocketBase from 'pocketbase';
+import { getPocketBaseAdmin, requirePocketBaseAdmin } from '@/lib/pocketbaseAdmin';
 
 
 // Helper function for error responses
@@ -35,8 +36,9 @@ export async function validateReferralCodeAction(code: string): Promise<{ succes
       console.log(`[${actionName}] Valid referrer found: ${referrer.name}`);
       return { success: true, message: `This referral code belongs to ${referrer.name}.`, referrerName: referrer.name };
     } else {
+      // Do not show "Invalid referral code"
       console.log(`[${actionName}] No referrer found for code: ${upperCaseCode}`);
-      return { success: false, message: "" }; // Keep message empty for UI
+      return { success: false, message: "" };
     }
   } catch (error) {
     console.error(`[${actionName}] Error validating referral code:`, error);
@@ -74,7 +76,7 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
       expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 78)).toISOString().split('T')[0],
       totalPoints: 0,
       referralCode: newUserReferralCode,
-      referredByCode: upperCaseReferredByCode,
+      referredByCode: upperCaseReferredByCode, // Store the code user entered
       referralStats: {
         referred_free: 0,
         referred_chapterwise: 0,
@@ -89,7 +91,8 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
     };
     console.log(`[${actionName}] Attempting to create user in PocketBase with data (password omitted):`, { ...userDataForPocketBase, password: '***', passwordConfirm: '***' });
     
-    newUserPocketBase = await createUserInPocketBase(userDataForPocketBase, pbGlobal); // Using global pb for user creation (public rule)
+    // Use global pb instance for creating new user, relying on public createRule for users collection
+    newUserPocketBase = await createUserInPocketBase(userDataForPocketBase, pbGlobal);
     console.log(`[${actionName}] User created successfully in PocketBase: ${newUserPocketBase.id}`);
 
   } catch (error) {
@@ -126,17 +129,29 @@ export async function signupUserAction(data: SignupFormData): Promise<{ success:
     return createErrorResponse(`Signup failed: ${finalErrorMessage}`, "SIGNUP_PB_CREATE_ERROR", finalErrorMessage);
   }
 
+  // Update referrer stats IF a valid code was used and admin client is available
   if (newUserPocketBase && newUserPocketBase.id && upperCaseReferredByCode) {
     console.log(`[${actionName}] New user ${newUserPocketBase.id} signed up with referral code: ${upperCaseReferredByCode}. Attempting to update referrer stats.`);
     try {
-      const pbAdmin = null; 
-      if (pbAdmin) { 
-        // Admin-dependent logic for referrer stats update - effectively skipped
+      const adminPb = await getPocketBaseAdmin(); // Attempt to get admin client
+      if (adminPb) {
+        const referrer = await findUserByReferralCode(upperCaseReferredByCode, adminPb);
+        if (referrer) {
+          const currentStats = referrer.referralStats || { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0, referred_dpp: 0 };
+          const newStats = {
+            ...currentStats,
+            referred_free: (currentStats.referred_free || 0) + 1, // New users are on 'Free' model by default
+          };
+          await updateUserReferralStats(referrer.id, newStats, adminPb);
+          console.log(`[${actionName}] Successfully updated referral stats for referrer ${referrer.id}.`);
+        } else {
+          console.warn(`[${actionName}] Referrer with code ${upperCaseReferredByCode} not found, even though it might have been validated client-side. No stats updated.`);
+        }
       } else {
-        console.warn(`[${actionName}] Admin client not available for referrer stats update. Skipping update for ${upperCaseReferredByCode}.`);
+        console.warn(`[${actionName}] Admin client not available (POCKETBASE_ADMIN_EMAIL/PASSWORD likely not set or incorrect in .env). Skipping referrer stats update for ${upperCaseReferredByCode}.`);
       }
     } catch (statsError) {
-      console.warn(`[${actionName}] Error during (skipped) referrer stats update for ${upperCaseReferredByCode}. Error:`, statsError.message, statsError);
+      console.warn(`[${actionName}] Error during referrer stats update for ${upperCaseReferredByCode}. This does not block signup. Error:`, statsError.message, statsError);
     }
   }
   return { success: true, message: 'Signup successful! Please log in.', userId: newUserPocketBase.id };
@@ -188,6 +203,7 @@ export async function loginUserAction(data: { email: string, password_login: str
     const userName = userFullName.split(' ')[0] || 'User';
     const avatarFilename = user.avatar as string | undefined;
     const avatarUrl = avatarFilename ? pbGlobal.getFileUrl(user, avatarFilename) : null;
+    const userReferredByCode = user.referredByCode || null; // Ensure null if empty
 
     return {
       success: true,
@@ -203,7 +219,7 @@ export async function loginUserAction(data: { email: string, password_login: str
       userPhone: user.phone || null,
       userTargetYear: user.targetYear?.toString() || null,
       userReferralCode: user.referralCode || null,
-      userReferredByCode: user.referredByCode || null,
+      userReferredByCode: userReferredByCode,
       userReferralStats: user.referralStats || null,
       userExpiryDate: user.expiry_date || null,
       userAvatarUrl: avatarUrl,
@@ -233,40 +249,31 @@ export async function loginUserAction(data: { email: string, password_login: str
 }
 
 export async function updateUserProfileAction({
-  userId: userIdFromClient,
   classToUpdate,
   targetYearToUpdate
 }: {
-  userId: string,
   classToUpdate?: UserClass | '',
   targetYearToUpdate?: string
 }): Promise<{ success: boolean; message: string; error?: string; updatedUser?: User }> {
   const actionName = "Update User Profile Action";
-  
   const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
   const cookieStore = cookies();
   const authCookie = cookieStore.get('pb_auth');
-  
+
   if (authCookie?.value) {
     pb.authStore.loadFromCookie(authCookie.value);
+    try {
+      await pb.collection('users').authRefresh();
+    } catch (_) {
+      pb.authStore.clear(); // Clear store if refresh fails
+    }
   }
 
-  try {
-    await pb.collection('users').authRefresh();
-    if (!pb.authStore.isValid || !pb.authStore.model?.id) {
-      return createErrorResponse("User not authenticated. Please log in again.", "UPA_E001_NO_AUTH_SERVER");
-    }
-  } catch (_) {
-    pb.authStore.clear();
-    return createErrorResponse("User auth refresh failed. Please log in again.", "UPA_E001B_AUTH_REFRESH_FAIL_SERVER");
+  if (!pb.authStore.isValid || !pb.authStore.model?.id) {
+    return createErrorResponse("User not authenticated or session invalid. Please log in again.", "UPA_NO_AUTH_SERVER");
   }
   
   const authenticatedUserId = pb.authStore.model.id;
-  if (userIdFromClient !== authenticatedUserId) {
-      console.error(`[${actionName}] Security alert: Authenticated user ${authenticatedUserId} attempting to update profile for ${userIdFromClient}. Denying.`);
-      return createErrorResponse("Permission denied: Cannot update another user's profile.", "UPA_E001C_PERMISSION_DENIED_SERVER");
-  }
-  
   console.log(`[${actionName}] Attempting to update profile for authenticated user ID: ${authenticatedUserId} with class: ${classToUpdate}, targetYear: ${targetYearToUpdate}`);
   
   const dataForPocketBase: Partial<Pick<User, 'class' | 'targetYear'>> = {};
@@ -285,6 +292,7 @@ export async function updateUserProfileAction({
   console.log(`[${actionName}] Data to send to PocketBase for user ${authenticatedUserId}:`, dataForPocketBase);
 
   try {
+    // Use the user-authenticated pb instance
     const updatedUserRecord = await updateUserInPocketBase(authenticatedUserId, dataForPocketBase, pb);
     console.log(`[${actionName}] Profile updated successfully for user ${authenticatedUserId}.`);
     return { success: true, message: "Profile updated successfully!", updatedUser: updatedUserRecord };
@@ -296,7 +304,7 @@ export async function updateUserProfileAction({
       errorMessage = error.data?.message || errorMessage;
       errorCode = `UPA_PB_${error.status}`;
       if (error.status === 403) {
-        errorMessage = `Permission Denied by PocketBase (403): You may not have permission to update this profile. Check PocketBase 'users' collection updateRule. Server log: ${JSON.stringify(error.data)}`;
+        errorMessage = `Permission Denied by PocketBase (403). This typically means the user doesn't have permission to update their own record as per collection rules. Ensure 'users' collection Update Rule is '@request.auth.id = id'. Server log: ${JSON.stringify(error.data)}`;
       } else if (error.status === 404) {
         errorMessage = `User not found (ID: ${authenticatedUserId}). Could not update profile.`;
       } else if (error.status === 0) {
@@ -317,20 +325,21 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
   const authCookie = cookieStore.get('pb_auth');
   if (authCookie?.value) {
     pb.authStore.loadFromCookie(authCookie.value);
+    try {
+      await pb.collection('users').authRefresh();
+    } catch (_) {
+      pb.authStore.clear();
+    }
   }
 
-  try {
-    await pb.collection('users').authRefresh();
-    if (!pb.authStore.isValid || !pb.authStore.model?.id) {
-      return { referrerName: null, error: "User not authenticated to fetch referrer info. (GRICA_E001_SERVER)" };
-    }
-  } catch (_) {
-    pb.authStore.clear();
-    return { referrerName: null, error: "User auth refresh failed when fetching referrer info. (GRICA_E001B_SERVER)" };
+  if (!pb.authStore.isValid || !pb.authStore.model?.id) {
+    return { referrerName: null, error: "User not authenticated to fetch referrer info. (GRICA_NO_AUTH_SERVER)" };
   }
 
   const currentAuthUserId = pb.authStore.model.id;
-  const currentUserReferredByCode = pb.authStore.model.referredByCode as string | undefined;
+  const currentUserRecord = await findUserById(currentAuthUserId, pb); // Use the authenticated pb instance
+  const currentUserReferredByCode = currentUserRecord?.referredByCode;
+
 
   if (!currentUserReferredByCode || currentUserReferredByCode.trim() === '') {
     console.log(`[${actionName}] Current user (ID: ${currentAuthUserId}) was not referred or referredByCode is not set.`);
@@ -339,7 +348,7 @@ export async function getReferrerInfoForCurrentUserAction(): Promise<{ referrerN
   console.log(`[${actionName}] Current user (ID: ${currentAuthUserId}) was referred by code: ${currentUserReferredByCode}. Fetching referrer...`);
 
   try {
-    const referrer = await findUserByReferralCode(currentUserReferredByCode, pbGlobal);
+    const referrer = await findUserByReferralCode(currentUserReferredByCode, pb); // Use the authenticated pb instance for the query
     if (referrer && referrer.name) {
       console.log(`[${actionName}] Found referrer (ID: ${referrer.id}, Name: ${referrer.name}) for code: ${currentUserReferredByCode}.`);
       return { referrerName: referrer.name };
@@ -360,24 +369,25 @@ export async function updateUserAvatarAction(formData: FormData): Promise<{ succ
   const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
   const cookieStore = cookies();
   const authCookie = cookieStore.get('pb_auth');
+
   if (authCookie?.value) {
     pb.authStore.loadFromCookie(authCookie.value);
+     try {
+      await pb.collection('users').authRefresh();
+    } catch (_) {
+      pb.authStore.clear();
+    }
   }
 
-  try {
-    await pb.collection('users').authRefresh();
-    if (!pb.authStore.isValid || !pb.authStore.model?.id) {
-      return createErrorResponse("User not authenticated. Please log in to update your avatar.", "UAA_E001_NO_AUTH_SERVER");
-    }
-  } catch (_) {
-    pb.authStore.clear();
-    return createErrorResponse("User auth refresh failed. Please log in again to update avatar.", "UAA_E001B_AUTH_REFRESH_FAIL_SERVER");
+  if (!pb.authStore.isValid || !pb.authStore.model?.id) {
+    return createErrorResponse("User not authenticated or session invalid. Please log in to update your avatar.", "UAA_NO_AUTH_SERVER");
   }
   
   const userId = pb.authStore.model.id;
   console.log(`[${actionName}] Updating avatar for user ID: ${userId}. formData keys: ${Array.from(formData.keys()).join(', ')}`);
 
   try {
+    // Use user-authenticated pb instance
     const updatedRecord = await updateUserInPocketBase(userId, formData, pb); 
     console.log(`[${actionName}] Avatar updated successfully for user ${userId}. New avatar filename: ${updatedRecord.avatar}`);
     return { success: true, message: "Avatar updated successfully!", updatedUserRecord: updatedRecord };
@@ -388,7 +398,9 @@ export async function updateUserAvatarAction(formData: FormData): Promise<{ succ
     if (error instanceof ClientResponseError) {
       errorMessage = error.data?.message || errorMessage;
       errorCode = `UAA_PB_${error.status}`;
-      // ... more specific error messages
+      if (error.status === 403) {
+        errorMessage = `Permission Denied by PocketBase (403) for avatar update. Ensure 'users' collection Update Rule is '@request.auth.id = id'. Details: ${JSON.stringify(error.data)}`;
+      }
     } else if (error instanceof Error) {
       errorMessage = error.message;
     }
@@ -404,22 +416,22 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
   const authCookie = cookieStore.get('pb_auth');
   if (authCookie?.value) {
     pb.authStore.loadFromCookie(authCookie.value);
+    try {
+      await pb.collection('users').authRefresh();
+    } catch (_) {
+      pb.authStore.clear();
+    }
   }
 
-  try {
-    await pb.collection('users').authRefresh();
-    if (!pb.authStore.isValid || !pb.authStore.model?.id) {
-      return createErrorResponse("User not authenticated. Please log in to remove your avatar.", "RAA_E001_NO_AUTH_SERVER");
-    }
-  } catch (_) {
-    pb.authStore.clear();
-    return createErrorResponse("User auth refresh failed. Please log in again to remove avatar.", "RAA_E001B_AUTH_REFRESH_FAIL_SERVER");
+  if (!pb.authStore.isValid || !pb.authStore.model?.id) {
+    return createErrorResponse("User not authenticated or session invalid. Please log in to remove your avatar.", "RAA_NO_AUTH_SERVER");
   }
 
   const userId = pb.authStore.model.id;
   console.log(`[${actionName}] Removing avatar for user ID: ${userId}.`);
 
   try {
+    // Use user-authenticated pb instance
     const updatedRecord = await updateUserInPocketBase(userId, { 'avatar': null }, pb); 
     console.log(`[${actionName}] Avatar removed successfully for user ${userId}.`);
     return { success: true, message: "Avatar removed successfully!", updatedUserRecord: updatedRecord };
@@ -430,7 +442,9 @@ export async function removeUserAvatarAction(): Promise<{ success: boolean; mess
      if (error instanceof ClientResponseError) {
       errorMessage = error.data?.message || errorMessage;
       errorCode = `RAA_PB_${error.status}`;
-      // ... more specific error messages
+       if (error.status === 403) {
+        errorMessage = `Permission Denied by PocketBase (403) for avatar removal. Ensure 'users' collection Update Rule is '@request.auth.id = id'. Details: ${JSON.stringify(error.data)}`;
+      }
     } else if (error instanceof Error) {
       errorMessage = error.message;
     }
@@ -448,41 +462,19 @@ export async function addQuestionAction(formData: FormData): Promise<{ success: 
 
   if (authCookie?.value) {
     pb.authStore.loadFromCookie(authCookie.value);
-  } else {
-     console.error(`[${actionName}] No auth cookie found for Add Question. User is likely not authenticated for this action.`);
-     return createErrorResponse(
-      "User is not authenticated. Please log in to add questions. (AQA_E000_NO_COOKIE_SERVER)",
-      "AQA_E000_NO_COOKIE_SERVER",
-      "No auth cookie found."
-    );
-  }
-
-  try {
-    await pb.collection('users').authRefresh();
-    console.log(`[${actionName}] Auth refresh successful for Add Question. User: ${pb.authStore.model?.id}, Role: ${pb.authStore.model?.role}`);
-  } catch (authError) {
-    pb.authStore.clear();
-    console.error(`[${actionName}] Auth refresh failed. Error:`, authError);
-    let specificMessage = "User authentication failed or token expired. Please log in again.";
-    if (authError instanceof ClientResponseError) {
-        console.error(`[${actionName}] Auth refresh ClientResponseError details:`, JSON.stringify(authError.data));
-        if (authError.status === 0) specificMessage = "Network error during auth refresh. Cannot add question.";
+     try {
+      await pb.collection('users').authRefresh(); // Attempt to refresh to validate the token
+    } catch (authRefreshError) {
+      pb.authStore.clear(); // Clear store if refresh fails
+      console.warn(`[${actionName}] Auth refresh failed during addQuestionAction. Error: ${authRefreshError.message}. Proceeding as potentially unauthenticated or relying on collection rules.`);
     }
-    return createErrorResponse(specificMessage, "AQA_E001_AUTH_REFRESH_FAIL_SERVER", specificMessage);
-  }
-
-  if (!pb.authStore.isValid || !pb.authStore.model?.id) {
-    console.error(`[${actionName}] User is not authenticated after authRefresh. Cannot add question. Auth store valid: ${pb.authStore.isValid}, Model ID: ${pb.authStore.model?.id}`);
-    return createErrorResponse(
-      "User is not authenticated. Cannot add question. (AQA_E001B_NO_AUTH_POST_REFRESH_SERVER)",
-      "AQA_E001B_NO_AUTH_POST_REFRESH_SERVER",
-      "User is not authenticated after authRefresh."
-    );
   }
   
-  // Rely on PocketBase rule: @request.auth.id != "" && @request.auth.role = "Admin"
-  // The SDK will send the authenticated user's token. PocketBase will enforce the role.
-  console.log(`[${actionName}] User is authenticated (ID: ${pb.authStore.model.id}, Role: ${pb.authStore.model.role}). Proceeding to create question in question_bank.`);
+  // Rely on PocketBase's 'question_bank' collection Create Rule: "@request.auth.id != "" && @request.auth.role = "Admin""
+  // The client-side `admin-panel/layout.tsx` already checks if the user's role (from localStorage) is 'Admin'.
+  // If the auth token from the cookie is valid and belongs to an Admin, PocketBase will allow it.
+  // If the token is invalid, or doesn't belong to an Admin, PocketBase will reject it.
+  console.log(`[${actionName}] User for Add Question. Auth Valid: ${pb.authStore.isValid}, User ID: ${pb.authStore.model?.id}, Role: ${pb.authStore.model?.role}. Relaying on PocketBase 'question_bank' Create Rule.`);
 
   try {
     const newQuestionRecord = await pb.collection('question_bank').create(formData);
@@ -499,7 +491,7 @@ export async function addQuestionAction(formData: FormData): Promise<{ success: 
       detailedFieldErrors = error.data?.data ? JSON.stringify(error.data.data) : "";
 
       if (error.status === 403) { 
-        errorMessage = `Permission Denied by PocketBase (403): You (Role: ${pb.authStore.model?.role}) may not have permission to add questions. Ensure PocketBase 'question_bank' Create Rule is '@request.auth.id != "" && @request.auth.role = "Admin"'. Details: ${detailedFieldErrors || error.data?.message}`;
+        errorMessage = `Permission Denied by PocketBase (403): Your account (Role: ${pb.authStore.model?.role || 'Unknown/Not Authenticated'}) may not have permission to add questions. Ensure your account has 'Admin' role and PocketBase 'question_bank' Create Rule is correct (e.g., '@request.auth.id != "" && @request.auth.role = "Admin"'). Details: ${detailedFieldErrors || error.data?.message}`;
       } else if (error.status === 401) { 
          errorMessage = `Authentication Required by PocketBase (401): User is not authenticated or token is invalid. Please log in.`;
       } else if (detailedFieldErrors) {
@@ -525,22 +517,19 @@ export async function getLessonsBySubjectAction(subject: string): Promise<{ succ
   const authCookie = cookieStore.get('pb_auth');
 
   if (authCookie?.value) {
-      pb.authStore.loadFromCookie(authCookie.value);
+    pb.authStore.loadFromCookie(authCookie.value);
+    try {
+      await pb.collection('users').authRefresh();
+    } catch (_) {
+      pb.authStore.clear();
+    }
   }
-  console.log(`[${actionName}] Using PocketBase instance with baseUrl: ${pb.baseUrl}. Initial auth valid: ${pb.authStore.isValid}`);
+  console.log(`[${actionName}] Using PocketBase instance with baseUrl: ${pb.baseUrl}. User Auth Valid: ${pb.authStore.isValid}, User ID: ${pb.authStore.model?.id}`);
   
+  // Rely on PocketBase 'question_bank' List/View rules: "@request.auth.id != """
+  // If user is not authenticated, PocketBase will reject the request.
   try {
-    if (pb.authStore.token) {
-        await pb.collection('users').authRefresh();
-        console.log(`[${actionName}] Auth refresh attempted. User: ${pb.authStore.model?.id}, isValid: ${pb.authStore.isValid}`);
-    }
-
-    if (!pb.authStore.isValid) {
-        console.error(`[${actionName}] User not authenticated. Cannot fetch lessons. Rule is @request.auth.id != ""`);
-        return createErrorResponse("User not authenticated. Please log in to view lessons.", "GLBSA_E001B_NO_AUTH_SERVER", "User not authenticated for lesson view.");
-    }
-    
-    console.log(`[${actionName}] Attempting to fetch lessons for subject: ${subject} as user ${pb.authStore.model.id}`);
+    console.log(`[${actionName}] Attempting to fetch lessons for subject: ${subject}`);
     const records = await pb.collection('question_bank').getFullList({
       filter: `subject = "${subject}"`,
       fields: 'lessonName', 
@@ -559,16 +548,15 @@ export async function getLessonsBySubjectAction(subject: string): Promise<{ succ
     console.error(`[${actionName}] Error fetching lessons for subject ${subject}:`, error);
 
     if (error instanceof ClientResponseError) {
-      errorMessage = error.data?.message || `PocketBase error while fetching lessons for '${subject}'. Status: ${error.status}.`;
-      errorCode = `GLBSA_E004_PB_${error.status}`;
       errorDetails = JSON.stringify(error.data);
-      
       if (error.status === 404) {
-        errorMessage = `Collection 'question_bank' not found OR no records match filter when fetching lessons for subject '${subject}'. Ensure collection name is correct and PocketBase URL in .env is the root URL. Current URL used by SDK: ${pb.baseUrl}. Filter: subject = "${subject}"`;
+        errorMessage = `Collection 'question_bank' not found OR no records match filter when fetching lessons for subject '${subject}'. Check PocketBase URL (${pb.baseUrl}) and collection name. Filter: subject = "${subject}"`;
       } else if (error.status === 401 || error.status === 403) {
-        errorMessage = `Permission Denied/Authentication Required (${error.status}) by PocketBase: You may not have permission to view lessons for '${subject}'. Please ensure you are logged in. PocketBase 'question_bank' View Rule likely requires authentication (e.g., "@request.auth.id != """). User ID after auth attempt: ${pb.authStore.model?.id || 'N/A'}`;
+        errorMessage = `Permission Denied/Authentication Required (${error.status}) by PocketBase to view lessons for '${subject}'. Ensure you are logged in. PocketBase 'question_bank' View Rule: "@request.auth.id != """. User ID from token: ${pb.authStore.model?.id || 'N/A'}. Original error: ${error.data?.message || 'No specific message.'}`;
       } else if (error.status === 0) {
-        errorMessage = `Network Error: Could not connect to PocketBase to fetch lessons for subject '${subject}'. Check PocketBase server and NEXT_PUBLIC_POCKETBASE_URL.`;
+        errorMessage = `Network Error: Could not connect to PocketBase (${pb.baseUrl}) to fetch lessons for subject '${subject}'. Check PocketBase server and NEXT_PUBLIC_POCKETBASE_URL.`;
+      } else {
+        errorMessage = error.data?.message || `PocketBase error while fetching lessons for '${subject}'. Status: ${error.status}.`;
       }
       console.error(`[${actionName}] PocketBase ClientResponseError details: URL: ${error.url}, Status: ${error.status}, Response: ${JSON.stringify(error.response)}`);
     }
@@ -584,21 +572,17 @@ export async function getQuestionsByLessonAction(subject: string, lessonName: st
 
   if (authCookie?.value) {
     pb.authStore.loadFromCookie(authCookie.value);
+    try {
+      await pb.collection('users').authRefresh();
+    } catch (_) {
+      pb.authStore.clear();
+    }
   }
-  console.log(`[${actionName}] Using PocketBase instance with baseUrl: ${pb.baseUrl}. Initial auth valid: ${pb.authStore.isValid}`);
+  console.log(`[${actionName}] Using PocketBase instance with baseUrl: ${pb.baseUrl}. User Auth Valid: ${pb.authStore.isValid}, User ID: ${pb.authStore.model?.id}`);
   
+  // Relies on PocketBase 'question_bank' View rule: "@request.auth.id != """
   try {
-    if (pb.authStore.token) {
-        await pb.collection('users').authRefresh();
-        console.log(`[${actionName}] Auth refresh attempted. User: ${pb.authStore.model?.id}, isValid: ${pb.authStore.isValid}`);
-    }
-
-    if (!pb.authStore.isValid) {
-        console.error(`[${actionName}] User not authenticated. Cannot fetch questions. Rule is @request.auth.id != ""`);
-        return createErrorResponse("User not authenticated. Please log in to view questions.", "GQBLA_E001B_NO_AUTH_SERVER", "User not authenticated for question view.");
-    }
-
-    console.log(`[${actionName}] Attempting to fetch questions for subject: ${subject}, lesson: ${lessonName} as user ${pb.authStore.model.id}`);
+    console.log(`[${actionName}] Attempting to fetch questions for subject: ${subject}, lesson: ${lessonName}`);
     const records = await pb.collection('question_bank').getFullList({
       filter: `subject = "${subject}" && lessonName = "${lessonName}"`,
     });
@@ -653,15 +637,15 @@ export async function getQuestionsByLessonAction(subject: string, lessonName: st
     console.error(`[${actionName}] Error fetching questions:`, error);
 
     if (error instanceof ClientResponseError) {
-      errorMessage = error.data?.message || `PocketBase error: ${error.status}.`;
-      errorCode = `GQBLA_E003_PB_${error.status}`;
       errorDetails = JSON.stringify(error.data);
-      if (error.status === 404) {
-        errorMessage = `Collection 'question_bank' not found or no records match. Ensure collection name is correct and PocketBase URL in .env is the root URL. Current URL used: ${pb.baseUrl}. Filter: subject = "${subject}" && lessonName = "${lessonName}"`;
+       if (error.status === 404) {
+        errorMessage = `Collection 'question_bank' not found or no records match. Check PocketBase URL (${pb.baseUrl}) and collection name. Filter: subject = "${subject}" && lessonName = "${lessonName}"`;
       } else if (error.status === 401 || error.status === 403) {
-        errorMessage = `Permission Denied/Authentication Required (${error.status}) by PocketBase: You may not have permission to view questions for '${subject} - ${lessonName}'. Please ensure you are logged in. PocketBase 'question_bank' View Rule likely requires authentication (e.g., "@request.auth.id != """). User ID after auth attempt: ${pb.authStore.model?.id || 'N/A'}`;
+        errorMessage = `Permission Denied/Authentication Required (${error.status}) by PocketBase to view questions for '${subject} - ${lessonName}'. Ensure you are logged in. PocketBase 'question_bank' View Rule: "@request.auth.id != """. User ID from token: ${pb.authStore.model?.id || 'N/A'}. Original error: ${error.data?.message || 'No specific message.'}`;
       } else if (error.status === 0) {
-        errorMessage = "Network Error: Could not connect to PocketBase to fetch questions.";
+        errorMessage = `Network Error: Could not connect to PocketBase (${pb.baseUrl}) to fetch questions. Check PocketBase server and NEXT_PUBLIC_POCKETBASE_URL.`;
+      } else {
+         errorMessage = error.data?.message || `PocketBase error: ${error.status}.`;
       }
       console.error(`[${actionName}] PocketBase ClientResponseError details: URL: ${error.url}, Status: ${error.status}, Response: ${JSON.stringify(error.response)}`);
     }
@@ -676,7 +660,8 @@ export async function saveDppAttemptAction(payload: DppAttemptPayload): Promise<
   const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
   const cookieStore = cookies();
   const authCookie = cookieStore.get('pb_auth');
-  console.log(`[${actionName}] Auth cookie from store: ${authCookie?.value ? authCookie.value.substring(0, 20) + '...' : 'MISSING'}`);
+  
+  console.log(`[${actionName}] Auth cookie from store: ${authCookie?.value ? 'Present' : 'MISSING'}`);
 
   if (!authCookie?.value) {
     console.error(`[${actionName}] No auth cookie found. User is not authenticated.`);
@@ -688,22 +673,23 @@ export async function saveDppAttemptAction(payload: DppAttemptPayload): Promise<
   }
   
   pb.authStore.loadFromCookie(authCookie.value);
-  console.log(`[${actionName}] Auth store loaded from cookie. Before authRefresh - isValid: ${pb.authStore.isValid}, model ID: ${pb.authStore.model?.id}, token: ${pb.authStore.token ? pb.authStore.token.substring(0,10)+'...' : 'NONE'}`);
+  console.log(`[${actionName}] Auth store loaded from cookie. Before authRefresh - isValid: ${pb.authStore.isValid}, model ID: ${pb.authStore.model?.id}`);
 
   try {
     await pb.collection('users').authRefresh(); 
     console.log(`[${actionName}] Auth refresh successful. After authRefresh - isValid: ${pb.authStore.isValid}, model ID: ${pb.authStore.model?.id}`);
   } catch (authError) {
     pb.authStore.clear(); 
-    console.error(`[${actionName}] Auth refresh failed. User is likely not authenticated or token expired. Error:`, authError);
-    let specificMessage = "User authentication failed or token expired. Please log in again to save DPP attempt.";
+    console.error(`[${actionName}] Auth refresh failed. User session is likely invalid or token expired. Error:`, authError.message);
     if (authError instanceof ClientResponseError) {
-        console.error(`[${actionName}] Auth refresh ClientResponseError details:`, JSON.stringify(authError.data));
-        if (authError.status === 0) specificMessage = "Network error during auth refresh. Cannot save attempt.";
-        else if (authError.status === 401 || authError.status === 403) specificMessage = "Your session is invalid or expired. Please log in again to save your attempt.";
-        else specificMessage = `Auth refresh error (${authError.status}). Please log in again.`;
+      console.error(`[${actionName}] Auth refresh ClientResponseError details: URL: ${authError.url}, Status: ${authError.status}, Response: ${JSON.stringify(authError.response)}`);
     }
-    return createErrorResponse(specificMessage, "SDPPA_E001_AUTH_REFRESH_FAIL_SERVER", specificMessage);
+    let specificMessage = "Your session is invalid or expired. Please log in again to save your attempt.";
+    if (authError instanceof ClientResponseError) {
+        if (authError.status === 0) specificMessage = "Network error during session validation. Cannot save attempt. Check PocketBase server connection.";
+        else specificMessage = `Session validation error (${authError.status}). Please log in again.`;
+    }
+    return createErrorResponse(specificMessage, "SDPPA_E001_AUTH_REFRESH_FAIL_SERVER", authError.message);
   }
 
   if (!pb.authStore.isValid || !pb.authStore.model?.id) {
@@ -727,7 +713,7 @@ export async function saveDppAttemptAction(payload: DppAttemptPayload): Promise<
     score: payload.score,
     totalQuestions: payload.totalQuestions,
   };
-  console.log(`[${actionName}] Data prepared for save/update for user ${userId}: Attempting to save ${dataToSaveOrUpdate.questionsAttempted.length} question details.`);
+  console.log(`[${actionName}] Data prepared for save/update for user ${userId}. Total questions in payload: ${payload.totalQuestions}, Score: ${payload.score}. Questions attempted details length: ${payload.questionsAttempted.length}`);
 
   try {
     let existingAttempt = null;
@@ -743,18 +729,20 @@ export async function saveDppAttemptAction(payload: DppAttemptPayload): Promise<
         existingAttempt = null;
       } else {
         console.error(`[${actionName}] Error when checking for existing attempt:`, findError);
-        if (findError instanceof ClientResponseError) console.error(`[${actionName}] Find Error Details:`, JSON.stringify(findError.data))
+        if (findError instanceof ClientResponseError) {
+          console.error(`[${actionName}] Find Error Details: Status ${findError.status}, Response: ${JSON.stringify(findError.response)}`);
+        }
         throw findError; 
       }
     }
 
     if (existingAttempt) {
-      console.log(`[${actionName}] Attempting to update existing attempt ID: ${existingAttempt.id} with data: `, JSON.stringify(dataToSaveOrUpdate).substring(0, 200) + "...");
+      console.log(`[${actionName}] Attempting to update existing dpp_attempts ID: ${existingAttempt.id}`);
       const updatedRecord = await pb.collection('dpp_attempts').update(existingAttempt.id, dataToSaveOrUpdate);
       console.log(`[${actionName}] DPP attempt updated successfully. Record ID: ${updatedRecord.id}`);
       return { success: true, message: "DPP attempt updated successfully!", recordId: updatedRecord.id };
     } else {
-      console.log(`[${actionName}] Attempting to create new DPP attempt with data: `, JSON.stringify(dataToSaveOrUpdate).substring(0, 200) + "...");
+      console.log(`[${actionName}] Attempting to create new dpp_attempts record.`);
       const newRecord = await pb.collection('dpp_attempts').create(dataToSaveOrUpdate);
       console.log(`[${actionName}] DPP attempt saved successfully. Record ID: ${newRecord.id}`);
       return { success: true, message: "DPP attempt saved successfully!", recordId: newRecord.id };
@@ -765,11 +753,11 @@ export async function saveDppAttemptAction(payload: DppAttemptPayload): Promise<
     let errorMessage = "Failed to save DPP attempt.";
     let errorCode = "SDPPA_E002_SAVE_FAIL_SERVER";
     if (error instanceof ClientResponseError) {
-      console.error(`[${actionName}] Save/Update PocketBase ClientResponseError details:`, JSON.stringify(error.data));
+      console.error(`[${actionName}] Save/Update PocketBase ClientResponseError details: Status: ${error.status}, Response: ${JSON.stringify(error.response)}`);
       errorMessage = error.data?.message || errorMessage;
       errorCode = `SDPPA_PB_${error.status}`;
       if (error.status === 403) { 
-        errorMessage = `Permission Denied by PocketBase (403): You may not have permission to save/update this DPP attempt. Check PocketBase rules for 'dpp_attempts' collection (Create/Update: "@request.auth.id != """, Update: "@request.auth.id == userId"). User: ${userId}, Role: ${pb.authStore.model?.role}. Error data: ${JSON.stringify(error.data)}`;
+        errorMessage = `Permission Denied by PocketBase (403): You may not have permission to save/update this DPP attempt. Check PocketBase rules for 'dpp_attempts' collection (Create: "@request.auth.id != """, Update: "@request.auth.id == userId"). User: ${userId}, Role: ${pb.authStore.model?.role}. Error data: ${JSON.stringify(error.data)}`;
       } else if (error.status === 401) { 
         errorMessage = `Authentication Required by PocketBase (401) to save DPP attempt. Please ensure you are logged in.`;
       } else if (error.status === 0) { 
@@ -781,6 +769,91 @@ export async function saveDppAttemptAction(payload: DppAttemptPayload): Promise<
     } else if (error instanceof Error) {
       errorMessage = error.message;
     }
-    return createErrorResponse(errorMessage, errorCode, (error instanceof ClientResponseError ? JSON.stringify(error.data) : String(error)));
+    return createErrorResponse(errorMessage, errorCode, (error instanceof ClientResponseError ? JSON.stringify(error.response) : String(error)));
+  }
+}
+
+
+export async function getLiveReferralStatsAction(): Promise<{
+  success: boolean;
+  stats?: User['referralStats'];
+  message?: string;
+  error?: string;
+}> {
+  const actionName = "Get Live Referral Stats Action";
+  console.log(`[${actionName}] Attempting to fetch live referral stats.`);
+  
+  let adminPb: PocketBase | null = null;
+  try {
+    adminPb = await requirePocketBaseAdmin();
+  } catch (adminAuthError) {
+    const errorMsg = adminAuthError instanceof Error ? adminAuthError.message : "Unknown admin auth error.";
+    console.error(`[${actionName}] Failed to get admin client: ${errorMsg}`);
+    console.log(`[${actionName}] Returning error: ${JSON.stringify({ success: false, message: errorMsg, error: "Admin client initialization failed (GLRSA_E001)." })}`);
+    return { success: false, message: errorMsg, error: "Admin client initialization failed (GLRSA_E001)." };
+  }
+
+  const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
+  const cookieStore = cookies();
+  const authCookie = cookieStore.get('pb_auth');
+
+  if (authCookie?.value) {
+    pb.authStore.loadFromCookie(authCookie.value);
+    try {
+      await pb.collection('users').authRefresh();
+    } catch (_) {
+      pb.authStore.clear();
+    }
+  }
+
+  if (!pb.authStore.isValid || !pb.authStore.model?.id) {
+    const errorMsg = "User not authenticated. Cannot fetch referral stats. (GLRSA_E002)";
+    console.log(`[${actionName}] Returning error: ${JSON.stringify({ success: false, message: errorMsg, error: "UserNotAuthenticated" })}`);
+    return { success: false, message: errorMsg, error: "UserNotAuthenticated" };
+  }
+
+  const currentUser = pb.authStore.model as User;
+  if (!currentUser.referralCode) {
+    const errorMsg = "Current user does not have a referral code. (GLRSA_E003)";
+     console.log(`[${actionName}] Returning error: ${JSON.stringify({ success: false, message: errorMsg, error: "NoReferralCode" })}`);
+    return { success: false, message: errorMsg, error: "NoReferralCode", stats: { referred_free: 0, referred_chapterwise: 0, referred_full_length: 0, referred_combo: 0, referred_dpp: 0 } };
+  }
+
+  try {
+    console.log(`[${actionName}] Fetching users referred by code: ${currentUser.referralCode}`);
+    const referredUsers = await adminPb.collection('users').getFullList({
+      filter: `referredByCode = "${currentUser.referralCode}"`,
+      fields: 'model', // Only fetch the 'model' field
+    });
+
+    const liveStats: User['referralStats'] = {
+      referred_free: 0,
+      referred_chapterwise: 0,
+      referred_full_length: 0,
+      referred_combo: 0,
+      referred_dpp: 0,
+    };
+
+    referredUsers.forEach(user => {
+      switch (user.model as UserModel) {
+        case 'Free': liveStats.referred_free = (liveStats.referred_free || 0) + 1; break;
+        case 'Chapterwise': liveStats.referred_chapterwise = (liveStats.referred_chapterwise || 0) + 1; break;
+        case 'Full_length': liveStats.referred_full_length = (liveStats.referred_full_length || 0) + 1; break;
+        case 'Combo': liveStats.referred_combo = (liveStats.referred_combo || 0) + 1; break;
+        case 'Dpp': liveStats.referred_dpp = (liveStats.referred_dpp || 0) + 1; break;
+        // 'Teacher' model is not counted in referral stats
+      }
+    });
+    console.log(`[${actionName}] Successfully calculated live stats: ${JSON.stringify(liveStats)}`);
+    return { success: true, stats: liveStats };
+
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error fetching referred users.";
+    console.error(`[${actionName}] Error calculating live referral stats: ${errorMessage}`);
+     if (error instanceof ClientResponseError) {
+      console.error(`[${actionName}] PocketBase ClientResponseError details: ${JSON.stringify(error.data)}`);
+    }
+    console.log(`[${actionName}] Returning error: ${JSON.stringify({ success: false, message: `Failed to calculate live referral stats: ${errorMessage}`, error: "LiveStatsCalculationError (GLRSA_E004)" })}`);
+    return { success: false, message: `Failed to calculate live referral stats: ${errorMessage}`, error: "LiveStatsCalculationError (GLRSA_E004)" };
   }
 }
