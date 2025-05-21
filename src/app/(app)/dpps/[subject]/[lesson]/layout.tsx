@@ -22,5 +22,6 @@ export default function LessonPageLayout({
 
   // This simple layout allows the page to take over the full screen
   // by not including the main app sidebar or header.
-  return <div className="h-screen w-screen flex flex-col bg-background">{children}</div>;
+  // Added overflow-hidden to ensure the layout container itself doesn't show scrollbars.
+  return <div className="h-screen w-screen flex flex-col bg-background overflow-hidden">{children}</div>;
 }
