@@ -4,8 +4,8 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { getQuestionsByLessonAction } from '@/app/auth/actions';
-import type { QuestionDisplayInfo, PYQInfo } from '@/types';
+import { getQuestionsByLessonAction, saveDppAttemptAction } from '@/app/auth/actions';
+import type { QuestionDisplayInfo, PYQInfo, DppAttemptPayload, QuestionAttemptDetail } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -19,16 +19,25 @@ import {
   CheckCircle2,
   Loader2,
   AlertCircle,
+  Save,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { cn } from '@/lib/utils';
+import pb from '@/lib/pocketbase'; // For getting current user ID client-side
 
 const difficultyColors: Record<QuestionDisplayInfo['difficulty'], string> = {
   Easy: "bg-green-100 text-green-700 border-green-300 dark:bg-green-900/70 dark:text-green-300 dark:border-green-700",
   Medium: "bg-yellow-100 text-yellow-700 border-yellow-300 dark:bg-yellow-900/70 dark:text-yellow-300 dark:border-yellow-700",
   Hard: "bg-red-100 text-red-700 border-red-300 dark:bg-red-900/70 dark:text-red-300 dark:border-red-700",
 };
+
+type AttemptedAnswersState = Record<string, {
+    selectedOption: string | null;
+    isCorrect: boolean | null;
+    status: 'correct' | 'incorrect' | 'skipped' | 'unattempted';
+}>;
+
 
 export default function LessonQuestionsPage() {
   const router = useRouter();
@@ -43,11 +52,19 @@ export default function LessonQuestionsPage() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [answerChecked, setAnswerChecked] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [attemptedAnswers, setAttemptedAnswers] = useState<AttemptedAnswersState>({});
   
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSavingAttempt, setIsSavingAttempt] = useState(false);
 
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex]);
+
+  const resetQuestionState = useCallback(() => {
+    setSelectedOption(null);
+    setAnswerChecked(false);
+    setIsCorrect(null);
+  }, []);
 
   const fetchQuestions = useCallback(async () => {
     if (!subject || !lessonName) {
@@ -57,6 +74,7 @@ export default function LessonQuestionsPage() {
     }
     setIsLoading(true);
     setError(null);
+    setAttemptedAnswers({}); // Reset attempts when fetching new questions
     try {
       const result = await getQuestionsByLessonAction(subject, lessonName);
       if (result.success && result.questions) {
@@ -79,7 +97,7 @@ export default function LessonQuestionsPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [subject, lessonName, toast]);
+  }, [subject, lessonName, toast, resetQuestionState]);
 
   useEffect(() => {
     fetchQuestions();
@@ -88,19 +106,24 @@ export default function LessonQuestionsPage() {
   const handleOptionSelect = (optionKey: string) => {
     if (answerChecked) return;
     setSelectedOption(optionKey);
-    setIsCorrect(null);
+    setIsCorrect(null); // Reset correctness until checked
+    if (currentQuestion) {
+        setAttemptedAnswers(prev => ({
+            ...prev,
+            [currentQuestion.id]: { ...prev[currentQuestion.id], selectedOption: optionKey, status: 'unattempted' }
+        }));
+    }
   };
 
   const handleCheckAnswer = () => {
     if (!selectedOption || !currentQuestion) return;
+    const correct = selectedOption === currentQuestion.correctOption;
     setAnswerChecked(true);
-    setIsCorrect(selectedOption === currentQuestion.correctOption);
-  };
-
-  const resetQuestionState = () => {
-    setSelectedOption(null);
-    setAnswerChecked(false);
-    setIsCorrect(null);
+    setIsCorrect(correct);
+    setAttemptedAnswers(prev => ({
+        ...prev,
+        [currentQuestion.id]: { ...prev[currentQuestion.id], selectedOption, isCorrect: correct, status: correct ? 'correct' : 'incorrect' }
+    }));
   };
 
   const handleNextQuestion = () => {
@@ -114,6 +137,56 @@ export default function LessonQuestionsPage() {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(prev => prev - 1);
       resetQuestionState();
+    }
+  };
+
+  const handleFinishAndSave = async () => {
+    if (!pb.authStore.isValid || !pb.authStore.model?.id) {
+        toast({ title: "Not Logged In", description: "You must be logged in to save your attempt.", variant: "destructive" });
+        return;
+    }
+
+    setIsSavingAttempt(true);
+    let score = 0;
+    const questionsAttemptedDetails: QuestionAttemptDetail[] = questions.map(q => {
+        const attempt = attemptedAnswers[q.id];
+        if (attempt?.isCorrect) {
+            score++;
+        }
+        return {
+            questionId: q.id,
+            selectedOption: attempt?.selectedOption || null,
+            isCorrect: attempt?.isCorrect || false,
+            status: attempt?.status || 'skipped', 
+        };
+    });
+
+    const payload: DppAttemptPayload = {
+        subject,
+        lessonName,
+        questionsAttempted: questionsAttemptedDetails,
+        score,
+        totalQuestions: questions.length,
+    };
+
+    console.log("[DPP Attempt] Payload being sent to server action:", JSON.stringify(payload, null, 2));
+
+    try {
+        const result = await saveDppAttemptAction(payload);
+        console.log("[DPP Attempt] Result from server action:", result);
+        if (result.success) {
+            toast({ title: "Attempt Saved!", description: result.message });
+            // Optionally, navigate away or reset
+            // router.push(`/dpps/${encodeURIComponent(subject)}`); 
+        } else {
+            toast({ title: "Save Failed", description: result.message || "Could not save your attempt.", variant: "destructive" });
+        }
+    } catch (e) {
+        const errMessage = e instanceof Error ? e.message : "An unexpected error occurred during save.";
+        console.error("[DPP Attempt] Critical error calling saveDppAttemptAction:", e);
+        toast({ title: "Save Error", description: errMessage, variant: "destructive" });
+    } finally {
+        setIsSavingAttempt(false);
     }
   };
   
@@ -182,7 +255,7 @@ export default function LessonQuestionsPage() {
       } else if (isSelected && !isCorrect) {
         optionStyle = "bg-red-100 border-red-500 text-red-700 dark:bg-red-900/50 dark:border-red-700 dark:text-red-300";
       } else {
-        optionStyle = "border-border opacity-70"; // Non-selected, non-correct options after check
+        optionStyle = "border-border opacity-70"; 
       }
     } else if (isSelected) {
       optionStyle = "border-primary ring-2 ring-primary dark:ring-offset-background";
@@ -194,7 +267,7 @@ export default function LessonQuestionsPage() {
         variant="outline"
         className={cn("w-full justify-start text-left h-auto py-3 px-4 whitespace-normal text-sm sm:text-base", optionStyle)}
         onClick={() => handleOptionSelect(optionKey)}
-        disabled={answerChecked}
+        disabled={answerChecked || isLoading}
       >
         <span className="font-semibold mr-3">{optionKey}.</span>
         {text && <span className="whitespace-pre-wrap">{text}</span>}
@@ -220,10 +293,11 @@ export default function LessonQuestionsPage() {
     { key: 'C', text: currentQuestion.optionCText, image: currentQuestion.optionCImage },
     { key: 'D', text: currentQuestion.optionDText, image: currentQuestion.optionDImage },
   ];
+
+  const isLastQuestion = currentQuestionIndex === questions.length - 1;
   
   return (
     <div className="flex flex-col h-full w-full">
-      {/* Header */}
       <header className="flex items-center justify-between p-3 border-b sticky top-0 bg-background z-10">
         <Button variant="ghost" size="icon" onClick={() => router.push(`/dpps/${encodeURIComponent(subject)}`)} aria-label="Go back to lessons">
           <ArrowLeft className="h-5 w-5" />
@@ -236,13 +310,11 @@ export default function LessonQuestionsPage() {
             Question {currentQuestionIndex + 1} of {questions.length}
           </p>
         </div>
-        <div className="w-10"> {/* Spacer to balance back button */} </div>
+        <div className="w-10"> </div>
       </header>
 
-      {/* Main Content Area */}
       <ScrollArea className="flex-grow p-3 sm:p-4">
         <div className="w-full max-w-3xl mx-auto space-y-4 sm:space-y-5">
-          {/* Question Card */}
           <Card className="shadow-md">
             <CardHeader className="pb-3 sm:pb-4">
               <div className="flex justify-between items-start gap-2">
@@ -280,7 +352,6 @@ export default function LessonQuestionsPage() {
             </CardContent>
           </Card>
 
-          {/* Options */}
           <Card className="shadow-md">
             <CardHeader><CardTitle className="text-base sm:text-lg">Options</CardTitle></CardHeader>
             <CardContent className="space-y-3">
@@ -300,19 +371,17 @@ export default function LessonQuestionsPage() {
             </CardContent>
           </Card>
           
-          {/* Check Answer Button */}
           {!answerChecked && (
             <Button 
               onClick={handleCheckAnswer} 
-              disabled={!selectedOption || isLoading} 
+              disabled={!selectedOption || isLoading || isSavingAttempt} 
               className="w-full text-base sm:text-lg py-3"
               size="lg"
             >
-              Check Answer
+              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Check Answer"}
             </Button>
           )}
 
-          {/* Feedback and Explanation */}
           {answerChecked && (
             <Card className={cn(
               "shadow-md border-2",
@@ -358,12 +427,11 @@ export default function LessonQuestionsPage() {
         </div>
       </ScrollArea>
 
-      {/* Footer Navigation */}
       <footer className="flex items-center justify-between p-3 border-t sticky bottom-0 bg-background z-10">
         <Button 
           variant="outline" 
           onClick={handlePreviousQuestion} 
-          disabled={currentQuestionIndex === 0 || isLoading}
+          disabled={currentQuestionIndex === 0 || isLoading || isSavingAttempt}
           className="px-3 sm:px-4 py-2 text-sm sm:text-base"
         >
           <ChevronLeft className="mr-1 h-4 w-4" /> Previous
@@ -371,14 +439,26 @@ export default function LessonQuestionsPage() {
         <div className="text-sm text-muted-foreground">
           {questions.length > 0 ? `${currentQuestionIndex + 1} / ${questions.length}` : '0 / 0'}
         </div>
-        <Button 
-          onClick={handleNextQuestion} 
-          disabled={currentQuestionIndex === questions.length - 1 || (!answerChecked && questions.length > 1) || isLoading}
-          className="px-3 sm:px-4 py-2 text-sm sm:text-base"
-        >
-          Next <ChevronRight className="ml-1 h-4 w-4" />
-        </Button>
+        {isLastQuestion && answerChecked ? (
+            <Button 
+              onClick={handleFinishAndSave} 
+              disabled={isLoading || isSavingAttempt}
+              className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-green-600 hover:bg-green-700 text-white"
+            >
+              {isSavingAttempt ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+              Finish & Save Attempt
+            </Button>
+        ) : (
+            <Button 
+              onClick={handleNextQuestion} 
+              disabled={isLastQuestion || (!answerChecked && questions.length > 1) || isLoading || isSavingAttempt}
+              className="px-3 sm:px-4 py-2 text-sm sm:text-base"
+            >
+              Next <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+        )}
       </footer>
     </div>
   );
 }
+
