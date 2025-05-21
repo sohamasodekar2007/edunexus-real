@@ -115,3 +115,29 @@ export interface QuestionDisplayInfo {
   explanationText?: string;
   explanationImage?: string; // URL
 }
+
+export interface QuestionAttemptDetail {
+  questionId: string;
+  selectedOption: string | null;
+  isCorrect: boolean | null;
+  status: 'correct' | 'incorrect' | 'skipped' | 'unattempted';
+}
+
+export interface DppAttemptPayload {
+  userId: string | null; // User's ID from PocketBase, or null for anonymous
+  subject: string;
+  lessonName: string;
+  attemptDate?: string; // Will be set on the server
+  questionsAttempted: QuestionAttemptDetail[];
+  score: number;
+  totalQuestions: number;
+  timeTakenSeconds?: number; // Optional
+}
+
+export interface College {
+  id: string;
+  name: string;
+  district: string;
+  stream: 'PCM' | 'PCB' | 'Both';
+  // Add other relevant fields like address, intake, website, etc. as needed
+}

@@ -30,13 +30,12 @@ import {
   GitCompareArrows,
   ShieldCheck,
   Bell,
-  Sparkles, 
-  HelpCircle, 
+  Sparkles,
+  HelpCircle,
   MessageSquareQuote,
+  School, // Added School icon
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-// Removed initializeLocalStorageData as it's less critical with PocketBase backend
-// import { initializeLocalStorageData } from '@/lib/mock-data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -48,7 +47,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SideBase, type NavItemGroup as SideBaseNavItemGroup, type NavItem as SideBaseNavItem } from '@/components/sidebase';
-import pb from '@/lib/pocketbase'; 
+import pb from '@/lib/pocketbase';
 import type { UserModel, UserRole } from '@/types';
 
 interface NavItem extends SideBaseNavItem {}
@@ -63,6 +62,7 @@ const mainNavigationItems: NavItem[] = [
   { href: '/notebook', label: 'Notebooks', icon: Bookmark },
   { href: '/my-progress', label: 'My Progress', icon: TrendingUp },
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
+  { href: '/colleges', label: 'College List', icon: School }, // Added College List
 ];
 
 const connectAndCompeteItems: NavItem[] = [
@@ -89,60 +89,59 @@ const showUpgradeForPlans: UserModel[] = ['Free', 'Dpp', 'Full_length', 'Chapter
 export default function AppLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isMobile } = useSidebar(); 
+  const { isMobile } = useSidebar();
   const [currentUserFullName, setCurrentUserFullName] = useState<string>('User');
   const [currentUserModel, setCurrentUserModel] = useState<UserModel | null>(null);
   const [currentUserRole, setCurrentUserRole] = useState<UserRole | null>(null);
   const [currentUserAvatarFallback, setCurrentUserAvatarFallback] = useState<string>('U');
   const [currentUserAvatarUrl, setCurrentUserAvatarUrl] = useState<string | null>(null);
-  const [currentUserClass, setCurrentUserClass] = useState<string | null>(null);
-  const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
-  const [currentUserPhone, setCurrentUserPhone] = useState<string | null>(null);
-  const [currentUserTargetYear, setCurrentUserTargetYear] = useState<string | null>(null);
-  const [currentUserReferralCode, setCurrentUserReferralCode] = useState<string | null>(null);
-  const [currentUserReferredByCode, setCurrentUserReferredByCode] = useState<string | null>(null);
-  const [currentUserReferralStats, setCurrentUserReferralStats] = useState<object | null>(null);
-  const [currentUserExpiryDate, setCurrentUserExpiryDate] = useState<string | null>(null);
+  const [userClass, setUserClass] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userPhone, setUserPhone] = useState<string | null>(null);
+  const [userTargetYear, setUserTargetYear] = useState<string | null>(null);
+  const [userReferralCode, setUserReferralCode] = useState<string | null>(null);
+  const [userReferredByCode, setUserReferredByCode] = useState<string | null>(null);
+  const [userReferralStats, setUserReferralStats] = useState<object | null>(null);
+  const [userExpiryDate, setUserExpiryDate] = useState<string | null>(null);
 
 
   useEffect(() => {
-    // initializeLocalStorageData(); // This might be removed if mock data is no longer needed
     if (typeof window !== 'undefined') {
       const fullName = localStorage.getItem('userFullName');
       const model = localStorage.getItem('userModel') as UserModel;
       const role = localStorage.getItem('userRole') as UserRole;
       const fallback = localStorage.getItem('userAvatarFallback');
       const avatarUrl = localStorage.getItem('userAvatarUrl');
-      const userClass = localStorage.getItem('userClass'); 
-      const userEmail = localStorage.getItem('userEmail'); 
-      const userPhone = localStorage.getItem('userPhone');
-      const userTargetYear = localStorage.getItem('userTargetYear');
-      const referralCode = localStorage.getItem('userReferralCode');
-      const referredByCode = localStorage.getItem('userReferredByCode');
-      const referralStats = localStorage.getItem('userReferralStats');
-      const expiryDate = localStorage.getItem('userExpiryDate');
-      
+      const storedUserClass = localStorage.getItem('userClass');
+      const storedUserEmail = localStorage.getItem('userEmail');
+      const storedUserPhone = localStorage.getItem('userPhone');
+      const storedUserTargetYear = localStorage.getItem('userTargetYear');
+      const storedReferralCode = localStorage.getItem('userReferralCode');
+      const storedReferredByCode = localStorage.getItem('userReferredByCode');
+      const storedReferralStats = localStorage.getItem('userReferralStats');
+      const storedExpiryDate = localStorage.getItem('userExpiryDate');
+
       if (fullName) setCurrentUserFullName(fullName);
       if (model) setCurrentUserModel(model);
       if (role) setCurrentUserRole(role);
       if (fallback) setCurrentUserAvatarFallback(fallback);
       if (avatarUrl && avatarUrl !== 'null' && avatarUrl !== 'undefined') setCurrentUserAvatarUrl(avatarUrl);
-      else setCurrentUserAvatarUrl(null); 
+      else setCurrentUserAvatarUrl(null);
 
-      if (userClass) setCurrentUserClass(userClass);
-      if (userEmail) setCurrentUserEmail(userEmail);
-      if (userPhone) setCurrentUserPhone(userPhone);
-      if (userTargetYear) setCurrentUserTargetYear(userTargetYear);
-      if (referralCode) setCurrentUserReferralCode(referralCode);
-      if (referredByCode) setCurrentUserReferredByCode(referredByCode);
-      if (referralStats) {
+      if (storedUserClass) setUserClass(storedUserClass);
+      if (storedUserEmail) setUserEmail(storedUserEmail);
+      if (storedUserPhone) setUserPhone(storedUserPhone);
+      if (storedUserTargetYear) setUserTargetYear(storedUserTargetYear);
+      if (storedReferralCode) setUserReferralCode(storedReferralCode);
+      if (storedReferredByCode) setUserReferredByCode(storedReferredByCode);
+      if (storedReferralStats) {
         try {
-          setCurrentUserReferralStats(JSON.parse(referralStats));
+          setUserReferralStats(JSON.parse(storedReferralStats));
         } catch (e) {
           console.error("Error parsing referral stats from localStorage", e);
         }
       }
-      if (expiryDate) setCurrentUserExpiryDate(expiryDate);
+      if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
 
       if (!pb.authStore.isValid) {
         router.push('/landing');
@@ -152,12 +151,19 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
-      pb.authStore.clear(); 
-      ['userId', 'userFullName', 'userName', 'userModel', 'userRole', 'userAvatarFallback', 'userAvatarUrl', 'userClass', 'userEmail', 'userPhone', 'userTargetYear', 'userReferralCode', 'userReferredByCode', 'userReferralStats', 'userExpiryDate'].forEach(key => localStorage.removeItem(key));
+      pb.authStore.clear();
+      const keysToClear = [
+        'userId', 'userFullName', 'userName', 'userModel', 'userRole',
+        'userAvatarFallback', 'userAvatarUrl', 'userClass', 'userEmail',
+        'userPhone', 'userTargetYear', 'userReferralCode', 'userReferredByCode',
+        'userReferralStats', 'userExpiryDate'
+      ];
+      keysToClear.forEach(key => localStorage.removeItem(key));
+      document.cookie = 'pb_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0';
     }
     router.push('/landing');
   };
-  
+
   const getActiveLabel = () => {
     for (const group of navStructure) {
       for (const item of group.items) {
@@ -171,7 +177,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     if (pathname.startsWith('/dpps')) return 'DPP';
     if (pathname.startsWith('/profile')) return 'My Profile';
     if (pathname.startsWith('/settings')) return 'Settings';
-    return 'EduNexus'; 
+    if (pathname.startsWith('/colleges')) return 'College List';
+    return 'EduNexus';
   };
 
   const appSideBaseNavStructure: SideBaseNavItemGroup[] = navStructure
@@ -183,12 +190,12 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     })
     .filter(Boolean) as SideBaseNavItemGroup[];
 
-  const showMainAppHeader = !pathname.startsWith('/admin-panel');
+  const showMainAppHeader = !pathname.startsWith('/admin-panel') && !pathname.match(/^\/dpps\/[^/]+\/[^/]+$/);
 
 
   return (
     <div className="flex min-h-screen w-full">
-      <SideBase navStructure={appSideBaseNavStructure} pathname={pathname} />
+      { !pathname.match(/^\/dpps\/[^/]+\/[^/]+$/) && <SideBase navStructure={appSideBaseNavStructure} pathname={pathname} /> }
       <SidebarInset className="flex-1 flex flex-col">
         {showMainAppHeader && (
           <header className="sticky top-0 z-10 flex h-14 items-center gap-2 sm:gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 py-4">
@@ -200,13 +207,13 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </div>
 
             {currentUserModel && showUpgradeForPlans.includes(currentUserModel) && (
-                <Button 
-                    variant="outline" 
-                    size="sm" 
+                <Button
+                    variant="outline"
+                    size="sm"
                     className="inline-flex items-center text-primary border-primary"
                     onClick={() => router.push('/upgrade')}
                 >
-                    <Sparkles className="mr-1 sm:mr-2 h-4 w-4" /> 
+                    <Sparkles className="mr-1 sm:mr-2 h-4 w-4" />
                     Upgrade
                 </Button>
             )}
@@ -238,7 +245,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/profile"> 
+                  <Link href="/profile">
                     <UserCircle className="mr-2 h-4 w-4" />
                     My Profile
                   </Link>
@@ -250,13 +257,13 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/settings"> 
+                  <Link href="/settings">
                     <Settings className="mr-2 h-4 w-4" />
                     Settings
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/support"> 
+                  <Link href="/support">
                     <HelpCircle className="mr-2 h-4 w-4" />
                     Support
                   </Link>
@@ -270,7 +277,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             </DropdownMenu>
           </header>
         )}
-        <main className={`flex-1 overflow-auto ${pathname.startsWith('/admin-panel') ? 'bg-background' : 'bg-muted/30'}`}>
+        <main className={`flex-1 overflow-auto ${pathname.startsWith('/admin-panel') ? 'bg-background' : (pathname.match(/^\/dpps\/[^/]+\/[^/]+$/) ? 'bg-background' : 'bg-muted/30')}`}>
           {children}
         </main>
       </SidebarInset>
