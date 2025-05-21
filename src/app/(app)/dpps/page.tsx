@@ -1,28 +1,27 @@
 
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardTitle } from '@/components/ui/card'; // Removed CardDescription, CardFooter, CardHeader
+import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-// import { Badge } from '@/components/ui/badge'; // No longer used in this simplified view
-import { 
-  Bookmark, 
-  ArrowLeft, 
-  // ChevronRight, // No longer used in this simplified view
-  Loader2, 
+import {
+  Bookmark,
+  ArrowLeft,
+  Loader2,
   AlertCircle,
-  Atom, 
-  FlaskConical, 
-  Sigma, 
+  Atom,
+  FlaskConical,
+  Sigma,
   Leaf,
   BookOpen,
   Filter,
-  ArrowUpDown, 
-  BarChart3, 
-  Palette, 
-  Component, 
-  Cpu, 
-  Database, 
-  FunctionSquare, 
+  ArrowUpDown,
+  BarChart3,
+  Palette,
+  Component,
+  Cpu,
+  Database,
+  FunctionSquare,
   GitBranch
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -34,7 +33,7 @@ interface SubjectInfo {
   name: string;
   icon: LucideIcon;
   dataAiHint: string;
-  colorClass: string; 
+  colorClass: string;
 }
 
 const subjects: SubjectInfo[] = [
@@ -50,6 +49,7 @@ const lessonIcons: LucideIcon[] = [
 
 export default function DppsPage() {
   const { toast } = useToast();
+  const router = useRouter();
 
   const [selectedSubject, setSelectedSubject] = useState<SubjectInfo | null>(null);
   const [lessons, setLessons] = useState<string[]>([]);
@@ -132,8 +132,14 @@ export default function DppsPage() {
     );
   }
 
-  // Display when a subject is selected - This part remains unchanged from previous advanced UI update
   const CurrentSubjectIcon = selectedSubject.icon;
+
+  const handleLessonClick = (lessonName: string) => {
+    if (!selectedSubject) return;
+    const encodedSubject = encodeURIComponent(selectedSubject.name);
+    const encodedLesson = encodeURIComponent(lessonName);
+    router.push(`/dpps/${encodedSubject}/${encodedLesson}`);
+  };
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 flex flex-col h-full">
@@ -155,6 +161,10 @@ export default function DppsPage() {
           <Button variant="outline" size="sm" className="hidden md:inline-flex">
             <Bookmark className="mr-2 h-4 w-4" /> View Bookmarked Qs
           </Button>
+           {/* Placeholder for stats icon, can be removed or implemented later */}
+          {/* <Button variant="ghost" size="icon" className="rounded-full hidden md:inline-flex">
+            <BarChart3 className="h-5 w-5" />
+          </Button> */}
         </div>
       </div>
 
@@ -177,7 +187,7 @@ export default function DppsPage() {
             </AlertDescription>
           </Alert>
         )}
-        
+
         {!isLoadingLessons && !lessonsError && lessons.length === 0 && (
           <p className="text-muted-foreground text-center py-8 text-lg">No lessons found for {selectedSubject.name} yet. Check back soon!</p>
         )}
@@ -185,17 +195,18 @@ export default function DppsPage() {
         {!isLoadingLessons && !lessonsError && lessons.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {lessons.map((lessonName, index) => {
-              const LessonIcon = lessonIcons[index % lessonIcons.length]; 
+              const LessonIcon = lessonIcons[index % lessonIcons.length];
               return (
-                <Card 
-                  key={index} 
+                <Card
+                  key={index}
                   className="shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                  onClick={() => toast({ title: "Coming Soon!", description: `DPPs for lesson "${lessonName}" will be available soon.`})}
+                  onClick={() => handleLessonClick(lessonName)}
                 >
                   <CardContent className="p-4 flex items-center gap-4">
                     <LessonIcon className={`h-8 w-8 ${selectedSubject.colorClass || 'text-primary'} opacity-70`} />
                     <div>
                       <h3 className="font-semibold text-md leading-tight">{lessonName}</h3>
+                       {/* Placeholder for question count or other info */}
                     </div>
                   </CardContent>
                 </Card>

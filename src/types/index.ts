@@ -40,37 +40,38 @@ export type UserRole = "User" | "Admin" | "Teacher";
 
 // User type aligned with PocketBase fields and app needs
 export interface User {
-  id: string; 
+  id: string;
   email: string;
-  name: string; 
+  name: string;
   phone?: string | null;
   class?: UserClass | null;
   model?: UserModel | null;
   role?: UserRole | null;
-  expiry_date?: string | null; 
-  created?: string; 
-  updated?: string; 
+  expiry_date?: string | null;
+  created?: string;
+  updated?: string;
   avatar?: string | File | null; // Can be filename (string from PB), File (for upload), or null
   avatarUrl?: string | null; // Derived URL for display
   totalPoints?: number | null;
   targetYear?: number | null;
-  referralCode?: string | null; 
-  referredByCode?: string | null; 
+  referralCode?: string | null;
+  referredByCode?: string | null;
   referralStats?: {
     referred_free: number;
     referred_chapterwise: number;
     referred_full_length: number;
     referred_combo: number;
+    referred_dpp?: number; // Added for consistency
   } | null;
   collectionId?: string;
   collectionName?: string;
-  username?: string; 
+  username?: string;
   verified?: boolean;
 }
 
 
 export interface UserScore {
-  id: string; 
+  id: string;
   name: string;
   score: number;
   avatarUrl?: string;
@@ -79,4 +80,38 @@ export interface UserScore {
 
 export interface LeaderboardEntry extends UserScore {
   dataAiHint?: string;
+}
+
+export interface PYQInfo {
+  examName?: string;
+  year?: string;
+  date?: string; // Formatted date string
+  shift?: string;
+}
+
+export interface QuestionDisplayInfo {
+  id: string;
+  collectionId: string; // from PocketBase record
+  subject: string;
+  lessonName: string;
+  lessonTopic?: string;
+  difficulty: "Easy" | "Medium" | "Hard";
+  tags?: string; // Assuming comma-separated string from PB, can be parsed if needed
+  isPYQ: boolean;
+  pyqInfo?: PYQInfo;
+  questionType: "text" | "image" | "text_image";
+  questionText?: string;
+  questionImage?: string; // URL
+  optionsFormat?: "text_options" | "image_options";
+  optionAText?: string;
+  optionAImage?: string; // URL
+  optionBText?: string;
+  optionBImage?: string; // URL
+  optionCText?: string;
+  optionCImage?: string; // URL
+  optionDText?: string;
+  optionDImage?: string; // URL
+  correctOption: "A" | "B" | "C" | "D" | "";
+  explanationText?: string;
+  explanationImage?: string; // URL
 }
