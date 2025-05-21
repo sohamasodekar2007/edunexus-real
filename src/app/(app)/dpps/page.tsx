@@ -154,12 +154,7 @@ export default function DppsPage() {
           <Button variant="outline" size="sm" className="hidden md:inline-flex">
             <Bookmark className="mr-2 h-4 w-4" /> View Bookmarked Qs
           </Button>
-          <Button variant="ghost" size="icon" className="rounded-full hidden md:inline-flex">
-            <Bookmark className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon" className="rounded-full hidden md:inline-flex">
-            <BarChart3 className="h-5 w-5" />
-          </Button>
+          {/* Removed matching ghost icon buttons */}
         </div>
       </div>
 
@@ -227,4 +222,3 @@ export default function DppsPage() {
     </div>
   );
 }
-
