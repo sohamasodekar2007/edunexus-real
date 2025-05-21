@@ -23,9 +23,10 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Brain, Dna, Filter, Search as SearchIcon, Building, ListFilter, MapPin, Users2, School } from 'lucide-react';
+import { Brain, Dna, Filter, Search as SearchIcon, Building, ListFilter, MapPin, Users2, School, Home } from 'lucide-react';
 import type { College } from '@/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import Link from 'next/link';
 
 // Mock Data (Replace with API call in the future)
 const MAHARASHTRA_DISTRICTS: string[] = [
@@ -73,9 +74,6 @@ export default function CollegesPage() {
   const allColleges = mockColleges;
 
   useEffect(() => {
-    // This effect will re-open the modal if no stream is selected
-    // It might be triggered if the user closes the modal without selecting a stream
-    // and then the component re-renders for some other reason, or on initial load.
     if (!selectedStream) {
       setIsModalOpen(true);
     }
@@ -153,9 +151,16 @@ export default function CollegesPage() {
                     {selectedStream} Colleges in Maharashtra
                   </h1>
                 </div>
-                <Button variant="outline" onClick={() => {setSelectedStream(null); setIsModalOpen(true);}} className="hidden sm:inline-flex">
-                  <Filter className="mr-2 h-4 w-4" /> Change Stream
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" onClick={() => {setSelectedStream(null); setIsModalOpen(true);}} className="hidden sm:inline-flex">
+                    <Filter className="mr-2 h-4 w-4" /> Change Stream
+                  </Button>
+                  <Link href="/landing" passHref>
+                    <Button variant="outline" className="hidden sm:inline-flex">
+                      <Home className="mr-2 h-4 w-4" /> Home
+                    </Button>
+                  </Link>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
