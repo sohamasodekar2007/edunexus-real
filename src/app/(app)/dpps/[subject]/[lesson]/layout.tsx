@@ -8,14 +8,15 @@ export default function LessonPageLayout({
   searchParams,
 }: {
   children: ReactNode;
+  // The 'params' prop for a dynamic route's layout/page is expected to be the "use-able" resource.
   params: { [key: string]: string | string[] | undefined };
-  searchParams: { [key: string]: string | string[] | undefined };
+  // The 'searchParams' prop can be undefined if there are no search parameters.
+  searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  // Ensure params and searchParams are unwrapped before any potential enumeration.
-  // Next.js expects these to be unwrapped in Server Components that receive them.
-  if (params) {
-    use(params);
-  }
+  // Ensure params is unwrapped immediately. For dynamic routes, Next.js should always provide params.
+  use(params);
+
+  // Conditionally unwrap searchParams only if it exists to avoid 'use(undefined)'.
   if (searchParams) {
     use(searchParams);
   }
