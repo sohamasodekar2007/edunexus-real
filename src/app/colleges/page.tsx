@@ -29,12 +29,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { 
   Brain, Dna, Filter, Search as SearchIcon, Building, ListFilter, MapPin, Users2, School, Home,
-  Calendar, Landmark, IndianRupee, Ruler, Star, ExternalLink, Sparkles, ChevronRight
+  Calendar, Landmark, IndianRupee, Ruler, Star, ExternalLink, Sparkles, ChevronRight, Loader2, AlertCircle
 } from 'lucide-react';
 import type { College } from '@/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { getCollegeDetailsAction } from '@/app/auth/actions'; // Assuming this is the correct path
+import type { CollegeDetailsOutput } from '@/ai/flows/college-details-flow'; // Assuming type export
+import { useToast } from "@/hooks/use-toast";
+
 
 const MAHARASHTRA_DISTRICTS: string[] = [
   'All Districts', 'Ahmednagar', 'Akola', 'Amravati', 'Aurangabad', 'Beed', 'Bhandara', 'Buldhana',
@@ -62,6 +66,7 @@ const mockColleges: College[] = [
   { id: '10', name: 'Byramjee Jeejeebhoy Government Medical College (BJMC), Pune', district: 'Pune', stream: 'PCB', establishedYear: 1946, collegeType: 'Government', annualFees: '₹95,000', campusSizeAcres: 100, rating: 4.6, logoPlaceholder: 'BJ', website: 'https://www.bjmcpune.org', courses: ['MBBS'] },
   { id: '11', name: 'Armed Forces Medical College (AFMC), Pune', district: 'Pune', stream: 'PCB', establishedYear: 1948, collegeType: 'Government', annualFees: 'Varies', campusSizeAcres: 119, rating: 4.9, logoPlaceholder: 'AF', website: 'https://afmc.nic.in', courses: ['MBBS'] },
   { id: '12', name: 'MIT World Peace University (MIT-WPU) - Faculty of Engineering, Pune', district: 'Pune', stream: 'Both', establishedYear: 1983, collegeType: 'Private', annualFees: '₹3,50,000', campusSizeAcres: 65, rating: 4.2, logoPlaceholder: 'MI', website: 'https://mitwpu.edu.in', courses: ['Comp Engg (PCM)', 'B.Pharm (PCB)'] },
+  { id: '13', name: 'Bharati Vidyapeeth Deemed University College of Engineering, Pune', district: 'Pune', stream: 'Both', establishedYear: 1983, collegeType: 'Deemed', annualFees: '₹1,60,000', campusSizeAcres: 25, rating: 4.1, logoPlaceholder: 'BV', website: 'https://coepune.bharatividyapeeth.edu/', courses: ['IT (PCM)', 'B.Tech Biotech (PCB)'] },
 ];
 
 
@@ -71,8 +76,13 @@ export default function CollegesPage() {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>('All Districts');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
+  const { toast } = useToast();
   const [selectedCollegeForDetails, setSelectedCollegeForDetails] = useState<College | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [aiCollegeDetails, setAiCollegeDetails] = useState<CollegeDetailsOutput | null>(null);
+  const [isFetchingAiDetails, setIsFetchingAiDetails] = useState(false);
+  const [aiDetailsError, setAiDetailsError] = useState<string | null>(null);
+
 
   const availableDistricts = MAHARASHTRA_DISTRICTS;
   const allColleges = mockColleges;
@@ -101,16 +111,57 @@ export default function CollegesPage() {
     );
   }, [selectedStream, selectedDistrict, searchTerm, allColleges]);
 
-  const handleViewDetails = (college: College) => {
+  const handleViewDetails = async (college: College) => {
     setSelectedCollegeForDetails(college);
     setIsDetailsModalOpen(true);
+    setIsFetchingAiDetails(true);
+    setAiCollegeDetails(null);
+    setAiDetailsError(null);
+
+    try {
+      const result = await getCollegeDetailsAction({ 
+        collegeName: college.name, 
+        collegeDistrict: college.district 
+      });
+      if (result.success && result.details) {
+        setAiCollegeDetails(result.details);
+      } else {
+        setAiDetailsError(result.error || "Failed to fetch AI-powered details.");
+        toast({
+          title: "Error Fetching Details",
+          description: result.error || "Could not retrieve details for this college.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "An unknown error occurred.";
+      setAiDetailsError(message);
+      toast({
+        title: "Error",
+        description: `Failed to fetch college details: ${message}`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsFetchingAiDetails(false);
+    }
   };
   
+  const handleDetailsModalOpenChange = (open: boolean) => {
+    setIsDetailsModalOpen(open);
+    if (!open) {
+      // Reset AI details when modal is closed
+      setAiCollegeDetails(null);
+      setAiDetailsError(null);
+      setIsFetchingAiDetails(false);
+      setSelectedCollegeForDetails(null);
+    }
+  };
+
   const renderStars = (rating: number | undefined) => {
     if (rating === undefined || rating === null) return <span className="text-xs text-muted-foreground">N/A</span>;
     const fullStars = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.4 && rating % 1 < 0.9; // Heuristic for half star
-    const almostFullStar = rating % 1 >= 0.9; // Heuristic for almost full star
+    const halfStar = rating % 1 >= 0.4 && rating % 1 < 0.9; 
+    const almostFullStar = rating % 1 >= 0.9;
     let renderedFullStars = fullStars;
     if(almostFullStar) renderedFullStars++;
     
@@ -135,7 +186,7 @@ export default function CollegesPage() {
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 min-h-screen">
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog open={isModalOpen} onOpenChange={(open) => { if (!open && !selectedStream) setIsModalOpen(true); else setIsModalOpen(open);}}>
         <DialogContent className="sm:max-w-md bg-background/95 backdrop-blur-sm">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center text-primary">Select Your Stream</DialogTitle>
@@ -176,30 +227,79 @@ export default function CollegesPage() {
       </Dialog>
 
       {selectedCollegeForDetails && (
-        <Dialog open={isDetailsModalOpen} onOpenChange={setIsDetailsModalOpen}>
-          <DialogContent className="sm:max-w-lg bg-background/95 backdrop-blur-sm">
+        <Dialog open={isDetailsModalOpen} onOpenChange={handleDetailsModalOpenChange}>
+          <DialogContent className="sm:max-w-lg md:max-w-2xl bg-background/95 backdrop-blur-sm">
             <DialogHeader>
               <DialogTitle className="text-xl font-bold text-primary">{selectedCollegeForDetails.name}</DialogTitle>
               <DialogDescription>
-                District: {selectedCollegeForDetails.district} | Stream: {selectedCollegeForDetails.stream === 'Both' ? 'PCM & PCB' : selectedCollegeForDetails.stream}
+                {selectedCollegeForDetails.district} | Stream: {selectedCollegeForDetails.stream === 'Both' ? 'PCM & PCB' : selectedCollegeForDetails.stream}
               </DialogDescription>
             </DialogHeader>
-            <div className="py-4 space-y-2">
-              <p className="text-sm text-muted-foreground">
-                Detailed branch-wise information, cutoffs, and admission insights for this college are currently being curated.
-              </p>
-              <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-md border border-blue-200 dark:border-blue-700">
-                <p className="text-sm font-semibold text-blue-700 dark:text-blue-300 flex items-center">
-                  <Sparkles className="h-4 w-4 mr-2 animate-pulse" />
-                  AI-Powered Insights (Coming Soon):
-                </p>
-                <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                  Our AI (like Gemini) will soon provide summaries of popular branches, typical MHT-CET/JEE/NEET cutoff ranges, and key highlights for {selectedCollegeForDetails.name}! Stay tuned.
-                </p>
+            <ScrollArea className="max-h-[70vh] p-1 pr-3 -mr-2"> {/* Added padding for scrollbar */}
+              <div className="py-4 space-y-4">
+                {isFetchingAiDetails && (
+                  <div className="flex flex-col items-center justify-center h-40">
+                    <Loader2 className="h-10 w-10 text-primary animate-spin mb-3" />
+                    <p className="text-muted-foreground">Fetching AI-powered details...</p>
+                  </div>
+                )}
+                {aiDetailsError && !isFetchingAiDetails && (
+                  <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-md text-destructive">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="h-5 w-5" />
+                      <h4 className="font-semibold">Error Fetching Details</h4>
+                    </div>
+                    <p className="text-sm">{aiDetailsError}</p>
+                  </div>
+                )}
+                {aiCollegeDetails && !isFetchingAiDetails && !aiDetailsError && (
+                  <div className="space-y-5">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2 text-accent">College Overview</h3>
+                      <p className="text-sm text-muted-foreground whitespace-pre-wrap">{aiCollegeDetails.collegeSummary || "No summary available."}</p>
+                    </div>
+                    
+                    {aiCollegeDetails.branches && aiCollegeDetails.branches.length > 0 && (
+                      <div>
+                        <h3 className="text-lg font-semibold mt-4 mb-3 text-accent">AI-Generated Branch Insights &amp; Typical Cutoffs</h3>
+                        <div className="space-y-3">
+                          {aiCollegeDetails.branches.map((branch, index) => (
+                            <Card key={index} className="shadow-sm border-border/70">
+                              <CardHeader className="pb-2 pt-3 px-4">
+                                <CardTitle className="text-md font-semibold">{branch.branchName}</CardTitle>
+                                {branch.intake && <CardDescription className="text-xs">Intake: {branch.intake}</CardDescription>}
+                              </CardHeader>
+                              <CardContent className="px-4 pb-3 text-xs space-y-1">
+                                {branch.mhtCetCutoff && <p><strong className="text-muted-foreground">MHT-CET:</strong> {branch.mhtCetCutoff}</p>}
+                                {branch.jeeMainCutoff && <p><strong className="text-muted-foreground">JEE Main:</strong> {branch.jeeMainCutoff}</p>}
+                                {branch.neetCutoff && <p><strong className="text-muted-foreground">NEET:</strong> {branch.neetCutoff}</p>}
+                                {!(branch.mhtCetCutoff || branch.jeeMainCutoff || branch.neetCutoff) && <p className="text-muted-foreground italic">No specific cutoff information available from AI.</p>}
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {(!aiCollegeDetails.branches || aiCollegeDetails.branches.length === 0) && (
+                        <p className="text-sm text-muted-foreground italic">No specific branch information available from AI.</p>
+                    )}
+                  </div>
+                )}
+                 {!aiCollegeDetails && !isFetchingAiDetails && !aiDetailsError && (
+                    <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-md border border-blue-200 dark:border-blue-700">
+                        <p className="text-sm font-semibold text-blue-700 dark:text-blue-300 flex items-center">
+                        <Sparkles className="h-4 w-4 mr-2 animate-pulse" />
+                        Preparing AI Insights...
+                        </p>
+                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                        Detailed branch information and typical cutoffs for {selectedCollegeForDetails.name} are being generated.
+                        </p>
+                    </div>
+                 )}
               </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDetailsModalOpen(false)}>Close</Button>
+            </ScrollArea>
+            <DialogFooter className="mt-2">
+              <Button variant="outline" onClick={() => handleDetailsModalOpenChange(false)}>Close</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -223,9 +323,9 @@ export default function CollegesPage() {
                   <Button variant="outline" onClick={() => {setSelectedStream(null); setIsModalOpen(true);}} className="hidden sm:inline-flex">
                     <Filter className="mr-2 h-4 w-4" /> Change Stream
                   </Button>
-                  <Link href="/landing" passHref>
-                    <Button variant="outline" className="hidden sm:inline-flex">
-                      <Home className="mr-2 h-4 w-4" /> Home
+                  <Link href="/landing" passHref legacyBehavior>
+                    <Button variant="outline" className="hidden sm:inline-flex" asChild>
+                      <a><Home className="mr-2 h-4 w-4" /> Home</a>
                     </Button>
                   </Link>
                 </div>
@@ -263,7 +363,6 @@ export default function CollegesPage() {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
-                      disabled={!selectedDistrict && selectedDistrict !== 'All Districts'}
                     />
                   </div>
                 </div>
@@ -351,3 +450,4 @@ export default function CollegesPage() {
     </div>
   );
 }
+
