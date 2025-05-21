@@ -7,26 +7,30 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Logo } from '@/components/icons';
-import { ArrowRight, Rocket, Target, Wand2, BarChartBig } from 'lucide-react';
+import { ArrowRight, Rocket, Target, Wand2, BarChartBig, ListChecks } from 'lucide-react';
+import { use } from 'react';
 
-export default function LandingPage() {
+export default function LandingPage({
+  params,
+  searchParams,
+}: {
+  params: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  use(params);
+  use(searchParams);
   const router = useRouter();
 
   useEffect(() => {
     if (pb.authStore.isValid) {
-      router.replace('/dashboard');
+      // If user is already logged in and somehow lands here, redirect to dashboard
+      // router.replace('/dashboard');
     }
   }, [router]);
 
-  if (typeof window !== 'undefined' && pb.authStore.isValid) {
-    // Prevent flash of landing page content if user is logged in and redirecting
-    return (
-       <div className="flex min-h-screen flex-col items-center justify-center bg-background">
-        <Logo className="h-16 w-16 animate-spin text-primary" />
-        <p className="mt-4 text-muted-foreground">Redirecting to dashboard...</p>
-      </div>
-    );
-  }
+  // The root page.tsx now handles initial redirect logic.
+  // This page should just render the landing content.
+  // If a logged-in user directly navigates here, they see it unless explicitly redirected.
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -60,11 +64,18 @@ export default function LandingPage() {
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
             EduNexus provides comprehensive test series, daily practice problems, and AI-powered doubt solving to help you succeed in MHT-CET, JEE, and NEET.
           </p>
-          <Button size="lg" asChild>
-            <Link href="/auth/signup">
-              Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <Button size="lg" asChild>
+              <Link href="/auth/signup">
+                Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/colleges"> {/* Placeholder link */}
+                <ListChecks className="mr-2 h-5 w-5" /> View College List
+              </Link>
+            </Button>
+          </div>
         </section>
 
         {/* Features Section */}
