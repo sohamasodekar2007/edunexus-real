@@ -20,7 +20,7 @@ export default function TestManagementPage({
   use(searchParams);
 
   return (
-    <div className="space-y-6">
+    <div className="container mx-auto py-6 px-4 md:px-6">
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center text-2xl">
