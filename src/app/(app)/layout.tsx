@@ -33,7 +33,7 @@ import {
   Sparkles,
   HelpCircle,
   MessageSquareQuote,
-  School, // Added School icon
+  School,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -62,7 +62,7 @@ const mainNavigationItems: NavItem[] = [
   { href: '/notebook', label: 'Notebooks', icon: Bookmark },
   { href: '/my-progress', label: 'My Progress', icon: TrendingUp },
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
-  { href: '/colleges', label: 'College List', icon: School }, // Added College List
+  { href: '/colleges', label: 'College List', icon: School },
 ];
 
 const connectAndCompeteItems: NavItem[] = [
@@ -107,6 +107,11 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      if (!pb.authStore.isValid) {
+        router.push('/landing');
+        return;
+      }
+
       const fullName = localStorage.getItem('userFullName');
       const model = localStorage.getItem('userModel') as UserModel;
       const role = localStorage.getItem('userRole') as UserRole;
@@ -142,10 +147,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         }
       }
       if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
-
-      if (!pb.authStore.isValid) {
-        router.push('/landing');
-      }
     }
   }, [pathname, router]);
 
@@ -284,3 +285,5 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
+    

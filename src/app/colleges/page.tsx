@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Brain, Dna, Filter, Search as SearchIcon, Building, ListFilter, MapPin, Users2 } from 'lucide-react';
@@ -137,7 +137,7 @@ export default function CollegesPage() {
 
       {selectedStream && (
         <div className="space-y-8">
-          <Card className="shadow-lg sticky top-16 md:top-20 z-10 bg-background/80 backdrop-blur-sm">
+          <Card className="shadow-lg sticky top-4 md:top-6 z-10 bg-background/80 backdrop-blur-sm">
             <CardContent className="p-4 space-y-4">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className='flex items-center gap-2'>
@@ -213,7 +213,7 @@ export default function CollegesPage() {
                       </div>
                     </CardContent>
                     <CardFooter>
-                       <Button variant="outline" className="w-full" onClick={() => alert(`More details for ${college.name} (Coming Soon)`)}>
+                       <Button variant="outline" className="w-full" onClick={() => alert(\`More details for \${college.name} (Coming Soon)\`)}>
                          View Details
                        </Button>
                     </CardFooter>
@@ -244,3 +244,5 @@ export default function CollegesPage() {
     </div>
   );
 }
+
+    
