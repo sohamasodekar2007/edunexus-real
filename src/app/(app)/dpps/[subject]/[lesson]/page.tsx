@@ -41,11 +41,11 @@ type AttemptedAnswersState = Record<string, {
 
 export default function LessonQuestionsPage() {
   const router = useRouter();
-  const params = useParams();
+  const paramsHook = useParams(); // Use a different name to avoid conflict with 'params' prop
   const { toast } = useToast();
 
-  const subject = useMemo(() => params.subject ? decodeURIComponent(params.subject as string) : '', [params.subject]);
-  const lessonName = useMemo(() => params.lesson ? decodeURIComponent(params.lesson as string) : '', [params.lesson]);
+  const subject = useMemo(() => paramsHook.subject ? decodeURIComponent(paramsHook.subject as string) : '', [paramsHook.subject]);
+  const lessonName = useMemo(() => paramsHook.lesson ? decodeURIComponent(paramsHook.lesson as string) : '', [paramsHook.lesson]);
 
   const [questions, setQuestions] = useState<QuestionDisplayInfo[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -110,23 +110,19 @@ export default function LessonQuestionsPage() {
     if (currentQuestion) {
         setAttemptedAnswers(prev => ({
             ...prev,
-            [currentQuestion.id]: { ...prev[currentQuestion.id], selectedOption: optionKey, status: 'unattempted' }
+            [currentQuestion.id]: { ...(prev[currentQuestion.id] || { status: 'unattempted', isCorrect: null}), selectedOption: optionKey }
         }));
     }
   };
 
-  const triggerSaveAttempt = useCallback(async () => {
+ const triggerSaveAttempt = useCallback(async () => {
     console.log("[Client] triggerSaveAttempt called");
     
-    // Client-side check for authentication before calling the server action
-    if (!pb.authStore.isValid || !pb.authStore.model?.id) {
-      toast({
-        title: "Not Logged In",
-        description: "You must be logged in to save your attempt. Your progress for this question might not be saved.",
-        variant: "destructive",
-      });
-      setIsSavingAttempt(false); 
-      return; // Don't proceed if user is not logged in on client
+    const currentUserId = pb.authStore.model?.id;
+    if (!currentUserId) {
+        console.warn("[Client] User not logged in. Cannot save DPP attempt.");
+        // Optionally show a toast, but primarily this is an anonymous attempt or error.
+        // The server action will handle saving with userId: null if appropriate.
     }
     
     setIsSavingAttempt(true);
@@ -135,11 +131,14 @@ export default function LessonQuestionsPage() {
         const attempt = attemptedAnswers[q.id];
         let status: QuestionAttemptDetail['status'] = 'unattempted';
         if (attempt) {
-            if (attempt.isCorrect) {
+            if (attempt.isCorrect === true) { // Explicitly check for true
                 score++;
                 status = 'correct';
-            } else if (attempt.selectedOption !== null) { 
+            } else if (attempt.selectedOption !== null && attempt.isCorrect === false) { // Explicitly check for false
                 status = 'incorrect';
+            } else if (attempt.selectedOption !== null && attempt.isCorrect === null) {
+                // Answer selected but not checked - still "unattempted" in terms of correctness
+                status = 'unattempted'; // Or a new 'attempted_not_checked' status if needed
             } else { 
                 status = 'skipped'; 
             }
@@ -147,13 +146,13 @@ export default function LessonQuestionsPage() {
         return {
             questionId: q.id,
             selectedOption: attempt?.selectedOption || null,
-            isCorrect: attempt?.isCorrect || false,
+            isCorrect: attempt?.isCorrect || false, // Default to false if null
             status: status, 
         };
     });
 
     const payload: DppAttemptPayload = {
-        userId: pb.authStore.model.id, // Get userId from client-side auth store
+        userId: currentUserId || null, // Send null if user is not logged in
         subject,
         lessonName,
         questionsAttempted: questionsAttemptedDetails,
@@ -190,7 +189,7 @@ export default function LessonQuestionsPage() {
       ...prev,
       [currentQuestion.id]: {
         ...prev[currentQuestion.id],
-        selectedOption,
+        selectedOption, // This should already be set by handleOptionSelect
         isCorrect: correct,
         status: correct ? 'correct' : 'incorrect',
       },

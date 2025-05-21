@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 'use client';
 import { useState } from 'react';
@@ -37,17 +36,29 @@ export default function LoginPage() {
       const actionData = { email: data.email, password_login: data.password };
       const result = await loginUserAction(actionData);
 
-      if (result.success && result.token && result.userId) {
+      if (result.success && result.token && result.userId && result.userRecordFromPb) {
         toast({
           title: 'Login Successful',
           description: `Welcome back, ${result.userFullName}!`,
         });
         
         if (typeof window !== 'undefined') {
-          pb.authStore.save(result.token, null); 
+          // Save to PocketBase SDK's authStore (manages localStorage and in-memory)
+          pb.authStore.save(result.token, result.userRecordFromPb);
+          
+          // Explicitly set the cookie for Server Action authentication
+          // Secure flag should be true in production if served over HTTPS
+          const cookieOptions = { 
+            httpOnly: false, // Must be false for client-side JS to set it
+            path: '/', 
+            sameSite: 'Lax' as const,
+            secure: process.env.NODE_ENV === 'production' 
+          };
+          document.cookie = pb.authStore.exportToCookie(cookieOptions);
+
           localStorage.setItem('userId', result.userId);
           localStorage.setItem('userFullName', result.userFullName || 'User');
-          localStorage.setItem('userName', result.userName || 'User'); // First name
+          localStorage.setItem('userName', result.userName || 'User'); 
           localStorage.setItem('userModel', result.userModel || 'Free'); 
           localStorage.setItem('userRole', result.userRole || 'User');
           localStorage.setItem('userClass', result.userClass || 'N/A');
@@ -56,10 +67,11 @@ export default function LoginPage() {
           localStorage.setItem('userAvatarFallback', fallback);
           localStorage.setItem('userPhone', result.userPhone || 'N/A');
           localStorage.setItem('userTargetYear', result.userTargetYear?.toString() || 'N/A');
-          localStorage.setItem('userReferralCode', result.userReferralCode || 'N/A'); // User's own code
-          localStorage.setItem('userReferredByCode', result.userReferredByCode || ''); // Code they used
+          localStorage.setItem('userReferralCode', result.userReferralCode || 'N/A'); 
+          localStorage.setItem('userReferredByCode', result.userReferredByCode || ''); 
           localStorage.setItem('userReferralStats', JSON.stringify(result.userReferralStats || {}));
           localStorage.setItem('userExpiryDate', result.userExpiryDate || 'N/A');
+          localStorage.setItem('userAvatarUrl', result.userAvatarUrl || '');
         }
         router.push('/dashboard'); 
       } else {
