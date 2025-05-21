@@ -74,7 +74,7 @@ export default function LessonQuestionsPage() {
     }
     setIsLoading(true);
     setError(null);
-    setAttemptedAnswers({}); // Reset attempts when fetching new questions
+    setAttemptedAnswers({}); 
     try {
       const result = await getQuestionsByLessonAction(subject, lessonName);
       if (result.success && result.questions) {
@@ -88,7 +88,7 @@ export default function LessonQuestionsPage() {
         }
       } else {
         setError(result.message || "Failed to load questions.");
-        toast({ title: "Error", description: result.message || "Could not load questions.", variant: "destructive" });
+        toast({ title: "Error Loading Questions", description: result.message || "Could not load questions.", variant: "destructive" });
       }
     } catch (e) {
       const errorMessage = e instanceof Error ? e.message : "An unexpected error occurred.";
@@ -106,7 +106,7 @@ export default function LessonQuestionsPage() {
   const handleOptionSelect = (optionKey: string) => {
     if (answerChecked) return;
     setSelectedOption(optionKey);
-    setIsCorrect(null); // Reset correctness until checked
+    setIsCorrect(null); 
     if (currentQuestion) {
         setAttemptedAnswers(prev => ({
             ...prev,
@@ -141,10 +141,8 @@ export default function LessonQuestionsPage() {
   };
 
   const handleFinishAndSave = async () => {
-    if (!pb.authStore.isValid || !pb.authStore.model?.id) {
-        toast({ title: "Not Logged In", description: "You must be logged in to save your attempt.", variant: "destructive" });
-        return;
-    }
+    // Removed client-side !pb.authStore.isValid check.
+    // The server action will handle authentication.
 
     setIsSavingAttempt(true);
     let score = 0;
@@ -169,21 +167,19 @@ export default function LessonQuestionsPage() {
         totalQuestions: questions.length,
     };
 
-    console.log("[DPP Attempt] Payload being sent to server action:", JSON.stringify(payload, null, 2));
+    console.log("[DPP Attempt Client] Payload being sent to server action:", JSON.stringify(payload, null, 2));
 
     try {
         const result = await saveDppAttemptAction(payload);
-        console.log("[DPP Attempt] Result from server action:", result);
+        console.log("[DPP Attempt Client] Result from server action:", result);
         if (result.success) {
-            toast({ title: "Attempt Saved!", description: result.message });
-            // Optionally, navigate away or reset
-            // router.push(`/dpps/${encodeURIComponent(subject)}`); 
+            toast({ title: "Attempt Saved!", description: result.message || "Your DPP attempt has been saved." });
         } else {
-            toast({ title: "Save Failed", description: result.message || "Could not save your attempt.", variant: "destructive" });
+            toast({ title: "Save Failed", description: result.message || "Could not save your attempt. Please try again.", variant: "destructive" });
         }
     } catch (e) {
         const errMessage = e instanceof Error ? e.message : "An unexpected error occurred during save.";
-        console.error("[DPP Attempt] Critical error calling saveDppAttemptAction:", e);
+        console.error("[DPP Attempt Client] Critical error calling saveDppAttemptAction:", e);
         toast({ title: "Save Error", description: errMessage, variant: "destructive" });
     } finally {
         setIsSavingAttempt(false);
@@ -359,14 +355,20 @@ export default function LessonQuestionsPage() {
                 if (currentQuestion.optionsFormat === 'image_options' && opt.image) {
                   return renderOption(opt.key, undefined, opt.image);
                 } else if ((currentQuestion.optionsFormat === 'text_options' || !currentQuestion.optionsFormat) && opt.text) {
-                  return renderOption(opt.key, opt.text, opt.image); 
+                  // This ensures that even if optionsFormat is undefined, text options are still rendered if text is present.
+                  // Also renders if an image option has accompanying text.
+                  return renderOption(opt.key, opt.text, currentQuestion.optionsFormat === 'image_options' ? opt.image : undefined); 
                 } else if(currentQuestion.optionsFormat === 'image_options' && !opt.image && opt.text) {
+                     // Handles case where format is image_options but a specific option might only have text (e.g. "None of these")
                      return renderOption(opt.key, opt.text);
                 }
                 return null;
               })}
-               {optionsData.every(opt => !opt.text && !opt.image) && (
-                 <p className="text-muted-foreground text-xs">Options not available.</p>
+               {optionsData.every(opt => 
+                    !(opt.text && (currentQuestion.optionsFormat === 'text_options' || !currentQuestion.optionsFormat)) &&
+                    !(opt.image && currentQuestion.optionsFormat === 'image_options')
+                ) && (
+                 <p className="text-muted-foreground text-xs">Options not available for the current format.</p>
                )}
             </CardContent>
           </Card>
