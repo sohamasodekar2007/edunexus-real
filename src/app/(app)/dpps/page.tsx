@@ -1,31 +1,29 @@
 
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-// Removed Dpp, Question, BookmarkedQuestion types as they are not used now
-// import type { Dpp, Question, BookmarkedQuestion } from '@/types'; 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardTitle } from '@/components/ui/card'; // Removed CardDescription, CardFooter, CardHeader
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+// import { Badge } from '@/components/ui/badge'; // No longer used in this simplified view
 import { 
   Bookmark, 
   ArrowLeft, 
-  ChevronRight, 
+  // ChevronRight, // No longer used in this simplified view
   Loader2, 
   AlertCircle,
   Atom, 
   FlaskConical, 
   Sigma, 
   Leaf,
-  BookOpen, // Generic icon for lessons
+  BookOpen,
   Filter,
-  ArrowUpDown, // For Sort
-  BarChart3, // For stats icon
-  Palette, // Example lesson icon 1
-  Component, // Example lesson icon 2
-  Cpu, // Example lesson icon 3
-  Database, // Example lesson icon 4
-  FunctionSquare, // Example lesson icon 5
-  GitBranch // Example lesson icon 6
+  ArrowUpDown, 
+  BarChart3, 
+  Palette, 
+  Component, 
+  Cpu, 
+  Database, 
+  FunctionSquare, 
+  GitBranch
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { getLessonsBySubjectAction } from '@/app/auth/actions';
@@ -36,7 +34,7 @@ interface SubjectInfo {
   name: string;
   icon: LucideIcon;
   dataAiHint: string;
-  colorClass: string; // For icon color
+  colorClass: string; 
 }
 
 const subjects: SubjectInfo[] = [
@@ -46,7 +44,6 @@ const subjects: SubjectInfo[] = [
   { name: 'Biology', icon: Leaf, dataAiHint: "biology nature", colorClass: "text-emerald-500" },
 ];
 
-// Placeholder icons for lessons, add more as needed
 const lessonIcons: LucideIcon[] = [
   FunctionSquare, Palette, Component, Cpu, Database, GitBranch, BookOpen
 ];
@@ -102,28 +99,32 @@ export default function DppsPage() {
 
   if (!selectedSubject) {
     return (
-      <div className="container mx-auto py-6 px-4 md:px-6">
-        <h1 className="text-3xl font-bold mb-8 text-primary">Select a Subject for DPPs</h1>
+      <div className="container mx-auto py-8 px-4 md:px-6">
+        <div className="mb-10 text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+            Daily Practice Problems
+          </h1>
+          <p className="mt-2 text-lg text-muted-foreground">
+            Choose a subject to view available lessons and practice sets.
+          </p>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {subjects.map((subject) => (
             <Card
               key={subject.name}
-              className="shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer group"
+              className="group transform cursor-pointer overflow-hidden rounded-xl border bg-card shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-primary"
               onClick={() => setSelectedSubject(subject)}
               data-ai-hint={subject.dataAiHint}
             >
-              <CardHeader className="items-center text-center">
-                <subject.icon className={`h-16 w-16 ${subject.colorClass} group-hover:scale-110 transition-transform mb-3`} />
-                <CardTitle className="text-xl">{subject.name}</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-sm text-muted-foreground">View DPPs for {subject.name}</p>
+              <CardContent className="flex flex-col items-center justify-center p-6 space-y-3 text-center">
+                <div className={`rounded-full p-3 sm:p-4 bg-primary/10 group-hover:bg-primary/20 transition-colors`}>
+                  <subject.icon className={`h-10 w-10 sm:h-12 md:h-16 ${subject.colorClass} transition-transform duration-300 group-hover:scale-110`} />
+                </div>
+                <CardTitle className="text-md sm:text-lg font-semibold text-card-foreground">{subject.name}</CardTitle>
+                <p className="text-xs sm:text-sm text-muted-foreground px-2">
+                  View DPPs for {subject.name}.
+                </p>
               </CardContent>
-              <CardFooter>
-                  <Button variant="outline" className="w-full group-hover:bg-accent">
-                      Select {subject.name} <ChevronRight className="ml-2 h-4 w-4"/>
-                  </Button>
-              </CardFooter>
             </Card>
           ))}
         </div>
@@ -131,7 +132,7 @@ export default function DppsPage() {
     );
   }
 
-  // Display when a subject is selected
+  // Display when a subject is selected - This part remains unchanged from previous advanced UI update
   const CurrentSubjectIcon = selectedSubject.icon;
 
   return (
@@ -154,7 +155,6 @@ export default function DppsPage() {
           <Button variant="outline" size="sm" className="hidden md:inline-flex">
             <Bookmark className="mr-2 h-4 w-4" /> View Bookmarked Qs
           </Button>
-          {/* Removed matching ghost icon buttons */}
         </div>
       </div>
 
@@ -185,7 +185,7 @@ export default function DppsPage() {
         {!isLoadingLessons && !lessonsError && lessons.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {lessons.map((lessonName, index) => {
-              const LessonIcon = lessonIcons[index % lessonIcons.length]; // Cycle through placeholder icons
+              const LessonIcon = lessonIcons[index % lessonIcons.length]; 
               return (
                 <Card 
                   key={index} 
@@ -196,8 +196,6 @@ export default function DppsPage() {
                     <LessonIcon className={`h-8 w-8 ${selectedSubject.colorClass || 'text-primary'} opacity-70`} />
                     <div>
                       <h3 className="font-semibold text-md leading-tight">{lessonName}</h3>
-                      {/* Placeholder for question count, can be added later */}
-                      {/* <p className="text-xs text-muted-foreground mt-1">XX Qs</p> */}
                     </div>
                   </CardContent>
                 </Card>
