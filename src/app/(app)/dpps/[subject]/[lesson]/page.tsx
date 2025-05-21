@@ -19,17 +19,15 @@ import {
   CheckCircle2,
   Loader2,
   AlertCircle,
-  Eye,
-  EyeOff
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { cn } from '@/lib/utils';
 
 const difficultyColors: Record<QuestionDisplayInfo['difficulty'], string> = {
-  Easy: "bg-green-100 text-green-700 border-green-300",
-  Medium: "bg-yellow-100 text-yellow-700 border-yellow-300",
-  Hard: "bg-red-100 text-red-700 border-red-300",
+  Easy: "bg-green-100 text-green-700 border-green-300 dark:bg-green-900/70 dark:text-green-300 dark:border-green-700",
+  Medium: "bg-yellow-100 text-yellow-700 border-yellow-300 dark:bg-yellow-900/70 dark:text-yellow-300 dark:border-yellow-700",
+  Hard: "bg-red-100 text-red-700 border-red-300 dark:bg-red-900/70 dark:text-red-300 dark:border-red-700",
 };
 
 export default function LessonQuestionsPage() {
@@ -42,7 +40,7 @@ export default function LessonQuestionsPage() {
 
   const [questions, setQuestions] = useState<QuestionDisplayInfo[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null); // 'A', 'B', 'C', 'D'
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [answerChecked, setAnswerChecked] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   
@@ -64,7 +62,8 @@ export default function LessonQuestionsPage() {
       if (result.success && result.questions) {
         if (result.questions.length > 0) {
           setQuestions(result.questions);
-          setCurrentQuestionIndex(0); // Reset to first question
+          setCurrentQuestionIndex(0);
+          resetQuestionState(); 
         } else {
           setQuestions([]);
           setError("No questions found for this lesson.");
@@ -87,9 +86,9 @@ export default function LessonQuestionsPage() {
   }, [fetchQuestions]);
 
   const handleOptionSelect = (optionKey: string) => {
-    if (answerChecked) return; // Don't allow changing selection after checking
+    if (answerChecked) return;
     setSelectedOption(optionKey);
-    setIsCorrect(null); // Reset correctness when a new option is selected
+    setIsCorrect(null);
   };
 
   const handleCheckAnswer = () => {
@@ -172,42 +171,44 @@ export default function LessonQuestionsPage() {
     );
   }
 
-  const getOptionKey = (index: number): string => ['A', 'B', 'C', 'D'][index];
-
   const renderOption = (optionKey: string, text?: string, imageUrl?: string) => {
     const isSelected = selectedOption === optionKey;
     const isActualCorrect = currentQuestion.correctOption === optionKey;
-    let optionStyle = "border-border hover:bg-muted/50"; // Default
+    let optionStyle = "border-border hover:bg-muted/50 dark:hover:bg-muted/20";
 
     if (answerChecked) {
       if (isActualCorrect) {
-        optionStyle = "bg-green-100 border-green-500 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-300";
+        optionStyle = "bg-green-100 border-green-500 text-green-700 dark:bg-green-900/50 dark:border-green-700 dark:text-green-300";
       } else if (isSelected && !isCorrect) {
-        optionStyle = "bg-red-100 border-red-500 text-red-700 dark:bg-red-900 dark:border-red-700 dark:text-red-300";
+        optionStyle = "bg-red-100 border-red-500 text-red-700 dark:bg-red-900/50 dark:border-red-700 dark:text-red-300";
+      } else {
+        optionStyle = "border-border opacity-70"; // Non-selected, non-correct options after check
       }
     } else if (isSelected) {
-      optionStyle = "border-primary ring-2 ring-primary";
+      optionStyle = "border-primary ring-2 ring-primary dark:ring-offset-background";
     }
 
     return (
       <Button
         key={optionKey}
         variant="outline"
-        className={cn("w-full justify-start text-left h-auto py-3 px-4 whitespace-normal", optionStyle)}
+        className={cn("w-full justify-start text-left h-auto py-3 px-4 whitespace-normal text-sm sm:text-base", optionStyle)}
         onClick={() => handleOptionSelect(optionKey)}
         disabled={answerChecked}
       >
         <span className="font-semibold mr-3">{optionKey}.</span>
         {text && <span className="whitespace-pre-wrap">{text}</span>}
         {imageUrl && (
-          <Image 
-            src={imageUrl} 
-            alt={`Option ${optionKey}`} 
-            width={150} 
-            height={100} 
-            className="ml-2 rounded-md border object-contain max-h-24"
-            data-ai-hint="option diagram" 
-          />
+          <div className="w-full flex justify-center my-1">
+            <Image 
+              src={imageUrl} 
+              alt={`Option ${optionKey}`} 
+              width={200} // Adjust width as needed
+              height={120} // Adjust height as needed
+              className="rounded-md border object-contain max-h-32 sm:max-h-40" // Responsive max height
+              data-ai-hint="option diagram" 
+            />
+          </div>
         )}
       </Button>
     );
@@ -224,14 +225,14 @@ export default function LessonQuestionsPage() {
     <div className="flex flex-col h-full w-full">
       {/* Header */}
       <header className="flex items-center justify-between p-3 border-b sticky top-0 bg-background z-10">
-        <Button variant="ghost" size="icon" onClick={() => router.push(`/dpps/${encodeURIComponent(subject)}`)}>
+        <Button variant="ghost" size="icon" onClick={() => router.push(`/dpps/${encodeURIComponent(subject)}`)} aria-label="Go back to lessons">
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <div className="text-center flex-grow">
-          <h1 className="text-lg md:text-xl font-semibold truncate max-w-xs sm:max-w-sm md:max-w-md mx-auto" title={lessonName}>
+        <div className="text-center flex-grow mx-2">
+          <h1 className="text-md sm:text-lg md:text-xl font-semibold truncate" title={lessonName}>
             {lessonName}
           </h1>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Question {currentQuestionIndex + 1} of {questions.length}
           </p>
         </div>
@@ -239,16 +240,16 @@ export default function LessonQuestionsPage() {
       </header>
 
       {/* Main Content Area */}
-      <ScrollArea className="flex-grow p-2 md:p-4">
-        <div className="max-w-3xl mx-auto space-y-4">
+      <ScrollArea className="flex-grow p-3 sm:p-4">
+        <div className="max-w-3xl mx-auto space-y-4 sm:space-y-5">
           {/* Question Card */}
           <Card className="shadow-md">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-3 sm:pb-4">
               <div className="flex justify-between items-start gap-2">
-                <CardTitle className="text-md md:text-lg font-semibold">
+                <CardTitle className="text-base sm:text-lg font-semibold">
                   Question {currentQuestionIndex + 1}
                 </CardTitle>
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap justify-end">
                   {currentQuestion.isPYQ && currentQuestion.pyqInfo && (
                     <Badge variant="secondary" className="text-xs whitespace-nowrap">
                       {formatPYQInfo(currentQuestion.pyqInfo)}
@@ -260,7 +261,7 @@ export default function LessonQuestionsPage() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm md:text-base">
+            <CardContent className="space-y-3 text-sm sm:text-base">
               {currentQuestion.questionText && (
                 <p className="leading-relaxed whitespace-pre-wrap">{currentQuestion.questionText}</p>
               )}
@@ -271,7 +272,7 @@ export default function LessonQuestionsPage() {
                     alt="Question Image" 
                     width={500} 
                     height={350} 
-                    className="rounded-md border object-contain max-h-[350px] w-auto" 
+                    className="rounded-md border object-contain max-h-[250px] sm:max-h-[350px] w-auto" 
                     data-ai-hint="question illustration"
                   />
                 </div>
@@ -281,15 +282,23 @@ export default function LessonQuestionsPage() {
 
           {/* Options */}
           <Card className="shadow-md">
-            <CardHeader><CardTitle className="text-md">Options</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base sm:text-lg">Options</CardTitle></CardHeader>
             <CardContent className="space-y-3">
-              {currentQuestion.optionsFormat === 'text_options' || (!currentQuestion.optionsFormat && optionsData.some(opt => opt.text)) ? (
-                optionsData.map(opt => opt.text ? renderOption(opt.key, opt.text) : null)
-              ) : currentQuestion.optionsFormat === 'image_options' ? (
-                optionsData.map(opt => opt.image ? renderOption(opt.key, undefined, opt.image) : null)
-              ) : (
-                <p className="text-muted-foreground text-xs">Options not available or format unclear.</p>
-              )}
+              {optionsData.map(opt => {
+                if (currentQuestion.optionsFormat === 'image_options' && opt.image) {
+                  return renderOption(opt.key, undefined, opt.image);
+                } else if ((currentQuestion.optionsFormat === 'text_options' || !currentQuestion.optionsFormat) && opt.text) {
+                   // Ensure text is displayed even if optionsFormat is not explicitly 'text_options' but text exists
+                  return renderOption(opt.key, opt.text, opt.image); // Pass image too in case it's text + image for one option
+                } else if(currentQuestion.optionsFormat === 'image_options' && !opt.image && opt.text) {
+                    // Fallback for image_options if image is missing but text is there (though ideally schema matches format)
+                     return renderOption(opt.key, opt.text);
+                }
+                return null;
+              })}
+               {optionsData.every(opt => !opt.text && !opt.image) && (
+                 <p className="text-muted-foreground text-xs">Options not available.</p>
+               )}
             </CardContent>
           </Card>
           
@@ -297,8 +306,8 @@ export default function LessonQuestionsPage() {
           {!answerChecked && (
             <Button 
               onClick={handleCheckAnswer} 
-              disabled={!selectedOption || answerChecked} 
-              className="w-full text-md py-3"
+              disabled={!selectedOption || isLoading} 
+              className="w-full text-base sm:text-lg py-3"
               size="lg"
             >
               Check Answer
@@ -309,32 +318,32 @@ export default function LessonQuestionsPage() {
           {answerChecked && (
             <Card className={cn(
               "shadow-md border-2",
-              isCorrect ? "border-green-500" : "border-red-500"
+              isCorrect ? "border-green-500 dark:border-green-600" : "border-red-500 dark:border-red-600"
             )}>
               <CardHeader>
                 <CardTitle className={cn(
-                  "flex items-center text-lg",
+                  "flex items-center text-lg sm:text-xl",
                   isCorrect ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
                 )}>
                   {isCorrect ? <CheckCircle2 className="mr-2 h-6 w-6" /> : <XCircle className="mr-2 h-6 w-6" />}
                   {isCorrect ? "Correct!" : "Incorrect"}
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-sm sm:text-base">
                   The correct answer is: <span className="font-semibold">{currentQuestion.correctOption}</span>
                 </CardDescription>
               </CardHeader>
               {(currentQuestion.explanationText || currentQuestion.explanationImage) && (
-                <CardContent className="space-y-2 text-sm md:text-base">
-                  <h4 className="font-semibold text-md flex items-center"><Lightbulb className="mr-2 h-5 w-5 text-yellow-500"/>Explanation:</h4>
+                <CardContent className="space-y-2 text-sm sm:text-base">
+                  <h4 className="font-semibold text-md sm:text-lg flex items-center"><Lightbulb className="mr-2 h-5 w-5 text-yellow-400 dark:text-yellow-500"/>Explanation:</h4>
                   {currentQuestion.explanationText && <p className="whitespace-pre-wrap">{currentQuestion.explanationText}</p>}
                   {currentQuestion.explanationImage && (
                     <div className="my-3 flex justify-center">
                       <Image 
                         src={currentQuestion.explanationImage} 
                         alt="Explanation Image" 
-                        width={400} 
-                        height={250} 
-                        className="rounded-md border object-contain max-h-[250px] w-auto" 
+                        width={450} 
+                        height={300} 
+                        className="rounded-md border object-contain max-h-[200px] sm:max-h-[300px] w-auto" 
                         data-ai-hint="solution diagram"
                       />
                     </div>
@@ -356,16 +365,18 @@ export default function LessonQuestionsPage() {
         <Button 
           variant="outline" 
           onClick={handlePreviousQuestion} 
-          disabled={currentQuestionIndex === 0}
+          disabled={currentQuestionIndex === 0 || isLoading}
+          className="px-3 sm:px-4 py-2 text-sm sm:text-base"
         >
           <ChevronLeft className="mr-1 h-4 w-4" /> Previous
         </Button>
         <div className="text-sm text-muted-foreground">
-          {currentQuestionIndex + 1} / {questions.length}
+          {questions.length > 0 ? `${currentQuestionIndex + 1} / ${questions.length}` : '0 / 0'}
         </div>
         <Button 
           onClick={handleNextQuestion} 
-          disabled={currentQuestionIndex === questions.length - 1 || !answerChecked && questions.length > 1}
+          disabled={currentQuestionIndex === questions.length - 1 || !answerChecked && questions.length > 1 || isLoading}
+          className="px-3 sm:px-4 py-2 text-sm sm:text-base"
         >
           Next <ChevronRight className="ml-1 h-4 w-4" />
         </Button>
@@ -373,3 +384,4 @@ export default function LessonQuestionsPage() {
     </div>
   );
 }
+
