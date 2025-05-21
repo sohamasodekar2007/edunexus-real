@@ -4,8 +4,19 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Construction, Home } from 'lucide-react';
 import { Logo } from '@/components/icons';
+import { use } from 'react'; // Import use
 
-export default function NotFoundPage() {
+export default function NotFoundPage({
+  params,
+  searchParams,
+}: {
+  params: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  // Ensure params and searchParams are unwrapped before any potential enumeration
+  use(params);
+  use(searchParams);
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4 text-center">
       <Card className="w-full max-w-lg shadow-xl">
@@ -15,12 +26,12 @@ export default function NotFoundPage() {
           </div>
           <CardTitle className="text-4xl font-bold text-primary">404 - Page Not Found</CardTitle>
           <CardDescription className="mt-2 text-lg text-muted-foreground">
-            Oops! This area is still under construction or the page you're looking for doesn't exist.
+            Oops! This area is still under construction or the page you&apos;re looking for doesn&apos;t exist.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <p className="text-muted-foreground">
-            We're working hard to build the best experience for you at EduNexus.
+            We&apos;re working hard to build the best experience for you at EduNexus.
             In the meantime, you can return to a safe place.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
