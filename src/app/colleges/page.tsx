@@ -73,6 +73,9 @@ export default function CollegesPage() {
   const allColleges = mockColleges;
 
   useEffect(() => {
+    // This effect will re-open the modal if no stream is selected
+    // It might be triggered if the user closes the modal without selecting a stream
+    // and then the component re-renders for some other reason, or on initial load.
     if (!selectedStream) {
       setIsModalOpen(true);
     }
@@ -80,8 +83,8 @@ export default function CollegesPage() {
 
   const handleStreamSelect = (stream: 'PCB' | 'PCM') => {
     setSelectedStream(stream);
-    setSelectedDistrict(null);
-    setSearchTerm('');
+    setSelectedDistrict(null); // Reset district when stream changes
+    setSearchTerm(''); // Reset search term
     setIsModalOpen(false);
   };
 
@@ -98,7 +101,7 @@ export default function CollegesPage() {
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 min-h-screen">
-      <Dialog open={isModalOpen} onOpenChange={(open) => { if (!open && !selectedStream) setIsModalOpen(true); else setIsModalOpen(open);}}>
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-md bg-background/95 backdrop-blur-sm">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center text-primary">Select Your Stream</DialogTitle>
@@ -247,5 +250,3 @@ export default function CollegesPage() {
     </div>
   );
 }
-
-    
