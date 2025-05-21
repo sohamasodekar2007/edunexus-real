@@ -35,13 +35,13 @@ import type { College } from '@/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { getCollegeDetailsAction } from '@/app/auth/actions';
-import type { CollegeDetailsOutput } from '@/ai/flows/college-details-flow';
+import { getCollegeDetailsAction } from '@/app/auth/actions'; 
+import type { CollegeDetailsOutput } from '@/ai/flows/college-details-flow'; 
 import { useToast } from "@/hooks/use-toast";
 
 
 const MAHARASHTRA_DISTRICTS: string[] = [
-  'All Districts', 'Ahmednagar', 'Akola', 'Amravati', 'Chh. Sambhaji Nagar', 'Beed', 'Bhandara', 'Buldhana',
+  'All Districts', 'AhilyaNagar', 'Akola', 'Amravati', 'Chh. Sambhaji Nagar', 'Beed', 'Bhandara', 'Buldhana',
   'Chandrapur', 'Dhule', 'Gadchiroli', 'Gondia', 'Hingoli', 'Jalgaon', 'Jalna',
   'Kolhapur', 'Latur', 'Mumbai City', 'Mumbai Suburban', 'Nagpur', 'Nanded',
   'Nandurbar', 'Nashik', 'Osmanabad', 'Palghar', 'Parbhani', 'Pune', 'Raigad',
@@ -50,7 +50,9 @@ const MAHARASHTRA_DISTRICTS: string[] = [
 ];
 
 const getInitials = (name: string = '') => {
-  return name.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase() || 'C';
+  const parts = name.split(' ');
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase() || 'C';
+  return parts.map(n => n[0]).slice(0,2).join('').toUpperCase() || 'C';
 };
 
 const mockColleges: College[] = [
@@ -67,6 +69,22 @@ const mockColleges: College[] = [
   { id: '11', name: 'Armed Forces Medical College (AFMC), Pune', district: 'Pune', stream: 'PCB', establishedYear: 1948, collegeType: 'Government', annualFees: 'Varies', campusSizeAcres: 119, rating: 4.9, logoPlaceholder: 'AF', website: 'https://afmc.nic.in', courses: ['MBBS'] },
   { id: '12', name: 'MIT World Peace University (MIT-WPU) - Faculty of Engineering, Pune', district: 'Pune', stream: 'Both', establishedYear: 1983, collegeType: 'Private', annualFees: '₹3,50,000', campusSizeAcres: 65, rating: 4.2, logoPlaceholder: 'MI', website: 'https://mitwpu.edu.in', courses: ['Comp Engg (PCM)', 'B.Pharm (PCB)'] },
   { id: '13', name: 'Bharati Vidyapeeth Deemed University College of Engineering, Pune', district: 'Pune', stream: 'Both', establishedYear: 1983, collegeType: 'Deemed', annualFees: '₹1,60,000', campusSizeAcres: 25, rating: 4.1, logoPlaceholder: 'BV', website: 'https://coepune.bharatividyapeeth.edu/', courses: ['IT (PCM)', 'B.Tech Biotech (PCB)'] },
+  // New Colleges for AhilyaNagar (formerly Ahmednagar)
+  { id: '14', name: 'Dr. Vithalrao Vikhe Patil College of Engineering, AhilyaNagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹1,20,000', campusSizeAcres: 20, rating: 4.0, logoPlaceholder: 'DV', website: '#', courses: ['Mech Engg', 'Comp Engg', 'Civil Engg'] },
+  { id: '15', name: 'Rajiv Gandhi College of Engineering & Polytechnic, AhilyaNagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹90,000', campusSizeAcres: 15, rating: 3.8, logoPlaceholder: 'RG', website: '#', courses: ['Comp Engg', 'ENTC', 'Mech Engg'] },
+  { id: '16', name: 'Pravara Rural Engineering College, Loni', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 25, rating: 4.1, logoPlaceholder: 'PR', website: '#', courses: ['Chem Engg', 'Mech Engg', 'Comp Engg'] },
+  { id: '17', name: 'Shri Chhatrapati Shivaji Maharaj College of Engineering, Nepti', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹85,000', campusSizeAcres: 10, rating: 3.7, logoPlaceholder: 'SC', website: '#', courses: ['Civil Engg', 'Mech Engg', 'Comp Engg'] },
+  { id: '18', name: 'Adsul Technical Campus Faculty of Engineering & MBA, AhilyaNagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹75,000', campusSizeAcres: 12, rating: 3.6, logoPlaceholder: 'AT', website: '#', courses: ['Comp Engg', 'ENTC', 'MBA'] },
+  { id: '19', name: 'Shri Sant Gadge Baba College of Engineering and Technology, AhilyaNagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹95,000', campusSizeAcres: 18, rating: 3.9, logoPlaceholder: 'SG', website: '#', courses: ['Mech Engg', 'Civil Engg', 'Electrical Engg'] },
+  { id: '20', name: 'Vidya Niketan College of Engineering, Sangamner', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹70,000', campusSizeAcres: 8, rating: 3.5, logoPlaceholder: 'VN', website: '#', courses: ['Comp Engg', 'IT', 'Mech Engg'] },
+  { id: '21', name: "Hon. Shri Babanrao Pachpute Vichardhara Trust's Faculty of Engineering, AhilyaNagar", district: 'AhilyaNagar', stream: 'PCM', establishedYear: 2006, collegeType: 'Private', annualFees: '₹1,00,000', campusSizeAcres: 22, rating: 4.0, logoPlaceholder: 'HS', website: '#', courses: ['Comp Engg', 'Mech Engg', 'Civil Engg'] },
+  { id: '22', name: 'Shri Chhatrapati Shivaji College of Engineering, AhilyaNagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1999, collegeType: 'Private', annualFees: '₹90,000', campusSizeAcres: 17, rating: 3.8, logoPlaceholder: 'SC', website: '#', courses: ['ENTC', 'Comp Engg', 'Mech Engg'] }, // Note: Duplicate name from Nepti, might need differentiation or one is an error in source list
+  { id: '23', name: 'Shri Sai Baba Institute of Engineering Research and Allied Sciences, AhilyaNagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 14, rating: 3.7, logoPlaceholder: 'SS', website: '#', courses: ['IT', 'Comp Engg', 'ENTC'] },
+  { id: '24', name: "Vishwabharati Academy's College of Engineering, AhilyaNagar", district: 'AhilyaNagar', stream: 'PCM', establishedYear: 2006, collegeType: 'Private', annualFees: '₹1,05,000', campusSizeAcres: 19, rating: 3.9, logoPlaceholder: 'VA', website: '#', courses: ['Mech Engg', 'Comp Engg', 'AI & DS'] },
+  { id: '25', name: 'G H Raisoni College of Engineering and Management, AhilyaNagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 2006, collegeType: 'Private', annualFees: '₹1,30,000', campusSizeAcres: 20, rating: 4.2, logoPlaceholder: 'GH', website: '#', courses: ['Comp Engg', 'IT', 'Data Science'] },
+  { id: '26', name: 'Government Polytechnic, AhilyaNagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1960, collegeType: 'Government', annualFees: '₹15,000', campusSizeAcres: 30, rating: 4.3, logoPlaceholder: 'GP', website: '#', courses: ['Diploma Mech', 'Diploma Civil', 'Diploma Electrical'] },
+  { id: '27', name: 'Sanjivani College of Engineering, Kopargaon', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹1,25,000', campusSizeAcres: 28, rating: 4.4, logoPlaceholder: 'SN', website: '#', courses: ['Comp Engg', 'Mech Engg', 'IT'] },
+  { id: '28', name: 'Amrutvahini College of Engineering, Sangamner', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹1,15,000', campusSizeAcres: 26, rating: 4.3, logoPlaceholder: 'AV', website: '#', courses: ['Mech Engg', 'Comp Engg', 'Civil Engg'] },
 ];
 
 
@@ -95,8 +113,8 @@ export default function CollegesPage() {
 
   const handleStreamSelect = (stream: 'PCB' | 'PCM') => {
     setSelectedStream(stream);
-    setSelectedDistrict('All Districts');
-    setSearchTerm('');
+    setSelectedDistrict('All Districts'); // Reset district on stream change
+    setSearchTerm(''); // Reset search term on stream change
     setIsModalOpen(false);
   };
 
@@ -149,7 +167,6 @@ export default function CollegesPage() {
   const handleDetailsModalOpenChange = (open: boolean) => {
     setIsDetailsModalOpen(open);
     if (!open) {
-      // Reset AI details when modal is closed
       setAiCollegeDetails(null);
       setAiDetailsError(null);
       setIsFetchingAiDetails(false);
@@ -450,6 +467,3 @@ export default function CollegesPage() {
     </div>
   );
 }
-
-
-    
