@@ -35,13 +35,13 @@ import type { College } from '@/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { getCollegeDetailsAction } from '@/app/auth/actions'; // Assuming this is the correct path
-import type { CollegeDetailsOutput } from '@/ai/flows/college-details-flow'; // Assuming type export
+import { getCollegeDetailsAction } from '@/app/auth/actions';
+import type { CollegeDetailsOutput } from '@/ai/flows/college-details-flow';
 import { useToast } from "@/hooks/use-toast";
 
 
 const MAHARASHTRA_DISTRICTS: string[] = [
-  'All Districts', 'Ahmednagar', 'Akola', 'Amravati', 'Aurangabad', 'Beed', 'Bhandara', 'Buldhana',
+  'All Districts', 'Ahmednagar', 'Akola', 'Amravati', 'Chh. Sambhaji Nagar', 'Beed', 'Bhandara', 'Buldhana',
   'Chandrapur', 'Dhule', 'Gadchiroli', 'Gondia', 'Hingoli', 'Jalgaon', 'Jalna',
   'Kolhapur', 'Latur', 'Mumbai City', 'Mumbai Suburban', 'Nagpur', 'Nanded',
   'Nandurbar', 'Nashik', 'Osmanabad', 'Palghar', 'Parbhani', 'Pune', 'Raigad',
@@ -186,7 +186,7 @@ export default function CollegesPage() {
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 min-h-screen">
-      <Dialog open={isModalOpen} onOpenChange={(open) => { if (!open && !selectedStream) setIsModalOpen(true); else setIsModalOpen(open);}}>
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-md bg-background/95 backdrop-blur-sm">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center text-primary">Select Your Stream</DialogTitle>
@@ -235,7 +235,7 @@ export default function CollegesPage() {
                 {selectedCollegeForDetails.district} | Stream: {selectedCollegeForDetails.stream === 'Both' ? 'PCM & PCB' : selectedCollegeForDetails.stream}
               </DialogDescription>
             </DialogHeader>
-            <ScrollArea className="max-h-[70vh] p-1 pr-3 -mr-2"> {/* Added padding for scrollbar */}
+            <ScrollArea className="max-h-[70vh] p-1 pr-3 -mr-2">
               <div className="py-4 space-y-4">
                 {isFetchingAiDetails && (
                   <div className="flex flex-col items-center justify-center h-40">
@@ -451,3 +451,5 @@ export default function CollegesPage() {
   );
 }
 
+
+    
