@@ -139,5 +139,22 @@ export interface College {
   name: string;
   district: string;
   stream: 'PCM' | 'PCB' | 'Both';
-  // Add other relevant fields like address, intake, website, etc. as needed
+  establishedYear?: number;
+  collegeType?: 'Government' | 'Private' | 'Autonomous' | 'Deemed' | 'University Department';
+  annualFees?: string; // e.g., "Approx. ₹1.5 Lakhs"
+  campusSizeAcres?: number;
+  rating?: number; // e.g., 4.5 (out of 5)
+  logoPlaceholder?: string; // e.g., first letter or initials for placeholder
+  website?: string;
+  courses?: string[]; // A few popular courses for the card
+  // For detailed view later, to be populated by Gemini or other AI
+  branches?: Array<{
+    name: string;
+    intake?: number;
+    durationYears?: number;
+    mhtCetCutoff?: string; // e.g., "98.5 percentile" or "Rank: 1500"
+    jeeMainCutoff?: string; // e.g., "Rank: 20000"
+    neetCutoff?: string; // e.g., "Score: 600"
+    description?: string;
+  }>;
 }
