@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 'use client';
 import { useState } from 'react';
@@ -43,18 +44,24 @@ export default function LoginPage() {
         });
         
         if (typeof window !== 'undefined') {
-          // Save to PocketBase SDK's authStore (manages localStorage and in-memory)
           pb.authStore.save(result.token, result.userRecordFromPb);
+          console.log('[Login Page] Client-side pb.authStore.isValid after save:', pb.authStore.isValid);
+          console.log('[Login Page] Client-side pb.authStore.model after save:', pb.authStore.model);
           
-          // Explicitly set the cookie for Server Action authentication
-          // Secure flag should be true in production if served over HTTPS
           const cookieOptions = { 
-            httpOnly: false, // Must be false for client-side JS to set it
+            httpOnly: false, 
             path: '/', 
             sameSite: 'Lax' as const,
             secure: process.env.NODE_ENV === 'production' 
           };
-          document.cookie = pb.authStore.exportToCookie(cookieOptions);
+          const cookieString = pb.authStore.exportToCookie(cookieOptions);
+          console.log('[Login Page] Attempting to set cookie with string:', cookieString);
+          if (cookieString && cookieString.includes('pb_auth=')) {
+            document.cookie = cookieString;
+            console.log('[Login Page] Current document.cookie after setting attempt:', document.cookie);
+          } else {
+            console.error('[Login Page] exportToCookie did not return a valid string. Cookie not set.');
+          }
 
           localStorage.setItem('userId', result.userId);
           localStorage.setItem('userFullName', result.userFullName || 'User');
