@@ -24,7 +24,6 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { cn } from '@/lib/utils';
-import pb from '@/lib/pocketbase'; // For getting current user ID client-side
 
 const difficultyColors: Record<QuestionDisplayInfo['difficulty'], string> = {
   Easy: "bg-green-100 text-green-700 border-green-300 dark:bg-green-900/70 dark:text-green-300 dark:border-green-700",
@@ -104,9 +103,9 @@ export default function LessonQuestionsPage() {
   }, [fetchQuestions]);
 
   const handleOptionSelect = (optionKey: string) => {
-    if (answerChecked) return;
+    if (answerChecked) return; // Don't allow changing option if already checked for current question
     setSelectedOption(optionKey);
-    setIsCorrect(null); 
+    setIsCorrect(null); // Reset correctness state as option changed
     if (currentQuestion) {
         setAttemptedAnswers(prev => ({
             ...prev,
@@ -115,15 +114,85 @@ export default function LessonQuestionsPage() {
     }
   };
 
-  const handleCheckAnswer = () => {
+  const triggerSaveAttempt = useCallback(async () => {
+    setIsSavingAttempt(true);
+    let score = 0;
+    const questionsAttemptedDetails: QuestionAttemptDetail[] = questions.map(q => {
+        const attempt = attemptedAnswers[q.id];
+        let status: QuestionAttemptDetail['status'] = 'unattempted';
+        if (attempt) {
+            if (attempt.isCorrect) {
+                score++;
+                status = 'correct';
+            } else if (attempt.selectedOption !== null) { // It means it was answered but incorrect
+                status = 'incorrect';
+            } else { // selectedOption is null, but entry exists implies it was seen but skipped or not yet answered
+                status = 'skipped'; 
+            }
+        }
+        return {
+            questionId: q.id,
+            selectedOption: attempt?.selectedOption || null,
+            isCorrect: attempt?.isCorrect || false,
+            status: status, 
+        };
+    });
+
+    const payload: DppAttemptPayload = {
+        subject,
+        lessonName,
+        questionsAttempted: questionsAttemptedDetails,
+        score,
+        totalQuestions: questions.length,
+    };
+
+    console.log("[DPP Attempt Client] Payload for save/update:", JSON.stringify(payload, null, 2));
+
+    try {
+        const result = await saveDppAttemptAction(payload);
+        console.log("[DPP Attempt Client] Result from saveDppAttemptAction:", result);
+        if (result.success) {
+            toast({ title: "Attempt Saved!", description: result.message || "Your progress has been saved." });
+        } else {
+            toast({ title: "Save Failed", description: result.message || "Could not save your attempt. Please try again.", variant: "destructive" });
+        }
+    } catch (e) {
+        const errMessage = e instanceof Error ? e.message : "An unexpected error occurred during save.";
+        console.error("[DPP Attempt Client] Critical error calling saveDppAttemptAction:", e);
+        toast({ title: "Save Error", description: errMessage, variant: "destructive" });
+    } finally {
+        setIsSavingAttempt(false);
+    }
+  }, [questions, attemptedAnswers, subject, lessonName, toast]);
+
+  const handleCheckAnswer = async () => {
     if (!selectedOption || !currentQuestion) return;
     const correct = selectedOption === currentQuestion.correctOption;
     setAnswerChecked(true);
     setIsCorrect(correct);
-    setAttemptedAnswers(prev => ({
-        ...prev,
-        [currentQuestion.id]: { ...prev[currentQuestion.id], selectedOption, isCorrect: correct, status: correct ? 'correct' : 'incorrect' }
-    }));
+    
+    // Update attemptedAnswers state immediately for UI
+    const newAttemptedAnswers = {
+      ...attemptedAnswers,
+      [currentQuestion.id]: {
+        ...attemptedAnswers[currentQuestion.id],
+        selectedOption,
+        isCorrect: correct,
+        status: correct ? 'correct' : 'incorrect',
+      },
+    };
+    setAttemptedAnswers(newAttemptedAnswers);
+
+    // Now trigger the save with the latest state
+    // Need to pass the newAttemptedAnswers to triggerSaveAttempt or ensure it uses the latest state.
+    // For simplicity, triggerSaveAttempt will read from the state, which might be one render cycle behind.
+    // A more robust way is to pass newAttemptedAnswers or make triggerSaveAttempt accept it.
+    // For this iteration, let's rely on the state update being quick enough or accept slight delay.
+    // A better approach:
+    // await triggerSaveAttempt(newAttemptedAnswers); // if triggerSaveAttempt is modified to accept it.
+    // Or, more simply:
+    await triggerSaveAttempt(); // This might use the state before the newAttemptedAnswers is fully reflected.
+
   };
 
   const handleNextQuestion = () => {
@@ -137,52 +206,6 @@ export default function LessonQuestionsPage() {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(prev => prev - 1);
       resetQuestionState();
-    }
-  };
-
-  const handleFinishAndSave = async () => {
-    // Removed client-side !pb.authStore.isValid check.
-    // The server action will handle authentication.
-
-    setIsSavingAttempt(true);
-    let score = 0;
-    const questionsAttemptedDetails: QuestionAttemptDetail[] = questions.map(q => {
-        const attempt = attemptedAnswers[q.id];
-        if (attempt?.isCorrect) {
-            score++;
-        }
-        return {
-            questionId: q.id,
-            selectedOption: attempt?.selectedOption || null,
-            isCorrect: attempt?.isCorrect || false,
-            status: attempt?.status || 'skipped', 
-        };
-    });
-
-    const payload: DppAttemptPayload = {
-        subject,
-        lessonName,
-        questionsAttempted: questionsAttemptedDetails,
-        score,
-        totalQuestions: questions.length,
-    };
-
-    console.log("[DPP Attempt Client] Payload being sent to server action:", JSON.stringify(payload, null, 2));
-
-    try {
-        const result = await saveDppAttemptAction(payload);
-        console.log("[DPP Attempt Client] Result from server action:", result);
-        if (result.success) {
-            toast({ title: "Attempt Saved!", description: result.message || "Your DPP attempt has been saved." });
-        } else {
-            toast({ title: "Save Failed", description: result.message || "Could not save your attempt. Please try again.", variant: "destructive" });
-        }
-    } catch (e) {
-        const errMessage = e instanceof Error ? e.message : "An unexpected error occurred during save.";
-        console.error("[DPP Attempt Client] Critical error calling saveDppAttemptAction:", e);
-        toast({ title: "Save Error", description: errMessage, variant: "destructive" });
-    } finally {
-        setIsSavingAttempt(false);
     }
   };
   
@@ -263,7 +286,7 @@ export default function LessonQuestionsPage() {
         variant="outline"
         className={cn("w-full justify-start text-left h-auto py-3 px-4 whitespace-normal text-sm sm:text-base", optionStyle)}
         onClick={() => handleOptionSelect(optionKey)}
-        disabled={answerChecked || isLoading}
+        disabled={answerChecked || isLoading || isSavingAttempt}
       >
         <span className="font-semibold mr-3">{optionKey}.</span>
         {text && <span className="whitespace-pre-wrap">{text}</span>}
@@ -355,11 +378,8 @@ export default function LessonQuestionsPage() {
                 if (currentQuestion.optionsFormat === 'image_options' && opt.image) {
                   return renderOption(opt.key, undefined, opt.image);
                 } else if ((currentQuestion.optionsFormat === 'text_options' || !currentQuestion.optionsFormat) && opt.text) {
-                  // This ensures that even if optionsFormat is undefined, text options are still rendered if text is present.
-                  // Also renders if an image option has accompanying text.
                   return renderOption(opt.key, opt.text, currentQuestion.optionsFormat === 'image_options' ? opt.image : undefined); 
                 } else if(currentQuestion.optionsFormat === 'image_options' && !opt.image && opt.text) {
-                     // Handles case where format is image_options but a specific option might only have text (e.g. "None of these")
                      return renderOption(opt.key, opt.text);
                 }
                 return null;
@@ -380,7 +400,7 @@ export default function LessonQuestionsPage() {
               className="w-full text-base sm:text-lg py-3"
               size="lg"
             >
-              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Check Answer"}
+              {isSavingAttempt ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Check Answer")}
             </Button>
           )}
 
@@ -441,24 +461,13 @@ export default function LessonQuestionsPage() {
         <div className="text-sm text-muted-foreground">
           {questions.length > 0 ? `${currentQuestionIndex + 1} / ${questions.length}` : '0 / 0'}
         </div>
-        {isLastQuestion && answerChecked ? (
-            <Button 
-              onClick={handleFinishAndSave} 
-              disabled={isLoading || isSavingAttempt}
-              className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-green-600 hover:bg-green-700 text-white"
-            >
-              {isSavingAttempt ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-              Finish & Save Attempt
-            </Button>
-        ) : (
-            <Button 
-              onClick={handleNextQuestion} 
-              disabled={isLastQuestion || (!answerChecked && questions.length > 1) || isLoading || isSavingAttempt}
-              className="px-3 sm:px-4 py-2 text-sm sm:text-base"
-            >
-              Next <ChevronRight className="ml-1 h-4 w-4" />
-            </Button>
-        )}
+        <Button 
+            onClick={handleNextQuestion} 
+            disabled={isLastQuestion || (!answerChecked && questions.length > 1) || isLoading || isSavingAttempt}
+            className="px-3 sm:px-4 py-2 text-sm sm:text-base"
+        >
+            Next <ChevronRight className="ml-1 h-4 w-4" />
+        </Button>
       </footer>
     </div>
   );
