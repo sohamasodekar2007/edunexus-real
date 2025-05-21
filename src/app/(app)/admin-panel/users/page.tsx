@@ -1,8 +1,8 @@
 
 import type { Metadata } from 'next';
-import { use } from 'react';
+import { use } from 'react'; // Import use
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import { Users as UsersIcon, ExternalLink } from "lucide-react"; // Use a different name if Users is ambiguous
+import { Users as UsersIcon, ExternalLink } from "lucide-react";
 
 export const metadata: Metadata = {
   title: 'Admin - User Management',
@@ -35,9 +35,9 @@ export default function UserManagementPage({
           <p className="text-muted-foreground">
             To manage users (view, create, edit, delete), please use your PocketBase instance's built-in administration interface.
           </p>
-          <a 
-            href={process.env.NEXT_PUBLIC_POCKETBASE_URL ? `${process.env.NEXT_PUBLIC_POCKETBASE_URL}/_/` : '#'} 
-            target="_blank" 
+          <a
+            href={process.env.NEXT_PUBLIC_POCKETBASE_URL ? `${process.env.NEXT_PUBLIC_POCKETBASE_URL}/_/` : '#'}
+            target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-flex items-center text-primary hover:underline"
           >
