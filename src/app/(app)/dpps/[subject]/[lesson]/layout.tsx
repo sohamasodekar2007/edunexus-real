@@ -13,8 +13,12 @@ export default function LessonPageLayout({
 }) {
   // Ensure params and searchParams are unwrapped before any potential enumeration.
   // Next.js expects these to be unwrapped in Server Components that receive them.
-  use(params);
-  use(searchParams);
+  if (params) {
+    use(params);
+  }
+  if (searchParams) {
+    use(searchParams);
+  }
 
   // This simple layout allows the page to take over the full screen
   // by not including the main app sidebar or header.
