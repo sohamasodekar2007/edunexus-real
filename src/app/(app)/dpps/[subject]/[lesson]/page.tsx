@@ -203,9 +203,9 @@ export default function LessonQuestionsPage() {
             <Image 
               src={imageUrl} 
               alt={`Option ${optionKey}`} 
-              width={200} // Adjust width as needed
-              height={120} // Adjust height as needed
-              className="rounded-md border object-contain max-h-32 sm:max-h-40" // Responsive max height
+              width={200} 
+              height={120} 
+              className="rounded-md border object-contain max-h-32 sm:max-h-40" 
               data-ai-hint="option diagram" 
             />
           </div>
@@ -241,7 +241,7 @@ export default function LessonQuestionsPage() {
 
       {/* Main Content Area */}
       <ScrollArea className="flex-grow p-3 sm:p-4">
-        <div className="max-w-3xl mx-auto space-y-4 sm:space-y-5">
+        <div className="w-full max-w-3xl mx-auto space-y-4 sm:space-y-5">
           {/* Question Card */}
           <Card className="shadow-md">
             <CardHeader className="pb-3 sm:pb-4">
@@ -288,10 +288,8 @@ export default function LessonQuestionsPage() {
                 if (currentQuestion.optionsFormat === 'image_options' && opt.image) {
                   return renderOption(opt.key, undefined, opt.image);
                 } else if ((currentQuestion.optionsFormat === 'text_options' || !currentQuestion.optionsFormat) && opt.text) {
-                   // Ensure text is displayed even if optionsFormat is not explicitly 'text_options' but text exists
-                  return renderOption(opt.key, opt.text, opt.image); // Pass image too in case it's text + image for one option
+                  return renderOption(opt.key, opt.text, opt.image); 
                 } else if(currentQuestion.optionsFormat === 'image_options' && !opt.image && opt.text) {
-                    // Fallback for image_options if image is missing but text is there (though ideally schema matches format)
                      return renderOption(opt.key, opt.text);
                 }
                 return null;
@@ -375,7 +373,7 @@ export default function LessonQuestionsPage() {
         </div>
         <Button 
           onClick={handleNextQuestion} 
-          disabled={currentQuestionIndex === questions.length - 1 || !answerChecked && questions.length > 1 || isLoading}
+          disabled={currentQuestionIndex === questions.length - 1 || (!answerChecked && questions.length > 1) || isLoading}
           className="px-3 sm:px-4 py-2 text-sm sm:text-base"
         >
           Next <ChevronRight className="ml-1 h-4 w-4" />
@@ -384,4 +382,3 @@ export default function LessonQuestionsPage() {
     </div>
   );
 }
-
