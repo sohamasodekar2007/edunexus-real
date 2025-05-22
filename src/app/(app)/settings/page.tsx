@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, type ChangeEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -20,6 +20,7 @@ import {
   CalendarDays,
   Info,
   Loader2,
+  AlertCircle,
 } from 'lucide-react';
 import type { UserClass, User, UserModel } from '@/types';
 import { format } from 'date-fns';
@@ -27,6 +28,8 @@ import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileAction, getReferrerInfoForCurrentUserAction, updateUserAvatarAction, removeUserAvatarAction } from '@/app/auth/actions';
 import pb from '@/lib/pocketbase'; 
 import { ClientResponseError } from 'pocketbase'; 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 
 const USER_CLASSES_OPTIONS: UserClass[] = ["11th Grade", "12th Grade", "Dropper", "Teacher"];
 const TARGET_EXAM_YEAR_OPTIONS: string[] = ["-- Not Set --", "2025", "2026", "2027", "2028"];
@@ -36,6 +39,7 @@ export default function SettingsPage() {
   const router = useRouter();
   const { toast } = useToast();
   
+  const [userId, setUserId] = useState<string | null>(null);
   const [userFullName, setUserFullName] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
   const [userPhone, setUserPhone] = useState<string>('');
@@ -50,9 +54,10 @@ export default function SettingsPage() {
   const [userReferralCode, setUserReferralCode] = useState<string>('N/A');
   const [userReferredByUserName, setUserReferredByUserName] = useState<string | null>(null);
   const [isLoadingReferrerName, setIsLoadingReferrerName] = useState(false);
-  const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
-  const [userModel, setUserModel] = useState<UserModel | string>('N/A'); // Allow string for 'N/A'
   const [hasUserReferredByCodeInStorage, setHasUserReferredByCodeInStorage] = useState<boolean>(false);
+
+  const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
+  const [userModel, setUserModel] = useState<UserModel | string>('N/A'); 
   
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
@@ -63,7 +68,11 @@ export default function SettingsPage() {
     let unsubscribe: (() => void) | null = null;
     
     async function initializeDataAndSubscribe() {
-      const currentUserId = pb.authStore.model?.id;
+      const currentAuthUserId = pb.authStore.model?.id;
+       if (currentAuthUserId) {
+        setUserId(currentAuthUserId);
+      }
+
       if (typeof window !== 'undefined' && isMounted) {
         const storedFullName = localStorage.getItem('userFullName');
         const storedEmail = localStorage.getItem('userEmail');
@@ -74,12 +83,12 @@ export default function SettingsPage() {
         const storedTargetYear = localStorage.getItem('userTargetYear');
         const storedModel = localStorage.getItem('userModel') as UserModel | null;
         const storedReferralCode = localStorage.getItem('userReferralCode');
-        const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
+        const storedUserReferredByCodeValue = localStorage.getItem('userReferredByCode');
         const storedExpiryDate = localStorage.getItem('userExpiryDate');
         
         if (storedFullName) setUserFullName(storedFullName);
         if (storedEmail) setUserEmail(storedEmail);
-        if (storedPhone) setUserPhone(storedPhone);
+        if (storedPhone && storedPhone !== 'N/A') setUserPhone(storedPhone); else setUserPhone('');
         if (storedAvatarFallback) setUserAvatarFallback(storedAvatarFallback);
         
         const currentPbAvatarUrl = pb.authStore.model?.avatar ? pb.getFileUrl(pb.authStore.model, pb.authStore.model.avatar as string) : null;
@@ -93,16 +102,25 @@ export default function SettingsPage() {
         }
         
         if (storedClass && USER_CLASSES_OPTIONS.includes(storedClass)) setUserClass(storedClass);
-        else if (storedClass === null || storedClass === '') setUserClass('');
+        else if (storedClass === null || storedClass === '') setUserClass(''); // Explicitly handle null or empty for initial state
 
         if (storedTargetYear && storedTargetYear !== 'N/A' && TARGET_EXAM_YEAR_OPTIONS.includes(storedTargetYear)) setUserTargetYear(storedTargetYear);
         else setUserTargetYear('-- Not Set --');
 
         if (storedModel) setUserModel(storedModel);
         if (storedReferralCode) setUserReferralCode(storedReferralCode);
-        if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
+        if (storedExpiryDate && storedExpiryDate !== 'N/A') {
+          try {
+            setUserExpiryDate(format(new Date(storedExpiryDate), 'MMMM d, yyyy'));
+          } catch (e) {
+             console.warn("Failed to parse expiry date from localStorage:", storedExpiryDate);
+             setUserExpiryDate('Invalid Date');
+          }
+        } else {
+          setUserExpiryDate('N/A');
+        }
         
-        const referredByCodeExists = !!(storedUserReferredByCode && storedUserReferredByCode.trim() !== '');
+        const referredByCodeExists = !!(storedUserReferredByCodeValue && storedUserReferredByCodeValue.trim().length > 0);
         setHasUserReferredByCodeInStorage(referredByCodeExists);
 
         if (referredByCodeExists) {
@@ -118,8 +136,8 @@ export default function SettingsPage() {
             .finally(() => { if (isMounted) setIsLoadingReferrerName(false); });
         }
 
-        if (pb.authStore.isValid && currentUserId && isMounted) {
-            const localUserId = currentUserId; // Capture userId for use in async/cleanup
+        if (pb.authStore.isValid && currentAuthUserId && isMounted) {
+            const localUserId = currentAuthUserId; 
             const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
             console.log(`[Real-time Subscription] PocketBase client baseUrl: ${pb.baseUrl}`);
             console.log(`[Real-time Subscription] Attempting to connect to WebSocket: ${realtimeUrl} for user ID: ${localUserId}`);
@@ -129,22 +147,25 @@ export default function SettingsPage() {
                 if (e.action === 'update' && e.record && isMounted) {
                   console.log('[Real-time] User record updated:', e.record);
                   
-                  // Update model (plan)
-                  if (e.record.model && typeof window !== 'undefined' && e.record.model !== localStorage.getItem('userModel')) {
-                     localStorage.setItem('userModel', e.record.model as string);
-                     setUserModel(e.record.model as UserModel);
+                  if (e.record.model && typeof window !== 'undefined') {
+                     const newModel = e.record.model as UserModel;
+                     if (newModel !== localStorage.getItem('userModel')) {
+                        localStorage.setItem('userModel', newModel);
+                        setUserModel(newModel);
+                        toast({ title: "Plan Updated", description: `Your plan was updated to ${newModel} via real-time sync.` });
+                     }
                   }
                   
-                  // Update avatar
                   if (typeof window !== 'undefined') {
                     const newAvatarFilename = e.record.avatar as string | undefined;
                     const newAvatarUrlFromEvent = newAvatarFilename ? pb.getFileUrl(e.record, newAvatarFilename) : null;
-                    const currentAvatarUrlInState = userAvatarUrl; // Use state for comparison to avoid stale closure issues
+                    const currentAvatarUrlInState = userAvatarUrl;
                     
                     if (newAvatarUrlFromEvent !== currentAvatarUrlInState) { 
                         localStorage.setItem('userAvatarUrl', newAvatarUrlFromEvent || '');
                         setUserAvatarUrl(newAvatarUrlFromEvent);
                         setAvatarPreview(newAvatarUrlFromEvent || `https://placehold.co/96x96.png?text=${localStorage.getItem('userAvatarFallback') || 'U'}`);
+                        toast({ title: "Avatar Updated", description: "Your profile picture was updated." });
                     }
                   }
                 }
@@ -162,7 +183,7 @@ export default function SettingsPage() {
                   console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Response: ${JSON.stringify(error.response)}`);
                   console.error(`[Real-time Subscription Error] PocketBase ClientResponseError Data: ${JSON.stringify(error.data)}`);
                   console.error("[Real-time Subscription Error] Full ClientResponseError object:", error);
-                  if (error.originalError) {
+                   if (error.originalError) {
                     console.error(`[Real-time Subscription Error] OriginalError Type: ${error.originalError.constructor.name}`);
                     if (error.originalError instanceof Error) {
                       console.error(`[Real-time Subscription Error] OriginalError Message: ${error.originalError.message}`);
@@ -176,7 +197,7 @@ export default function SettingsPage() {
                   title: "Real-time Sync Issue",
                   description: "Could not connect for live updates. Please verify NEXT_PUBLIC_POCKETBASE_URL, ngrok tunnel, and PocketBase server status. Also check for browser/network issues blocking WebSockets.",
                   variant: "destructive",
-                  duration: 15000,
+                  duration: 15000, 
                 });
             }
         }
@@ -188,13 +209,68 @@ export default function SettingsPage() {
     return () => {
       isMounted = false;
       if (unsubscribe) {
-        const localUserIdOnUnmount = pb.authStore.model?.id || 'unknown_user_on_unmount'; // Use current authStore
+        const localUserIdOnUnmount = pb.authStore.model?.id || 'unknown_user_on_unmount';
         console.log(`[Real-time Subscription] Unsubscribing from updates for user ID: ${localUserIdOnUnmount}`);
         unsubscribe();
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toast]); 
+  }, [toast]); // Added toast to dependency array
+
+  const handleProfilePictureChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setAvatarFile(file);
+      setAvatarPreview(URL.createObjectURL(file));
+
+      const formData = new FormData();
+      formData.append('avatar', file);
+      
+      setIsUploadingAvatar(true);
+      const currentAuthUserId = pb.authStore.model?.id;
+      if (!currentAuthUserId) {
+        toast({ title: "Error", description: "User not authenticated. Please log in again.", variant: "destructive" });
+        setIsUploadingAvatar(false);
+        return;
+      }
+      
+      const result = await updateUserAvatarAction(formData);
+      if (result.success && result.updatedUserRecord) {
+        toast({ title: "Success", description: "Profile picture updated!" });
+        const newAvatarUrl = pb.getFileUrl(result.updatedUserRecord, result.updatedUserRecord.avatar as string);
+        localStorage.setItem('userAvatarUrl', newAvatarUrl);
+        setUserAvatarUrl(newAvatarUrl);
+        setAvatarPreview(newAvatarUrl); // Update preview to permanent URL
+      } else {
+        toast({ title: "Upload Failed", description: result.error || "Could not update profile picture.", variant: "destructive" });
+        // Revert preview if upload failed
+        setAvatarPreview(userAvatarUrl || `https://placehold.co/96x96.png?text=${userAvatarFallback}`);
+      }
+      setAvatarFile(null); // Clear selected file
+      setIsUploadingAvatar(false);
+    }
+  };
+
+  const handleRemoveProfilePicture = async () => {
+    setIsUploadingAvatar(true); // Re-use loading state
+    const currentAuthUserId = pb.authStore.model?.id;
+    if (!currentAuthUserId) {
+      toast({ title: "Error", description: "User not authenticated. Please log in again.", variant: "destructive" });
+      setIsUploadingAvatar(false);
+      return;
+    }
+
+    const result = await removeUserAvatarAction();
+    if (result.success) {
+      toast({ title: "Success", description: "Profile picture removed!" });
+      localStorage.removeItem('userAvatarUrl'); // or set to empty string
+      setUserAvatarUrl(null);
+      setAvatarPreview(`https://placehold.co/96x96.png?text=${userAvatarFallback}`);
+    } else {
+      toast({ title: "Removal Failed", description: result.error || "Could not remove profile picture.", variant: "destructive" });
+    }
+    setIsUploadingAvatar(false);
+  };
 
   const handleSaveChanges = async () => {
     setIsSaving(true);
@@ -220,9 +296,9 @@ export default function SettingsPage() {
         const updatedTargetYear = result.updatedUser.targetYear?.toString() || '-- Not Set --';
         
         localStorage.setItem('userClass', updatedClass);
-        setUserClass(updatedClass); // Update local state to match
+        setUserClass(updatedClass); 
         localStorage.setItem('userTargetYear', updatedTargetYear);
-        setUserTargetYear(updatedTargetYear); // Update local state
+        setUserTargetYear(updatedTargetYear); 
       }
     } else {
       toast({ title: "Update Failed", description: result.error || "Could not update profile.", variant: "destructive" });
@@ -269,7 +345,6 @@ export default function SettingsPage() {
                 <AvatarImage src={avatarPreview || `https://placehold.co/96x96.png`} alt={userFullName} data-ai-hint="user avatar settings"/>
                 <AvatarFallback>{userAvatarFallback}</AvatarFallback>
               </Avatar>
-              
             </div>
             <p className="mt-2 text-xs text-muted-foreground">Profile picture managed via PocketBase Admin UI for now.</p>
           </div>
@@ -329,7 +404,7 @@ export default function SettingsPage() {
           </div>
         </CardContent>
         <CardFooter className="flex justify-end gap-3 pt-8">
-          <Button variant="outline" onClick={handleCancel} disabled={isSaving}>Cancel</Button>
+          <Button variant="outline" onClick={handleCancel} disabled={isSaving || isUploadingAvatar}>Cancel</Button>
           <Button onClick={handleSaveChanges} disabled={isSaving || isUploadingAvatar}>
             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
             {isSaving ? "Saving..." : "Save Changes"}
@@ -340,7 +415,7 @@ export default function SettingsPage() {
       <Card className="shadow-lg w-full max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Referral Program</CardTitle>
-          <CardDescription>Share your link and see who referred you.</CardDescription>
+          <CardDescription>Share your code, track your success, and see who referred you.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {isLoadingReferrerName && !userReferredByUserName && (
@@ -371,10 +446,10 @@ export default function SettingsPage() {
           )}
 
           <div>
-            <Label htmlFor="referralCodeDisplay">Your Referral Signup Link</Label>
+            <Label htmlFor="referralLinkDisplay">Your Referral Signup Link</Label>
             <div className="mt-1 flex items-center gap-2">
               <Input 
-                id="referralCodeDisplay" 
+                id="referralLinkDisplay" 
                 value={ (userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') ? `${window.location.origin}/auth/signup/${userReferralCode}` : 'N/A'} 
                 readOnly 
                 className="bg-muted/50" 
@@ -408,7 +483,7 @@ export default function SettingsPage() {
             <CalendarDays className="h-5 w-5 text-muted-foreground" />
             <span className="font-medium">Expires on:</span>
             <span className="text-muted-foreground">
-              {userExpiryDate && userExpiryDate !== 'N/A' && userExpiryDate.length > 0 ? format(new Date(userExpiryDate), 'MMMM d, yyyy') : 'N/A'}
+              {userExpiryDate}
             </span>
           </div>
         </CardContent>
@@ -416,6 +491,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-    
-
