@@ -10,18 +10,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Logo } from '@/components/icons';
 import { ArrowRight, Rocket, Target, Wand2, BarChartBig, ListChecks } from 'lucide-react';
 
+// Define a type for the props that Next.js passes to page components
+// This explicitly types params and searchParams as Promise-like to satisfy PageProps constraint
+type LandingPageNextJsProps = {
+  params: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
 export default function LandingPage({
-  params: paramsAsProp, // Renamed incoming prop
-  searchParams: searchParamsAsProp, // Renamed incoming prop
-}: {
-  params: any; // Type for the incoming params prop from Next.js
-  searchParams?: any; // Type for the incoming searchParams prop (can be undefined)
-}) {
+  params: paramsProp,
+  searchParams: searchParamsProp,
+}: LandingPageNextJsProps) {
   // Unwrap params and searchParams using React.use()
-  // This is necessary to satisfy Next.js's PageProps constraint during build,
-  // even if these specific unwrapped values are not used in this component.
-  const params = use(paramsAsProp);
-  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
+  // This is necessary for Next.js 15+ build system for props passed to page components
+  const resolvedParams = use(paramsProp);
+  const resolvedSearchParams = searchParamsProp ? use(searchParamsProp) : undefined;
 
   const router = useRouter();
 
@@ -30,6 +33,8 @@ export default function LandingPage({
       router.replace('/dashboard');
     }
     // No else needed, page content renders if not redirected
+    // resolvedParams and resolvedSearchParams are not used in this specific useEffect,
+    // but unwrapping them is necessary for the build.
   }, [router]);
 
   return (
