@@ -140,7 +140,7 @@ export interface College {
   district: string;
   stream: 'PCM' | 'PCB' | 'Both';
   establishedYear?: number;
-  collegeType?: 'Government' | 'Private' | 'Autonomous' | 'Deemed' | 'University Department';
+  collegeType?: 'Government' | 'Private' | 'Autonomous' | 'Deemed' | 'University Department' | 'University';
   annualFees?: string; // e.g., "Approx. ₹1.5 Lakhs"
   campusSizeAcres?: number;
   rating?: number; // e.g., 4.5 (out of 5)
