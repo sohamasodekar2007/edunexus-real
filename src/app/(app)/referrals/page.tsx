@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
@@ -24,9 +23,9 @@ export default function ReferralsPage() {
   const [userReferredByUserName, setUserReferredByUserName] = useState<string | null>(null);
   const [hasUserReferredByCodeInStorage, setHasUserReferredByCodeInStorage] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
-  // const [liveReferralStats, setLiveReferralStats] = useState<User['referralStats'] | null>(null); // Removed in previous step
-  // const [isLoadingStats, setIsLoadingStats] = useState(false); // Removed in previous step
-  // const [errorLoadingStats, setErrorLoadingStats] = useState<string | null>(null); // Removed in previous step
+  const [liveReferralStats, setLiveReferralStats] = useState<User['referralStats'] | null>(null);
+  const [isLoadingStats, setIsLoadingStats] = useState(false);
+  const [errorLoadingStats, setErrorLoadingStats] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -41,7 +40,8 @@ export default function ReferralsPage() {
         if (storedUserId) setUserId(storedUserId);
         if (storedReferralCode) setUserReferralCode(storedReferralCode);
 
-        const referredByCodeExists = typeof storedUserReferredByCode === 'string' && storedUserReferredByCode.trim() !== '';
+        // Ensure referredByCodeExists is always a boolean
+        const referredByCodeExists = !!(storedUserReferredByCode && storedUserReferredByCode.trim().length > 0);
         setHasUserReferredByCodeInStorage(referredByCodeExists);
 
         if (referredByCodeExists) {
@@ -59,15 +59,54 @@ export default function ReferralsPage() {
       }
     }
 
+    const fetchLiveStats = async () => {
+      if (!userId) return; // Don't fetch if userId isn't available yet
+      setIsLoadingStats(true);
+      setErrorLoadingStats(null);
+      try {
+        const result = await getLiveReferralStatsAction();
+        if (isMounted) {
+          if (result.success && result.stats) {
+            setLiveReferralStats(result.stats);
+          } else {
+            const errorMessage = result.message || "Could not load live referral statistics.";
+            // Log the full result object for better debugging
+            console.error("Failed to fetch live referral stats. Full server action result:", result);
+            setErrorLoadingStats(errorMessage);
+            toast({
+              title: "Stats Error",
+              description: errorMessage,
+              variant: "destructive",
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Critical error in fetchLiveStats:", error);
+        if (isMounted) {
+          const criticalErrorMessage = error instanceof Error ? error.message : "An unknown critical error occurred while fetching stats.";
+          setErrorLoadingStats(criticalErrorMessage);
+          toast({
+            title: "Critical Stats Error",
+            description: criticalErrorMessage,
+            variant: "destructive",
+          });
+        }
+      } finally {
+        if (isMounted) setIsLoadingStats(false);
+      }
+    };
+    
     initializeData();
-    // Removed fetchLiveStats call
+    if (userId) { // Fetch stats only if userId is available
+        fetchLiveStats();
+    }
 
     return () => {
       isMounted = false;
-      // Real-time subscription cleanup logic was removed as stats display was removed
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]); // Dependency array can be simplified if stats are not fetched
+  }, [userId]); // Re-run when userId is resolved
+
 
   const handleCopyReferralLink = () => {
     if (userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') {
@@ -80,7 +119,7 @@ export default function ReferralsPage() {
         });
     }
   };
-
+  
   const handleCopyReferralCode = () => {
     if (userReferralCode && userReferralCode !== 'N/A') {
       navigator.clipboard.writeText(userReferralCode)
@@ -91,6 +130,7 @@ export default function ReferralsPage() {
         });
     }
   };
+
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 space-y-8">
@@ -115,7 +155,7 @@ export default function ReferralsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div>
+           <div>
             <Label htmlFor="referralCodeDisplay">Your Referral Code</Label>
             <div className="mt-1 flex items-center gap-2">
               <Input
@@ -157,8 +197,6 @@ export default function ReferralsPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Referral Statistics Card Removed */}
 
       <Card className="shadow-lg w-full">
         <CardHeader>
