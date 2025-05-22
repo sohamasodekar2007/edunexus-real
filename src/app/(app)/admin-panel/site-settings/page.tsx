@@ -16,11 +16,8 @@ export default function SiteSettingsPage({
   searchParams?: any; // Type for the incoming searchParams prop
 }) {
   // Ensure params and searchParams are unwrapped before any potential enumeration
-  const params = use(paramsAsProp); // params is now the unwrapped object
-  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined; // searchParams is unwrapped or undefined
-
-  // Now you can use 'params' and 'searchParams' as plain objects if needed,
-  // though this page doesn't seem to use their values directly in its content.
+  const params = use(paramsAsProp);
+  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6">

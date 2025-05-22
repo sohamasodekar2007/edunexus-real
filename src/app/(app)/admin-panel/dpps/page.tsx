@@ -8,8 +8,6 @@ export const metadata: Metadata = {
   title: 'Admin - DPP Management',
 };
 
-// Renaming props in the signature and then unwrapping with use()
-// can sometimes help with PageProps constraint issues.
 export default function DppManagementPage({
   params: paramsAsProp, // Renamed incoming prop
   searchParams: searchParamsAsProp, // Renamed incoming prop
@@ -18,12 +16,8 @@ export default function DppManagementPage({
   searchParams?: any; // Type for the incoming searchParams prop
 }) {
   // Unwrap params and searchParams immediately
-  const params = use(paramsAsProp); // params is now the unwrapped object
-  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined; // searchParams is unwrapped or undefined
-
-  // Now you can use 'params' and 'searchParams' as plain objects if needed,
-  // though this page doesn't seem to use their values directly in its content.
-  // For example: console.log(params, searchParams);
+  const params = use(paramsAsProp);
+  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6">

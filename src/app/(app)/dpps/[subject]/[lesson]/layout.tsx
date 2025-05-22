@@ -4,22 +4,18 @@ import { use } from 'react';
 
 export default function LessonPageLayout({
   children,
-  params,
-  searchParams,
+  params: paramsAsProp, // Renamed incoming prop
+  searchParams: searchParamsAsProp, // Renamed incoming prop
 }: {
   children: ReactNode;
-  // The 'params' prop for a dynamic route's layout/page is expected to be the "use-able" resource.
-  params: { [key: string]: string | string[] | undefined };
-  // The 'searchParams' prop can be undefined if there are no search parameters.
-  searchParams?: { [key: string]: string | string[] | undefined };
+  params: any; // Type for the incoming params prop
+  searchParams?: any; // Type for the incoming searchParams prop
 }) {
   // Ensure params is unwrapped immediately. For dynamic routes, Next.js should always provide params.
-  use(params);
+  const params = use(paramsAsProp);
 
   // Conditionally unwrap searchParams only if it exists to avoid 'use(undefined)'.
-  if (searchParams) {
-    use(searchParams);
-  }
+  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   // This simple layout allows the page to take over the full screen
   // by not including the main app sidebar or header.
