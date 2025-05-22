@@ -1,0 +1,30 @@
+
+# Netlify configuration file
+
+[build]
+  # The command to build your site. The Next.js plugin usually handles this,
+  # but it can be specified.
+  # command = "npm run build"
+
+  # The directory to publish, after the build command has run.
+  # The Next.js plugin usually handles this.
+  # publish = ".next"
+
+# Specifies build environment settings
+[build.environment]
+  # Set a specific Node.js version.
+  # It's good to use an LTS version. Check Netlify's supported versions.
+  # Example: Use Node.js 18.x
+  NODE_VERSION = "18"
+
+# You can also specify context-specific settings, for example:
+# [context.production.environment]
+#   NODE_ENV = "production"
+
+# If you are using npm, you could specify npm version too, if needed:
+# [build.environment]
+#   NPM_VERSION = "8.x.x" # or your desired npm version
+
+# If using yarn:
+# [build.environment]
+#   YARN_VERSION = "1.22.x" # or your desired yarn version
