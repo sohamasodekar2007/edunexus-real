@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { getReferrerInfoForCurrentUserAction } from '@/app/auth/actions';
+import { getReferrerInfoForCurrentUserAction, getLiveReferralStatsAction } from '@/app/auth/actions';
 import pb from '@/lib/pocketbase';
 import type { User } from '@/types';
 import { Gift, Link2, Copy, Users, BarChart3, Info, Loader2, ArrowLeft, Share2, AlertCircle } from 'lucide-react';
@@ -24,6 +24,9 @@ export default function ReferralsPage() {
   const [userReferredByUserName, setUserReferredByUserName] = useState<string | null>(null);
   const [hasUserReferredByCodeInStorage, setHasUserReferredByCodeInStorage] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
+  // const [liveReferralStats, setLiveReferralStats] = useState<User['referralStats'] | null>(null); // Removed in previous step
+  // const [isLoadingStats, setIsLoadingStats] = useState(false); // Removed in previous step
+  // const [errorLoadingStats, setErrorLoadingStats] = useState<string | null>(null); // Removed in previous step
 
 
   useEffect(() => {
@@ -38,7 +41,7 @@ export default function ReferralsPage() {
         if (storedUserId) setUserId(storedUserId);
         if (storedReferralCode) setUserReferralCode(storedReferralCode);
 
-        const referredByCodeExists = storedUserReferredByCode && storedUserReferredByCode.trim() !== '';
+        const referredByCodeExists = typeof storedUserReferredByCode === 'string' && storedUserReferredByCode.trim() !== '';
         setHasUserReferredByCodeInStorage(referredByCodeExists);
 
         if (referredByCodeExists) {
@@ -57,11 +60,14 @@ export default function ReferralsPage() {
     }
 
     initializeData();
+    // Removed fetchLiveStats call
 
     return () => {
       isMounted = false;
+      // Real-time subscription cleanup logic was removed as stats display was removed
     };
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]); // Dependency array can be simplified if stats are not fetched
 
   const handleCopyReferralLink = () => {
     if (userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') {
@@ -151,6 +157,8 @@ export default function ReferralsPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Referral Statistics Card Removed */}
 
       <Card className="shadow-lg w-full">
         <CardHeader>
