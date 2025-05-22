@@ -8,20 +8,22 @@ export const metadata: Metadata = {
   title: 'Admin - DPP Management',
 };
 
-// Next.js passes params and searchParams as "use-able" resources.
-// `params` for route parameters should always be present.
-// `searchParams` can be undefined if no query parameters are present.
+// Renaming props in the signature and then unwrapping with use()
+// can sometimes help with PageProps constraint issues.
 export default function DppManagementPage({
-  params,
-  searchParams,
-}: { params: any; searchParams?: any }) {
-  // Unwrap params (should always be present for a page)
-  use(params);
+  params: paramsAsProp, // Renamed incoming prop
+  searchParams: searchParamsAsProp, // Renamed incoming prop
+}: {
+  params: any; // Type for the incoming params prop
+  searchParams?: any; // Type for the incoming searchParams prop
+}) {
+  // Unwrap params and searchParams immediately
+  const params = use(paramsAsProp); // params is now the unwrapped object
+  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined; // searchParams is unwrapped or undefined
 
-  // Conditionally unwrap searchParams only if it exists
-  if (searchParams) {
-    use(searchParams);
-  }
+  // Now you can use 'params' and 'searchParams' as plain objects if needed,
+  // though this page doesn't seem to use their values directly in its content.
+  // For example: console.log(params, searchParams);
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6">
