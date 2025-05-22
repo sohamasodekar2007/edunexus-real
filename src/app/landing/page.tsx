@@ -10,16 +10,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Logo } from '@/components/icons';
 import { ArrowRight, Rocket, Target, Wand2, BarChartBig, ListChecks } from 'lucide-react';
 
-export default function LandingPage({
-  params: paramsAsProp, // Renamed incoming prop
-  searchParams: searchParamsAsProp, // Renamed incoming prop
-}: {
-  params: any; // Type for the incoming params prop
-  searchParams?: any; // Type for the incoming searchParams prop, can be optional
-}) {
-  // Unwrap params and searchParams immediately
-  const params = use(paramsAsProp);
-  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
+// Define a type for the props as Next.js passes them (as "use-able" resources)
+// Typing them as Promise<any> or Promise<Record<string, any>> helps satisfy
+// the PageProps constraint regarding promise-like characteristics.
+type LandingPageServerProps = {
+  params: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default function LandingPage(props: LandingPageServerProps) {
+  // Unwrap params and searchParams.
+  // `params` is expected to always be provided by Next.js for page components.
+  const params = use(props.params);
+  const searchParams = props.searchParams ? use(props.searchParams) : undefined;
 
   const router = useRouter();
 
@@ -27,6 +30,7 @@ export default function LandingPage({
     if (pb.authStore.isValid) {
       router.replace('/dashboard');
     }
+    // No else needed, page content renders if not redirected
   }, [router]);
 
   return (
