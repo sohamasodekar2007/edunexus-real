@@ -3,8 +3,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { 
-  ListChecks, 
+import {
+  ListChecks,
   Percent,
   Target,
   Sparkles,
@@ -12,11 +12,12 @@ import {
   NotebookText,
   LineChart,
   History,
-  User, 
+  User,
   ChevronRight,
   BarChartHorizontalBig,
   TrendingUp,
-  Trophy // Consolidated Trophy import
+  Trophy,
+  Loader2 // Added Loader2
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -27,8 +28,10 @@ const leaderboardSnapshotData = [
 
 export default function DashboardPage() {
   const [userFullName, setUserFullName] = useState<string>('User');
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     if (typeof window !== 'undefined') {
       const storedName = localStorage.getItem('userFullName');
       if (storedName) {
@@ -37,12 +40,21 @@ export default function DashboardPage() {
     }
   }, []);
 
+  if (!isMounted) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-6">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        <p className="ml-3 text-muted-foreground">Loading Dashboard...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto py-6 px-4 md:px-6 space-y-6">
+    <div className="space-y-6">
       {/* Greeting Section */}
       <section className="mb-8">
         <h1 className="text-3xl font-bold flex items-center">
-          Hello, {userFullName}! 
+          Hello, {userFullName}!
           <span role="img" aria-label="waving hand" className="ml-2 text-2xl">👋</span>
         </h1>
         <p className="text-muted-foreground">Let's conquer those exams!</p>
@@ -110,7 +122,7 @@ export default function DashboardPage() {
               </Link>
             </Button>
             <Button variant="outline" size="lg" className="w-full justify-start text-left py-6" asChild>
-              <Link href="/my-progress"> 
+              <Link href="/my-progress">
                 <TrendingUp className="mr-3 h-5 w-5" /> My Progress
               </Link>
             </Button>
@@ -189,3 +201,6 @@ export default function DashboardPage() {
     </div>
   );
 }
+    
+
+    
