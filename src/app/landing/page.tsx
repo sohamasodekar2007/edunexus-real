@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import pb from '@/lib/pocketbase';
 import Link from 'next/link';
@@ -8,29 +9,25 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Logo } from '@/components/icons';
 import { ArrowRight, Rocket, Target, Wand2, BarChartBig, ListChecks } from 'lucide-react';
-import { use } from 'react';
 
 export default function LandingPage({
-  params,
-  searchParams,
+  params: paramsAsProp, // Renamed incoming prop
+  searchParams: searchParamsAsProp, // Renamed incoming prop
 }: {
-  params: { [key: string]: string | string[] | undefined };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: any; // Type for the incoming params prop
+  searchParams?: any; // Type for the incoming searchParams prop, can be optional
 }) {
-  use(params);
-  use(searchParams);
+  // Unwrap params and searchParams immediately
+  const params = use(paramsAsProp);
+  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
+
   const router = useRouter();
 
   useEffect(() => {
     if (pb.authStore.isValid) {
-      // If user is already logged in and somehow lands here, redirect to dashboard
-      // router.replace('/dashboard');
+      router.replace('/dashboard');
     }
   }, [router]);
-
-  // The root page.tsx now handles initial redirect logic.
-  // This page should just render the landing content.
-  // If a logged-in user directly navigates here, they see it unless explicitly redirected.
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -71,7 +68,7 @@ export default function LandingPage({
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/colleges"> {/* Placeholder link */}
+              <Link href="/colleges">
                 <ListChecks className="mr-2 h-5 w-5" /> View College List
               </Link>
             </Button>
