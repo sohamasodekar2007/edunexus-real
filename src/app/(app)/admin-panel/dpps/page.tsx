@@ -8,17 +8,17 @@ export const metadata: Metadata = {
   title: 'Admin - DPP Management',
 };
 
-// Changed props typing to any to resolve PageProps constraint issue
-// Next.js passes params and searchParams as "use-able" resources
+// Next.js passes params and searchParams as "use-able" resources.
+// `params` for route parameters should always be present.
+// `searchParams` can be undefined if no query parameters are present.
 export default function DppManagementPage({
   params,
   searchParams,
-}: { params?: any; searchParams?: any }) { // Use 'any' or a more generic type for the props themselves
-  // Ensure params and searchParams are unwrapped before any potential enumeration
-  // Also check if they exist before calling use()
-  if (params) {
-    use(params);
-  }
+}: { params: any; searchParams?: any }) {
+  // Unwrap params (should always be present for a page)
+  use(params);
+
+  // Conditionally unwrap searchParams only if it exists
   if (searchParams) {
     use(searchParams);
   }
