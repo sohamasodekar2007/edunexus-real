@@ -21,7 +21,7 @@ import {
   Info,
   Loader2,
 } from 'lucide-react';
-import type { UserClass, User } from '@/types';
+import type { UserClass, User, UserModel } from '@/types';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfileAction, getReferrerInfoForCurrentUserAction, updateUserAvatarAction, removeUserAvatarAction } from '@/app/auth/actions';
@@ -44,12 +44,14 @@ export default function SettingsPage() {
   const [userClass, setUserClass] = useState<UserClass | ''>('');
   const [userTargetYear, setUserTargetYear] = useState<string>('-- Not Set --');
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
 
   const [userReferralCode, setUserReferralCode] = useState<string>('N/A');
   const [userReferredByUserName, setUserReferredByUserName] = useState<string | null>(null);
   const [isLoadingReferrerName, setIsLoadingReferrerName] = useState(false);
   const [userExpiryDate, setUserExpiryDate] = useState<string>('N/A');
-  const [userModel, setUserModel] = useState<string>('N/A');
+  const [userModel, setUserModel] = useState<UserModel | string>('N/A'); // Allow string for 'N/A'
   const [hasUserReferredByCodeInStorage, setHasUserReferredByCodeInStorage] = useState<boolean>(false);
   
   const [isSaving, setIsSaving] = useState(false);
@@ -59,9 +61,9 @@ export default function SettingsPage() {
   useEffect(() => {
     let isMounted = true;
     let unsubscribe: (() => void) | null = null;
-    const currentUserId = pb.authStore.model?.id;
     
     async function initializeDataAndSubscribe() {
+      const currentUserId = pb.authStore.model?.id;
       if (typeof window !== 'undefined' && isMounted) {
         const storedFullName = localStorage.getItem('userFullName');
         const storedEmail = localStorage.getItem('userEmail');
@@ -70,7 +72,7 @@ export default function SettingsPage() {
         const storedAvatarUrl = localStorage.getItem('userAvatarUrl');
         const storedClass = localStorage.getItem('userClass') as UserClass | null;
         const storedTargetYear = localStorage.getItem('userTargetYear');
-        const storedModel = localStorage.getItem('userModel');
+        const storedModel = localStorage.getItem('userModel') as UserModel | null;
         const storedReferralCode = localStorage.getItem('userReferralCode');
         const storedUserReferredByCode = localStorage.getItem('userReferredByCode');
         const storedExpiryDate = localStorage.getItem('userExpiryDate');
@@ -100,10 +102,10 @@ export default function SettingsPage() {
         if (storedReferralCode) setUserReferralCode(storedReferralCode);
         if (storedExpiryDate) setUserExpiryDate(storedExpiryDate);
         
-        const userReferredByCodeExists = storedUserReferredByCode && storedUserReferredByCode.trim() !== '';
-        setHasUserReferredByCodeInStorage(userReferredByCodeExists);
+        const referredByCodeExists = !!(storedUserReferredByCode && storedUserReferredByCode.trim() !== '');
+        setHasUserReferredByCodeInStorage(referredByCodeExists);
 
-        if (userReferredByCodeExists) {
+        if (referredByCodeExists) {
           if (isMounted) setIsLoadingReferrerName(true);
           getReferrerInfoForCurrentUserAction()
             .then(result => {
@@ -117,24 +119,29 @@ export default function SettingsPage() {
         }
 
         if (pb.authStore.isValid && currentUserId && isMounted) {
-            const localUserId = currentUserId;
-            console.log(`[Real-time Subscription] PocketBase client baseUrl: ${pb.baseUrl}`);
+            const localUserId = currentUserId; // Capture userId for use in async/cleanup
             const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
+            console.log(`[Real-time Subscription] PocketBase client baseUrl: ${pb.baseUrl}`);
             console.log(`[Real-time Subscription] Attempting to connect to WebSocket: ${realtimeUrl} for user ID: ${localUserId}`);
+            
             try {
               unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
                 if (e.action === 'update' && e.record && isMounted) {
                   console.log('[Real-time] User record updated:', e.record);
+                  
+                  // Update model (plan)
                   if (e.record.model && typeof window !== 'undefined' && e.record.model !== localStorage.getItem('userModel')) {
                      localStorage.setItem('userModel', e.record.model as string);
-                     setUserModel(e.record.model as string);
+                     setUserModel(e.record.model as UserModel);
                   }
-                   
+                  
+                  // Update avatar
                   if (typeof window !== 'undefined') {
                     const newAvatarFilename = e.record.avatar as string | undefined;
                     const newAvatarUrlFromEvent = newAvatarFilename ? pb.getFileUrl(e.record, newAvatarFilename) : null;
+                    const currentAvatarUrlInState = userAvatarUrl; // Use state for comparison to avoid stale closure issues
                     
-                    if (newAvatarUrlFromEvent !== userAvatarUrl) { 
+                    if (newAvatarUrlFromEvent !== currentAvatarUrlInState) { 
                         localStorage.setItem('userAvatarUrl', newAvatarUrlFromEvent || '');
                         setUserAvatarUrl(newAvatarUrlFromEvent);
                         setAvatarPreview(newAvatarUrlFromEvent || `https://placehold.co/96x96.png?text=${localStorage.getItem('userAvatarFallback') || 'U'}`);
@@ -181,14 +188,16 @@ export default function SettingsPage() {
     return () => {
       isMounted = false;
       if (unsubscribe) {
-        const localUserIdOnUnmount = currentUserId || 'unknown_user_on_unmount';
+        const localUserIdOnUnmount = pb.authStore.model?.id || 'unknown_user_on_unmount'; // Use current authStore
         console.log(`[Real-time Subscription] Unsubscribing from updates for user ID: ${localUserIdOnUnmount}`);
         unsubscribe();
       }
     };
-  }, [toast, userAvatarUrl]); 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toast]); 
 
   const handleSaveChanges = async () => {
+    setIsSaving(true);
     const currentAuthUserId = pb.authStore.model?.id;
     if (!currentAuthUserId) {
       toast({ title: "Authentication Error", description: "Your session seems invalid. Please log in again.", variant: "destructive" });
@@ -196,7 +205,7 @@ export default function SettingsPage() {
       return;
     }
     
-    setIsSaving(true);
+    console.log(`[Settings Save] User ID: ${currentAuthUserId}, Class: ${userClass}, Target Year: ${userTargetYear}`);
 
     const result = await updateUserProfileAction({
       userId: currentAuthUserId,
@@ -211,9 +220,9 @@ export default function SettingsPage() {
         const updatedTargetYear = result.updatedUser.targetYear?.toString() || '-- Not Set --';
         
         localStorage.setItem('userClass', updatedClass);
-        setUserClass(updatedClass);
+        setUserClass(updatedClass); // Update local state to match
         localStorage.setItem('userTargetYear', updatedTargetYear);
-        setUserTargetYear(updatedTargetYear);
+        setUserTargetYear(updatedTargetYear); // Update local state
       }
     } else {
       toast({ title: "Update Failed", description: result.error || "Could not update profile.", variant: "destructive" });
@@ -224,67 +233,6 @@ export default function SettingsPage() {
   const handleCancel = () => {
     router.back();
   };
-
-  const handleProfilePictureChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const currentAuthUserId = pb.authStore.model?.id;
-    if (!currentAuthUserId) {
-      toast({ title: "Authentication Error", description: "Cannot change picture. Please log in again.", variant: "destructive" });
-      return;
-    }
-
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      if (file.size > 2 * 1024 * 1024) { 
-        toast({ title: "File Too Large", description: "Max 2MB allowed for profile picture.", variant: "destructive" });
-        return;
-      }
-      
-      setAvatarPreview(URL.createObjectURL(file)); 
-      setIsUploadingAvatar(true);
-
-      const formData = new FormData();
-      formData.append('avatar', file);
-      
-      const result = await updateUserAvatarAction(formData);
-
-      if (result.success && result.updatedUserRecord) {
-        const newAvatarUrl = pb.getFileUrl(result.updatedUserRecord, result.updatedUserRecord.avatar as string);
-        setAvatarPreview(newAvatarUrl);
-        setUserAvatarUrl(newAvatarUrl);
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('userAvatarUrl', newAvatarUrl);
-        }
-        toast({ title: "Avatar Updated", description: "Profile picture changed successfully." });
-      } else {
-        toast({ title: "Avatar Upload Failed", description: result.error || "Could not update profile picture.", variant: "destructive" });
-        const fallbackAvatar = localStorage.getItem('userAvatarUrl');
-        setAvatarPreview(fallbackAvatar || `https://placehold.co/96x96.png?text=${userAvatarFallback}`);
-      }
-      setIsUploadingAvatar(false);
-    }
-  };
-
-  const handleRemoveProfilePicture = async () => {
-    const currentAuthUserId = pb.authStore.model?.id;
-    if (!currentAuthUserId) {
-      toast({ title: "Authentication Error", description: "Cannot remove picture. Please log in again.", variant: "destructive" });
-      return;
-    }
-    setIsUploadingAvatar(true);
-    const result = await removeUserAvatarAction();
-    if (result.success) {
-      setAvatarPreview(`https://placehold.co/96x96.png?text=${userAvatarFallback}`);
-      setUserAvatarUrl(null);
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('userAvatarUrl');
-      }
-      toast({ title: "Avatar Removed", description: "Profile picture removed." });
-    } else {
-      toast({ title: "Removal Failed", description: result.error || "Could not remove profile picture.", variant: "destructive" });
-    }
-    setIsUploadingAvatar(false);
-  };
-
 
   const handleCopyReferralLink = () => {
     if (userReferralCode && userReferralCode !== 'N/A' && typeof window !== 'undefined') {
@@ -323,7 +271,7 @@ export default function SettingsPage() {
               </Avatar>
               
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">Max 2MB. JPG, PNG, WEBP.</p>
+            <p className="mt-2 text-xs text-muted-foreground">Profile picture managed via PocketBase Admin UI for now.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
@@ -344,7 +292,7 @@ export default function SettingsPage() {
             <div>
               <Label htmlFor="academicStatus">Academic Status</Label>
               <Select
-                value={userClass === '' ? EMPTY_CLASS_VALUE_PLACEHOLDER : userClass}
+                value={(userClass as string) === '' ? EMPTY_CLASS_VALUE_PLACEHOLDER : userClass}
                 onValueChange={(value) => {
                   if (value === EMPTY_CLASS_VALUE_PLACEHOLDER) {
                     setUserClass('');
@@ -401,7 +349,7 @@ export default function SettingsPage() {
                 Loading referrer information...
               </div>
           )}
-          {userReferredByUserName && !isLoadingReferrerName && (
+          {!isLoadingReferrerName && userReferredByUserName && (
             <div className="p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-md flex items-center gap-2">
               <Info className="h-5 w-5 text-green-600 dark:text-green-400" />
               <p className="text-sm text-green-700 dark:text-green-300">
@@ -409,7 +357,13 @@ export default function SettingsPage() {
               </p>
             </div>
           )}
-          {!userReferredByUserName && !isLoadingReferrerName && !hasUserReferredByCodeInStorage && (
+           {!isLoadingReferrerName && !userReferredByUserName && hasUserReferredByCodeInStorage && (
+             <div className="p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md flex items-center gap-2">
+                <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <p className="text-sm text-blue-700 dark:text-blue-300">Referrer details could not be loaded or the code used was invalid.</p>
+            </div>
+          )}
+          {!isLoadingReferrerName && !userReferredByUserName && !hasUserReferredByCodeInStorage && (
              <div className="p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md flex items-center gap-2">
                 <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <p className="text-sm text-blue-700 dark:text-blue-300">You were not referred by anyone.</p>
@@ -464,3 +418,4 @@ export default function SettingsPage() {
 }
 
     
+
