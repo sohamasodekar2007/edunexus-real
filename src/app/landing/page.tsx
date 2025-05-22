@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, use } from 'react';
+import { useEffect, use } from 'react'; // Ensure 'use' is imported
 import { useRouter } from 'next/navigation';
 import pb from '@/lib/pocketbase';
 import Link from 'next/link';
@@ -10,19 +10,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Logo } from '@/components/icons';
 import { ArrowRight, Rocket, Target, Wand2, BarChartBig, ListChecks } from 'lucide-react';
 
-// Define a type for the props as Next.js passes them (as "use-able" resources)
-// Typing them as Promise<any> or Promise<Record<string, any>> helps satisfy
-// the PageProps constraint regarding promise-like characteristics.
-type LandingPageServerProps = {
-  params: Promise<{ [key: string]: string | string[] | undefined }>;
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
-export default function LandingPage(props: LandingPageServerProps) {
-  // Unwrap params and searchParams.
-  // `params` is expected to always be provided by Next.js for page components.
-  const params = use(props.params);
-  const searchParams = props.searchParams ? use(props.searchParams) : undefined;
+export default function LandingPage({
+  params: paramsAsProp, // Renamed incoming prop
+  searchParams: searchParamsAsProp, // Renamed incoming prop
+}: {
+  params: any; // Type for the incoming params prop from Next.js
+  searchParams?: any; // Type for the incoming searchParams prop (can be undefined)
+}) {
+  // Unwrap params and searchParams using React.use()
+  // This is necessary to satisfy Next.js's PageProps constraint during build,
+  // even if these specific unwrapped values are not used in this component.
+  const params = use(paramsAsProp);
+  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   const router = useRouter();
 
