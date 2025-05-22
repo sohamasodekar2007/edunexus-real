@@ -7,15 +7,16 @@ import { Logo } from '@/components/icons';
 import { use } from 'react'; // Import use
 
 export default function NotFoundPage({
-  params,
-  searchParams,
+  params: paramsAsProp,
+  searchParams: searchParamsAsProp,
 }: {
-  params: { [key: string]: string | string[] | undefined };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: any;
+  searchParams?: any;
 }) {
   // Ensure params and searchParams are unwrapped before any potential enumeration
-  use(params);
-  use(searchParams);
+  // even if not directly used in this component, Next.js build might expect it
+  const params = use(paramsAsProp);
+  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4 text-center">

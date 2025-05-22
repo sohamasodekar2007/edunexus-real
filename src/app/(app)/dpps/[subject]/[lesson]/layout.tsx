@@ -1,20 +1,21 @@
 
 import type { ReactNode } from 'react';
-import { use } from 'react';
+import { use } from 'react'; // Import use
 
 export default function LessonPageLayout({
   children,
   params: paramsAsProp, // Renamed incoming prop
+  // searchParams prop is not typically used by layout components
 }: {
   children: ReactNode;
   params: any; // Type for the incoming params prop
-  // searchParams is not a standard prop for layout components
 }) {
-  // Ensure params is unwrapped immediately. For dynamic routes, Next.js should always provide params.
+  // Ensure params is unwrapped immediately.
+  // Next.js expects these to be unwrapped in Server Components that receive them.
   const params = use(paramsAsProp);
+  // searchParams would be unwrapped here if the layout used it:
+  // const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
-  // The 'params' variable can be used here if needed by the layout, e.g., for logging or conditional rendering based on params.
-  // console.log('DPP Lesson Layout Params:', params);
 
   // This simple layout allows the page to take over the full screen
   // by not including the main app sidebar or header.

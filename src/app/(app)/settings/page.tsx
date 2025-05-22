@@ -46,7 +46,6 @@ export default function SettingsPage() {
   const [userClass, setUserClass] = useState<UserClass | ''>('');
   const [userTargetYear, setUserTargetYear] = useState<string>('-- Not Set --');
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  // const [avatarFile, setAvatarFile] = useState<File | null>(null); // Not used if direct upload on change
 
 
   const [userReferralCode, setUserReferralCode] = useState<string>('N/A');
@@ -77,7 +76,7 @@ export default function SettingsPage() {
         const storedPhone = localStorage.getItem('userPhone');
         const storedAvatarFallback = localStorage.getItem('userAvatarFallback');
         const storedAvatarUrl = localStorage.getItem('userAvatarUrl');
-        const storedClass = localStorage.getItem('userClass') as UserClass | null;
+        const storedClassFromLocalStorage = localStorage.getItem('userClass'); // Read as string | null
         const storedTargetYear = localStorage.getItem('userTargetYear');
         const storedModel = localStorage.getItem('userModel') as UserModel | null;
         const storedReferralCode = localStorage.getItem('userReferralCode');
@@ -99,8 +98,12 @@ export default function SettingsPage() {
             setAvatarPreview(`https://placehold.co/96x96.png?text=${storedAvatarFallback || 'U'}`);
         }
 
-        if (storedClass && USER_CLASSES_OPTIONS.includes(storedClass)) setUserClass(storedClass);
-        else if (storedClass === null || storedClass === '') setUserClass('');
+        if (storedClassFromLocalStorage && USER_CLASSES_OPTIONS.includes(storedClassFromLocalStorage as UserClass)) {
+          setUserClass(storedClassFromLocalStorage as UserClass);
+        } else {
+          setUserClass(''); // Handles null, empty string, or invalid values
+        }
+
 
         if (storedTargetYear && storedTargetYear !== 'N/A' && TARGET_EXAM_YEAR_OPTIONS.includes(storedTargetYear)) setUserTargetYear(storedTargetYear);
         else setUserTargetYear('-- Not Set --');
@@ -136,11 +139,11 @@ export default function SettingsPage() {
         }
 
         if (pb.authStore.isValid && currentAuthUserId && isMounted) {
-            const localUserId = currentAuthUserId;
-            const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
+            const localUserId = currentAuthUserId; // Use a local constant for ID within this scope
             console.log(`[Real-time Subscription] PocketBase client baseUrl: ${pb.baseUrl}`);
+            const realtimeUrl = pb.baseUrl.replace(/^http/, 'ws') + '/api/realtime';
             console.log(`[Real-time Subscription] Attempting to connect to WebSocket: ${realtimeUrl} for user ID: ${localUserId}`);
-
+            
             try {
               unsubscribe = await pb.collection('users').subscribe(localUserId, (e) => {
                 if (e.action === 'update' && e.record && isMounted) {
@@ -214,8 +217,7 @@ export default function SettingsPage() {
         unsubscribe();
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toast]); // Added toast to dependency array
+  }, [toast]);
 
 
   const handleSaveChanges = async () => {
@@ -230,7 +232,6 @@ export default function SettingsPage() {
     console.log(`[Settings Save] User ID: ${currentAuthUserId}, Class: ${userClass}, Target Year: ${userTargetYear}`);
 
     const result = await updateUserProfileAction({
-      userId: currentAuthUserId,
       classToUpdate: userClass,
       targetYearToUpdate: userTargetYear,
     });
@@ -364,7 +365,7 @@ export default function SettingsPage() {
           <CardDescription>Share your code, track your success, and see who referred you.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {isLoadingReferrerName && !userReferredByUserName && (
+          {isLoadingReferrerName && (
              <div className="flex items-center text-sm text-muted-foreground">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Loading referrer information...
@@ -437,5 +438,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-
