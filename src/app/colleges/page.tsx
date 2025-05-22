@@ -34,8 +34,8 @@ import type { College } from '@/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { getCollegeDetailsAction } from '@/app/auth/actions'; 
-import type { CollegeDetailsOutput } from '@/ai/flows/college-details-flow'; 
+import { getCollegeDetailsAction } from '@/app/auth/actions';
+import type { CollegeDetailsOutput } from '@/ai/flows/college-details-flow';
 import { useToast } from "@/hooks/use-toast";
 
 
@@ -70,7 +70,7 @@ const mockColleges: College[] = [
   { id: 'ghr_ahmednagar', name: 'G H Raisoni College of Engineering and Management, Ahmednagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 2006, collegeType: 'Private', annualFees: '₹1,30,000', campusSizeAcres: 20, rating: 4.2, logoPlaceholder: getInitials('G H Raisoni College of Engineering and Management'), website: '#' },
   { id: 'gp_ahmednagar', name: 'Government Polytechnic, Ahmednagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1960, collegeType: 'Government', annualFees: '₹15,000', campusSizeAcres: 30, rating: 4.3, logoPlaceholder: getInitials('Government Polytechnic'), website: '#' },
   { id: '5160', name: 'Sanjivani Rural Education Societys Sanjivani College of Engineering, Kopargaon', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹1,25,000', campusSizeAcres: 28, rating: 4.4, logoPlaceholder: getInitials('Sanjivani College of Engineering'), website: '#' },
-  { id: '5161', name: 'Dr. Vithalrao Vikhe Patil College of Engineering, Ahmednagar', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹1,20,000', campusSizeAcres: 20, rating: 4.0, logoPlaceholder: getInitials('Dr. Vithalrao Vikhe Patil College of Engineering'), website: '#' }, // Duplicate ID 5161 with 5178, changed this one
+  { id: '5161_variant', name: 'Dr. Vithalrao Vikhe Patil College of Engineering, Ahmednagar (Variant)', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹1,20,000', campusSizeAcres: 20, rating: 4.0, logoPlaceholder: getInitials('Dr. Vithalrao Vikhe Patil College of Engineering Var'), website: '#' }, // Duplicate ID 5161 with 5178, changed this one's ID
   { id: '5162', name: 'Amrutvahini Sheti & Shikshan Vikas Sansthas Amrutvahini College of Engineering, Sangamner', district: 'AhilyaNagar', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹1,15,000', campusSizeAcres: 26, rating: 4.3, logoPlaceholder: getInitials('Amrutvahini College of Engineering'), website: '#' },
 
   // Akola
@@ -164,7 +164,7 @@ const mockColleges: College[] = [
 
   // Gadchiroli
   { id: 'npcet_gadchiroli', name: "Namdeorao Poreddiwar College of Engineering and Technology (NPCET), Gadchiroli", district: 'Gadchiroli', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹70,000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials("NPCET Gadchiroli"), website: '#' },
-  { id: 'gcoec_gad_proxy', name: 'Government College of Engineering, Chandrapur', district: 'Gadchiroli', stream: 'PCM', establishedYear: 1996, collegeType: 'Government', annualFees: '₹22,000', campusSizeAcres: 62, rating: 4.3, logoPlaceholder: getInitials('GCE Chandrapur G'), website: '#' }, // Note: Original is in Chandrapur, proxy for this list
+  { id: 'gcoec_gad_proxy', name: 'Government College of Engineering, Chandrapur (Serving Gadchiroli)', district: 'Gadchiroli', stream: 'PCM', establishedYear: 1996, collegeType: 'Government', annualFees: '₹22,000', campusSizeAcres: 62, rating: 4.3, logoPlaceholder: getInitials('GCE Chandrapur G'), website: '#' }, // Note: Original is in Chandrapur, proxy for this list
 
   // Hingoli
   { id: 'ksiet_hingoli', name: "Khurana Sawant Institute of Engineering & Technology (KSIET), Hingoli", district: 'Hingoli', stream: 'PCM', establishedYear: 2010, collegeType: 'Private', annualFees: '₹65,000', campusSizeAcres: 8, rating: 3.5, logoPlaceholder: getInitials("KSIET Hingoli"), website: '#' },
@@ -216,11 +216,12 @@ const mockColleges: College[] = [
   { id: '6803', name: 'Sant Gajanan Maharaj College of Engineering, Gadhinglaj', district: 'Kolhapur', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹80000', campusSizeAcres: 10, rating: 3.7, logoPlaceholder: getInitials('SGMCE Gadhinglaj'), website: '#' },
   { id: '6878', name: 'Dr. A. D. Shinde College Of Engineering, Tal.Gadhinglaj, Kolhapur', district: 'Kolhapur', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹85000', campusSizeAcres: 12, rating: 3.7, logoPlaceholder: getInitials('ADSCOE Gadhinglaj'), website: '#' },
   { id: '6277', name: 'Dr. J. J. Magdum Charitable Trusts Dr. J.J. Magdum College of Engineering, Jaysingpur', district: 'Kolhapur', stream: 'PCM', establishedYear: 1992, collegeType: 'Private', annualFees: '₹90000', campusSizeAcres: 15, rating: 3.9, logoPlaceholder: getInitials('JJ Magdum Jaysingpur'), website: '#' },
-  
+
   // Latur
   { id: '2129', name: 'M.S. Bidve Engineering College, Latur', district: 'Latur', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹85,000', campusSizeAcres: 20, rating: 3.9, logoPlaceholder: getInitials('MS Bidve Latur'), website: '#' },
   { id: '2254', name: 'Vilasrao Deshmukh Foundation Group of Institutions, Latur', district: 'Latur', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹90,000', campusSizeAcres: 18, rating: 4.0, logoPlaceholder: getInitials('VDF Latur'), website: '#' },
   { id: '2522', name: 'STMEIs Sandipani Technical Campus-Faculty of Engineering, Latur.', district: 'Latur', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹75,000', campusSizeAcres: 12, rating: 3.7, logoPlaceholder: getInitials('Sandipani Latur'), website: '#' },
+  { id: '2641', name: 'Dr. V.K. Patil College of Engineering & Technology', district: 'Osmanabad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('VK Patil Osmanabad'), website: '#' }, // Note: ID 2641 assigned to Osmanabad, seems to be where this college is
 
   // Mumbai City
   { id: '3012', name: 'Veermata Jijabai Technological Institute(VJTI), Matunga, Mumbai', district: 'Mumbai City', stream: 'PCM', establishedYear: 1887, collegeType: 'Autonomous', annualFees: '₹85,000', campusSizeAcres: 16, rating: 4.7, logoPlaceholder: getInitials('Veermata Jijabai Technological Institute'), website: 'https://vjti.ac.in' },
@@ -311,15 +312,15 @@ const mockColleges: College[] = [
   { id: '5401', name: 'Jawahar Education Societys Institute of Technology, Management & Research, Nashik.', district: 'Nashik', stream: 'PCM', establishedYear: 2012, collegeType: 'Private', annualFees: '₹1,00,000', campusSizeAcres: 8, rating: 3.7, logoPlaceholder: getInitials('JITMR Nashik'), website: '#' },
   { id: '5411', name: 'Maulana Mukhtar Ahmad Nadvi Technical Campus, Malegaon.', district: 'Nashik', stream: 'PCM', establishedYear: 2012, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 15, rating: 3.6, logoPlaceholder: getInitials('MMANTC Malegaon'), website: '#' },
   { id: '5418', name: 'Guru Gobind Singh College of Engineering & Research Centre, Nashik.', district: 'Nashik', stream: 'PCM', establishedYear: 2013, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 10, rating: 3.9, logoPlaceholder: getInitials('GGSCOERC Nashik'), website: '#' },
-  { id: '2111', name: 'Everest Education Society, Group of Institutions (Integrated Campus), Ohar', district: 'Nashik', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('Everest Ohar'), website: '#' }, // Ohar likely Nashik district based on nearby entries
-  { id: '5124', name: 'Jagadamba Education Soc. Nashiks S.N.D. College of Engineering & Reserch, Babulgaon', district: 'Yavatmal', stream: 'PCM', establishedYear: 2006, collegeType: 'Private', annualFees: '₹90000', campusSizeAcres: 10, rating: 3.9, logoPlaceholder: getInitials('SND Babulgaon'), website: '#' },
+  { id: '2111', name: 'Everest Education Society, Group of Institutions (Integrated Campus), Ohar', district: 'Nashik', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('Everest Ohar'), website: '#' },
+  { id: '5124', name: 'Jagadamba Education Soc. Nashiks S.N.D. College of Engineering & Reserch, Babulgaon', district: 'Yavatmal', stream: 'PCM', establishedYear: 2006, collegeType: 'Private', annualFees: '₹90000', campusSizeAcres: 10, rating: 3.9, logoPlaceholder: getInitials('SND Babulgaon'), website: '#' }, // Babulgaon is Yavatmal dist
 
   // Osmanabad (Dharashiv)
   { id: '2130', name: 'Terna Public Charitable Trusts College of Engineering, Dharashiv', district: 'Osmanabad', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹90,000', campusSizeAcres: 25, rating: 4.0, logoPlaceholder: getInitials('Terna Dharashiv'), website: '#' },
   { id: '2131', name: 'Shree Tuljabhavani College of Engineering, Tuljapur', district: 'Osmanabad', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 20, rating: 3.8, logoPlaceholder: getInitials('STBC Tuljapur'), website: '#' },
   { id: '2146', name: 'Adarsh Shikshan Prasarak Mandals K. T. Patil College of Engineering and Technology, Dharashiv', district: 'Osmanabad', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹75,000', campusSizeAcres: 15, rating: 3.7, logoPlaceholder: getInitials('KT Patil Dharashiv'), website: '#' },
   { id: '1268', name: 'Siddhivinayak Technical Campus, School of Engineering & Research Technology, Shirasgon, Nile', district: 'Osmanabad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹75000', campusSizeAcres: 12, rating: 3.6, logoPlaceholder: getInitials('Siddhivinayak Shirasgon'), website: '#' },
-  { id: '2641', name: 'Dr. V.K. Patil College of Engineering & Technology', district: 'Osmanabad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('VK Patil Osmanabad'), website: '#' },
+  // { id: '2641', name: 'Dr. V.K. Patil College of Engineering & Technology', district: 'Osmanabad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('VK Patil Osmanabad'), website: '#' }, // Already added in Latur section, assuming one entry per unique ID
 
   // Palghar
   { id: '3194', name: 'Vidyavardhinis College of Engineering and Technology, Vasai', district: 'Palghar', stream: 'PCM', establishedYear: 1994, collegeType: 'Private', annualFees: '₹1,25,000', campusSizeAcres: 12, rating: 3.9, logoPlaceholder: getInitials('VCET Vasai'), website: '#' },
@@ -327,7 +328,7 @@ const mockColleges: College[] = [
   { id: '3221', name: 'Late Shri. Vishnu Waman Thakur Charitable Trust, Viva Institute of Technology, Shirgaon', district: 'Palghar', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 10, rating: 3.8, logoPlaceholder: getInitials('Viva Shirgaon'), website: '#' },
   { id: '3222', name: 'Haji Jamaluddin Thim Trusts Theem College of Engineering, At. Villege Betegaon, Boisar', district: 'Palghar', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹1,00,000', campusSizeAcres: 12, rating: 3.7, logoPlaceholder: getInitials('Theem Boisar'), website: '#' },
   { id: '3460', name: 'Universal College of Engineering,Kaman Dist. Palghar', district: 'Palghar', stream: 'PCM', establishedYear: 2012, collegeType: 'Private', annualFees: '₹1,05,000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('UCOE Palghar'), website: '#' },
-  { id: '3465', name: 'Ideal Institute of Technology, Wada, Dist.Thane', district: 'Palghar', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹80000', campusSizeAcres: 8, rating: 3.4, logoPlaceholder: getInitials('Ideal Wada'), website: '#' },
+  { id: '3465', name: 'Ideal Institute of Technology, Wada, Dist.Thane', district: 'Palghar', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹80000', campusSizeAcres: 8, rating: 3.4, logoPlaceholder: getInitials('Ideal Wada'), website: '#' }, // Wada is in Palghar
 
   // Parbhani
   { id: '2252', name: 'Marathwada Shikshan Prasarak Mandals Shri Shivaji Institute of Engineering and Management Studies, Parbhani', district: 'Parbhani', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 15, rating: 3.7, logoPlaceholder: getInitials('SSIEMS Parbhani'), website: '#' },
@@ -411,7 +412,6 @@ const mockColleges: College[] = [
   { id: '6815', name: 'Vidya Prasarini Sabhas College of Engineering & Technology, Lonavala', district: 'Pune', stream: 'PCM', establishedYear: 1998, collegeType: 'Private', annualFees: '₹1,00,000', campusSizeAcres: 10, rating: 3.7, logoPlaceholder: getInitials('VPSCOET Lonavala'), website: '#' },
   { id: '6822', name: 'Pimpri Chinchwad Education Trusts Pimpri Chinchwad College Of Engineering And Research, Ravet', district: 'Pune', stream: 'PCM', establishedYear: 2014, collegeType: 'Private', annualFees: '₹1,40,000', campusSizeAcres: 10, rating: 4.0, logoPlaceholder: getInitials('PCCOER Ravet'), website: '#' },
   { id: '6834', name: 'Dr.D.Y.Patil College Of Engineering & Innovation,Talegaon', district: 'Pune', stream: 'PCM', establishedYear: 2014, collegeType: 'Private', annualFees: '₹1,20,000', campusSizeAcres: 10, rating: 3.8, logoPlaceholder: getInitials('DYPCOEI Talegaon'), website: '#' },
-
 
   // Raigad
   { id: '3033', name: 'Dr. Babasaheb Ambedkar Technological University, Lonere', district: 'Raigad', stream: 'PCM', establishedYear: 1989, collegeType: 'University', annualFees: '₹60,000', campusSizeAcres: 500, rating: 4.4, logoPlaceholder: getInitials('DBATU Lonere'), website: '#' },
@@ -546,8 +546,8 @@ export default function CollegesPage() {
 
   const handleStreamSelect = (stream: 'PCB' | 'PCM') => {
     setSelectedStream(stream);
-    setSelectedDistrict('All Districts'); 
-    setSearchTerm(''); 
+    setSelectedDistrict('All Districts');
+    setSearchTerm('');
     setIsModalOpen(false);
   };
 
@@ -610,8 +610,8 @@ export default function CollegesPage() {
   const renderStars = (rating: number | undefined) => {
     if (rating === undefined || rating === null || rating === 0) return <span className="text-xs text-muted-foreground">N/A</span>;
     const fullStars = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.4 && rating % 1 < 0.9; 
-    const almostFullStar = rating % 1 >= 0.9; 
+    const halfStar = rating % 1 >= 0.4 && rating % 1 < 0.9;
+    const almostFullStar = rating % 1 >= 0.9;
     let renderedFullStars = fullStars;
     if(almostFullStar) renderedFullStars++;
 
@@ -626,7 +626,7 @@ export default function CollegesPage() {
            <Star key="half" className="h-4 w-4 text-yellow-400" style={{clipPath: 'polygon(0 0, 50% 0, 50% 100%, 0% 100%)'}} />
         )}
         {[...Array(emptyStars < 0 ? 0 : emptyStars)].map((_, i) => (
-          <Star key={`empty-${i}`} className="h-4 w-4 text-yellow-300" /> 
+          <Star key={`empty-${i}`} className="h-4 w-4 text-yellow-300" />
         ))}
         <span className="ml-1.5 text-xs font-medium text-foreground">({rating.toFixed(1)})</span>
       </div>
@@ -679,14 +679,14 @@ export default function CollegesPage() {
       {selectedCollegeForDetails && (
         <Dialog open={isDetailsModalOpen} onOpenChange={handleDetailsModalOpenChange}>
           <DialogContent className="sm:max-w-lg md:max-w-2xl bg-background/95 backdrop-blur-sm">
-            <DialogHeader>
+            <DialogHeader className="pb-4 border-b mb-4">
               <DialogTitle className="text-xl font-bold text-primary">{selectedCollegeForDetails.name}</DialogTitle>
               <DialogDescription>
                 {selectedCollegeForDetails.district} | Stream: {selectedCollegeForDetails.stream === 'Both' ? 'PCM & PCB' : selectedCollegeForDetails.stream}
               </DialogDescription>
             </DialogHeader>
             <ScrollArea className="max-h-[70vh] p-1 pr-3 -mr-2">
-              <div className="py-4 space-y-4">
+              <div className="space-y-6">
                 {isFetchingAiDetails && (
                   <div className="flex flex-col items-center justify-center h-40">
                     <Loader2 className="h-10 w-10 text-primary animate-spin mb-3" />
@@ -702,40 +702,62 @@ export default function CollegesPage() {
                     <p className="text-sm">{aiDetailsError}</p>
                   </div>
                 )}
+
                 {aiCollegeDetails && !isFetchingAiDetails && !aiDetailsError && (
-                  <div className="space-y-5">
-                    <div>
+                  <>
+                    <div className="mb-5">
                       <h3 className="text-lg font-semibold mb-2 text-accent">College Overview</h3>
-                      <p className="text-sm text-muted-foreground whitespace-pre-wrap">{aiCollegeDetails.collegeSummary || "No summary available."}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                        {aiCollegeDetails.collegeSummary || "No summary available from AI."}
+                      </p>
                     </div>
 
                     {aiCollegeDetails.branches && aiCollegeDetails.branches.length > 0 && (
-                      <div>
-                        <h3 className="text-lg font-semibold mt-4 mb-3 text-accent">AI-Generated Branch Insights &amp; Typical Cutoffs</h3>
-                        <div className="space-y-3">
+                      <div className="mt-2">
+                        <h3 className="text-lg font-semibold mb-3 text-accent">AI-Generated Branch Insights &amp; Typical Cutoffs</h3>
+                        <div className="divide-y divide-border/60 rounded-md border border-border/60 shadow-sm">
                           {aiCollegeDetails.branches.map((branch, index) => (
-                            <Card key={index} className="shadow-sm border-border/70 bg-muted/30">
-                              <CardHeader className="pb-2 pt-3 px-4">
-                                <CardTitle className="text-md font-semibold">{branch.branchName}</CardTitle>
-                                {branch.intake && <CardDescription className="text-xs">Intake: {branch.intake}</CardDescription>}
-                              </CardHeader>
-                              <CardContent className="px-4 pb-3 text-xs space-y-1">
-                                {branch.mhtCetCutoff && <p><strong className="text-muted-foreground">MHT-CET:</strong> {branch.mhtCetCutoff}</p>}
-                                {branch.jeeMainCutoff && <p><strong className="text-muted-foreground">JEE Main:</strong> {branch.jeeMainCutoff}</p>}
-                                {branch.neetCutoff && <p><strong className="text-muted-foreground">NEET:</strong> {branch.neetCutoff}</p>}
-                                {!(branch.mhtCetCutoff || branch.jeeMainCutoff || branch.neetCutoff) && <p className="text-muted-foreground italic">No specific cutoff information available from AI.</p>}
-                              </CardContent>
-                            </Card>
+                            <div key={index} className="p-4 hover:bg-muted/50 transition-colors">
+                              <h4 className="text-md font-semibold text-primary mb-1.5">{branch.branchName}</h4>
+                              {branch.intake && (
+                                <p className="text-xs text-muted-foreground mb-2">
+                                  <span className="font-medium">Approx. Intake:</span> {branch.intake}
+                                </p>
+                              )}
+                              <div className="space-y-1.5 text-xs">
+                                {branch.mhtCetCutoff && (
+                                  <div className="flex items-baseline">
+                                    <span className="w-28 shrink-0 text-muted-foreground font-medium">MHT-CET Cutoff:</span>
+                                    <span className="text-foreground">{branch.mhtCetCutoff}</span>
+                                  </div>
+                                )}
+                                {branch.jeeMainCutoff && (
+                                  <div className="flex items-baseline">
+                                    <span className="w-28 shrink-0 text-muted-foreground font-medium">JEE Main Cutoff:</span>
+                                    <span className="text-foreground">{branch.jeeMainCutoff}</span>
+                                  </div>
+                                )}
+                                {branch.neetCutoff && (
+                                  <div className="flex items-baseline">
+                                    <span className="w-28 shrink-0 text-muted-foreground font-medium">NEET Cutoff:</span>
+                                    <span className="text-foreground">{branch.neetCutoff}</span>
+                                  </div>
+                                )}
+                                {!(branch.mhtCetCutoff || branch.jeeMainCutoff || branch.neetCutoff) && (
+                                  <p className="text-muted-foreground italic">No specific cutoff information available from AI for this branch.</p>
+                                )}
+                              </div>
+                            </div>
                           ))}
                         </div>
                       </div>
                     )}
-                     {(!aiCollegeDetails.branches || aiCollegeDetails.branches.length === 0) && (
-                        <p className="text-sm text-muted-foreground italic">No specific branch information available from AI.</p>
+                    {(!aiCollegeDetails.branches || aiCollegeDetails.branches.length === 0) && (
+                        <p className="text-sm text-muted-foreground italic mt-4">No specific branch information available from AI.</p>
                     )}
-                  </div>
+                  </>
                 )}
-                 {!aiCollegeDetails && !isFetchingAiDetails && !aiDetailsError && ( 
+                 {!aiCollegeDetails && !isFetchingAiDetails && !aiDetailsError && (
                     <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-md border border-blue-200 dark:border-blue-700">
                         <p className="text-sm font-semibold text-blue-700 dark:text-blue-300 flex items-center">
                         <Sparkles className="h-4 w-4 mr-2 animate-pulse" />
@@ -748,7 +770,7 @@ export default function CollegesPage() {
                  )}
               </div>
             </ScrollArea>
-            <DialogFooter className="mt-2">
+            <DialogFooter className="mt-4 pt-4 border-t">
               <Button variant="outline" onClick={() => handleDetailsModalOpenChange(false)}>Close</Button>
             </DialogFooter>
           </DialogContent>
@@ -844,7 +866,7 @@ export default function CollegesPage() {
                         <div className="flex items-center text-xs"><IndianRupee className="h-3.5 w-3.5 mr-1.5 text-green-600 dark:text-green-400" /> Fees: <span className="font-medium text-foreground ml-1">{college.annualFees || 'N/A'}</span></div>
                         <div className="flex items-center text-xs"><Ruler className="h-3.5 w-3.5 mr-1.5 text-orange-600 dark:text-orange-400" /> Campus: <span className="font-medium text-foreground ml-1">{college.campusSizeAcres ? `${college.campusSizeAcres} Acres` : 'N/A'}</span></div>
                       </div>
-                       <div className="flex items-center pt-2"> 
+                       <div className="flex items-center pt-2">
                          {renderStars(college.rating)}
                       </div>
                     </CardContent>
@@ -883,5 +905,3 @@ export default function CollegesPage() {
     </div>
   );
 }
-
-    
