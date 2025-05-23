@@ -16,7 +16,7 @@ export default function TestManagementPage({
   searchParams?: any; // Type for the incoming searchParams prop
 }) {
   // Ensure params and searchParams are unwrapped before any potential enumeration
-  const params = use(paramsAsProp);
+  const params = paramsAsProp ? use(paramsAsProp) : undefined;
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
