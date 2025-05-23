@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import { use } from 'react'; // Import use
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -9,13 +8,13 @@ export const metadata: Metadata = {
 };
 
 export default function DppManagementPage({
-  params: paramsAsProp, // Renamed incoming prop
-  searchParams: searchParamsAsProp, // Renamed incoming prop
+  params: paramsAsProp,
+  searchParams: searchParamsAsProp,
 }: {
-  params?: any; // params can be undefined for static pages during some build phases
-  searchParams?: any; // searchParams can be undefined or a "use-able" resource
+  params?: any; 
+  searchParams?: any;
 }) {
-  // Unwrap params and searchParams immediately only if they are defined
+  // Conditionally unwrap params and searchParams
   const params = paramsAsProp ? use(paramsAsProp) : undefined;
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 

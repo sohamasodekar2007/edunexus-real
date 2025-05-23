@@ -10,13 +10,13 @@ export const metadata: Metadata = {
 };
 
 export default function AdminDashboardPage({
-  params: paramsAsProp, // Renamed incoming prop
-  searchParams: searchParamsAsProp, // Renamed incoming prop
+  params: paramsAsProp,
+  searchParams: searchParamsAsProp,
 }: {
-  params?: any; // params can be undefined for static pages during some build phases
-  searchParams?: any; // searchParams can be undefined or a "use-able" resource
+  params?: any;
+  searchParams?: any;
 }) {
-  // Unwrap params and searchParams immediately only if they are defined
+  // Conditionally unwrap params and searchParams
   const params = paramsAsProp ? use(paramsAsProp) : undefined;
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
@@ -86,9 +86,4 @@ export default function AdminDashboardPage({
               <span>Global Settings (Coming Soon)</span>
               <ExternalLink className="h-4 w-4 text-muted-foreground" />
             </Link>
-          </CardContent>
-        </Card>
-      </section>
-    </div>
-  );
-}
+          </

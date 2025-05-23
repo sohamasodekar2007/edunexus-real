@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, use } from 'react'; // Ensure 'use' is imported
+import { useEffect } from 'react'; // Removed 'use'
 import { useRouter } from 'next/navigation';
 import pb from '@/lib/pocketbase';
 import Link from 'next/link';
@@ -10,21 +10,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Logo } from '@/components/icons';
 import { ArrowRight, Rocket, Target, Wand2, BarChartBig, ListChecks } from 'lucide-react';
 
-// Define a type for the props that Next.js passes to page components
-// This explicitly types params and searchParams as Promise-like to satisfy PageProps constraint
-type LandingPageNextJsProps = {
-  params: Promise<{ [key: string]: string | string[] | undefined }>;
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
-export default function LandingPage({
-  params: paramsProp,
-  searchParams: searchParamsProp,
-}: LandingPageNextJsProps) {
-  // Unwrap params and searchParams using React.use()
-  // This is necessary for Next.js 15+ build system for props passed to page components
-  const resolvedParams = use(paramsProp);
-  const resolvedSearchParams = searchParamsProp ? use(searchParamsProp) : undefined;
+export default function LandingPage() {
+  // Removed params, searchParams, and React.use() calls as they are not used
+  // in this client component's logic.
 
   const router = useRouter();
 
@@ -32,9 +20,8 @@ export default function LandingPage({
     if (pb.authStore.isValid) {
       router.replace('/dashboard');
     }
-    // No else needed, page content renders if not redirected
-    // resolvedParams and resolvedSearchParams are not used in this specific useEffect,
-    // but unwrapping them is necessary for the build.
+    // No else needed here, as this page should be accessible if not logged in.
+    // The /app/page.tsx handles the initial root redirect based on auth state.
   }, [router]);
 
   return (
