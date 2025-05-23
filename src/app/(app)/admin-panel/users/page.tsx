@@ -12,11 +12,11 @@ export default function UserManagementPage({
   params: paramsAsProp, // Renamed incoming prop
   searchParams: searchParamsAsProp, // Renamed incoming prop
 }: {
-  params: any; // Next.js provides this as a "use-able" resource
+  params?: any; // params can be undefined for static pages during some build phases
   searchParams?: any; // searchParams can be undefined or a "use-able" resource
 }) {
   // Ensure params and searchParams are unwrapped before any potential enumeration
-  const params = use(paramsAsProp); // paramsAsProp is expected to be defined
+  const params = paramsAsProp ? use(paramsAsProp) : undefined;
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (

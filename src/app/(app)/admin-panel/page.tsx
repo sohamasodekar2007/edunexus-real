@@ -13,11 +13,11 @@ export default function AdminDashboardPage({
   params: paramsAsProp, // Renamed incoming prop
   searchParams: searchParamsAsProp, // Renamed incoming prop
 }: {
-  params: any; // Next.js provides this as a "use-able" resource
+  params?: any; // params can be undefined for static pages during some build phases
   searchParams?: any; // searchParams can be undefined or a "use-able" resource
 }) {
-  // Unwrap params and searchParams immediately
-  const params = use(paramsAsProp); // paramsAsProp is expected to be defined
+  // Unwrap params and searchParams immediately only if they are defined
+  const params = paramsAsProp ? use(paramsAsProp) : undefined;
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
