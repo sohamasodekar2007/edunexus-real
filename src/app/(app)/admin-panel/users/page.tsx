@@ -1,6 +1,6 @@
 
 import type { Metadata } from 'next';
-import { use } from 'react';
+import { use } from 'react'; // Import use
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Users as UsersIcon, ExternalLink } from "lucide-react";
 
@@ -9,14 +9,14 @@ export const metadata: Metadata = {
 };
 
 export default function UserManagementPage({
-  params: paramsAsProp, 
-  searchParams: searchParamsAsProp, 
+  params: paramsAsProp, // Renamed incoming prop
+  searchParams: searchParamsAsProp, // Renamed incoming prop
 }: {
-  params?: any; 
-  searchParams?: any; 
+  params: any; // Next.js provides this as a "use-able" resource
+  searchParams?: any; // searchParams can be undefined or a "use-able" resource
 }) {
   // Ensure params and searchParams are unwrapped before any potential enumeration
-  const params = paramsAsProp ? use(paramsAsProp) : undefined;
+  const params = use(paramsAsProp); // paramsAsProp is expected to be defined
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (

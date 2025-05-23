@@ -1,6 +1,6 @@
 
 import type { Metadata } from 'next';
-import { use } from 'react';
+import { use } from 'react'; // Import use
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ClipboardList } from "lucide-react";
 
@@ -9,14 +9,14 @@ export const metadata: Metadata = {
 };
 
 export default function DppManagementPage({
-  params: paramsAsProp,
-  searchParams: searchParamsAsProp,
+  params: paramsAsProp, // Renamed incoming prop
+  searchParams: searchParamsAsProp, // Renamed incoming prop
 }: {
-  params?: any; 
-  searchParams?: any; 
+  params: any; // Next.js provides this as a "use-able" resource
+  searchParams?: any; // searchParams can be undefined or a "use-able" resource
 }) {
   // Unwrap params and searchParams immediately
-  const params = paramsAsProp ? use(paramsAsProp) : undefined;
+  const params = use(paramsAsProp); // paramsAsProp is expected to be defined
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (

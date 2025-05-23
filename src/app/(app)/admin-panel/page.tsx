@@ -1,6 +1,6 @@
 
 import type { Metadata } from 'next';
-import { use } from 'react';
+import { use } from 'react'; // Import use
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ShieldCheck, BarChart3, Users, Settings, ExternalLink } from 'lucide-react';
 import Link from "next/link";
@@ -10,14 +10,14 @@ export const metadata: Metadata = {
 };
 
 export default function AdminDashboardPage({
-  params: paramsAsProp,
-  searchParams: searchParamsAsProp,
+  params: paramsAsProp, // Renamed incoming prop
+  searchParams: searchParamsAsProp, // Renamed incoming prop
 }: {
-  params?: any; 
-  searchParams?: any; 
+  params: any; // Next.js provides this as a "use-able" resource
+  searchParams?: any; // searchParams can be undefined or a "use-able" resource
 }) {
   // Unwrap params and searchParams immediately
-  const params = paramsAsProp ? use(paramsAsProp) : undefined;
+  const params = use(paramsAsProp); // paramsAsProp is expected to be defined
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
