@@ -25,14 +25,9 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-  // Removed params and searchParams from props
-  // params: { [key: string]: string | string[] | undefined };
-  // searchParams: { [key: string]: string | string[] | undefined };
+  // Removed params and searchParams from props as RootLayout does not use them
 }>) {
-  // Removed use(params) and use(searchParams)
-  // const _resolvedParams = use(params);
-  // const _resolvedSearchParams = use(searchParams);
-
+  // No use(params) or use(searchParams) needed here
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>

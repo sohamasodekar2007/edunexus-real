@@ -4,17 +4,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Construction, Home } from 'lucide-react';
 import { Logo } from '@/components/icons';
-// Removed: import { use } from 'react'; 
 import type { Metadata } from 'next';
+// Removed: import { use } from 'react'; 
 
 export const metadata: Metadata = {
   title: 'EduNexus - Page Not Found',
 };
 
-// Removed params and searchParams from props
 export default function NotFoundPage() {
-  // Removed use(paramsAsProp) and use(searchParamsAsProp)
-
+  // Removed params, searchParams, and use() calls as they are not directly used
+  // and might cause issues if Next.js doesn't pass them consistently to not-found.
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4 text-center">
       <Card className="w-full max-w-lg shadow-xl">

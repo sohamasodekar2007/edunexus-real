@@ -86,4 +86,9 @@ export default function AdminDashboardPage({
               <span>Global Settings (Coming Soon)</span>
               <ExternalLink className="h-4 w-4 text-muted-foreground" />
             </Link>
-          </
+          </CardContent>
+        </Card>
+      </section>
+    </div>
+  );
+}

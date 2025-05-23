@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect } from 'react'; // Removed 'use'
+import { useEffect, use } from 'react'; // Added 'use'
 import { useRouter } from 'next/navigation';
 import pb from '@/lib/pocketbase';
 import Link from 'next/link';
@@ -10,9 +10,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Logo } from '@/components/icons';
 import { ArrowRight, Rocket, Target, Wand2, BarChartBig, ListChecks } from 'lucide-react';
 
-export default function LandingPage() {
-  // Removed params, searchParams, and React.use() calls as they are not used
-  // in this client component's logic.
+export default function LandingPage({
+  params: paramsAsProp,
+  searchParams: searchParamsAsProp,
+}: {
+  params?: any; // Make optional and type as any
+  searchParams?: any; // Make optional and type as any
+}) {
+  // Conditionally unwrap params and searchParams if Next.js passes them
+  // This helps satisfy build-time checks for page components, even if not directly used.
+  const _resolvedParams = paramsAsProp ? use(paramsAsProp) : undefined;
+  const _resolvedSearchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   const router = useRouter();
 
@@ -20,8 +28,6 @@ export default function LandingPage() {
     if (pb.authStore.isValid) {
       router.replace('/dashboard');
     }
-    // No else needed here, as this page should be accessible if not logged in.
-    // The /app/page.tsx handles the initial root redirect based on auth state.
   }, [router]);
 
   return (
