@@ -9,14 +9,14 @@ export const metadata: Metadata = {
 };
 
 export default function SiteSettingsPage({
-  params: paramsAsProp, // Renamed incoming prop
-  searchParams: searchParamsAsProp, // Renamed incoming prop
+  params: paramsAsProp,
+  searchParams: searchParamsAsProp,
 }: {
-  params: any; // Type for the incoming params prop
-  searchParams?: any; // Type for the incoming searchParams prop
+  params?: any; 
+  searchParams?: any; 
 }) {
   // Ensure params and searchParams are unwrapped before any potential enumeration
-  const params = use(paramsAsProp);
+  const params = paramsAsProp ? use(paramsAsProp) : undefined;
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (

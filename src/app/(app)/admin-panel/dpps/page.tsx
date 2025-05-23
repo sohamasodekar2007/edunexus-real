@@ -9,14 +9,14 @@ export const metadata: Metadata = {
 };
 
 export default function DppManagementPage({
-  params: paramsAsProp, // Renamed incoming prop
-  searchParams: searchParamsAsProp, // Renamed incoming prop
+  params: paramsAsProp,
+  searchParams: searchParamsAsProp,
 }: {
-  params: any; // Type for the incoming params prop
-  searchParams?: any; // Type for the incoming searchParams prop
+  params?: any; 
+  searchParams?: any; 
 }) {
   // Unwrap params and searchParams immediately
-  const params = use(paramsAsProp);
+  const params = paramsAsProp ? use(paramsAsProp) : undefined;
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
