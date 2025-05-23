@@ -12,11 +12,11 @@ export default function DppManagementPage({
   params: paramsAsProp, // Renamed incoming prop
   searchParams: searchParamsAsProp, // Renamed incoming prop
 }: {
-  params: any; // Type for the incoming params prop
+  params?: any; // Made params optional
   searchParams?: any; // Type for the incoming searchParams prop
 }) {
   // Unwrap params and searchParams immediately
-  const params = use(paramsAsProp);
+  const params = paramsAsProp ? use(paramsAsProp) : undefined;
   const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
