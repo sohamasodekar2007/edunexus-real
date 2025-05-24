@@ -1,0 +1,129 @@
+
+{
+  "coep": {
+    "id": "coep",
+    "name": "COEP Technological University",
+    "district": "Pune",
+    "stream": "PCM",
+    "establishedYear": 1854,
+    "collegeType": "University Department",
+    "overallAnnualFees": "₹90,000",
+    "campusSizeAcres": 36,
+    "overallRating": 4.8,
+    "website": "https://www.coep.org.in/",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": {
+          "open": "99.85",
+          "obc": "99.70",
+          "sc": "98.50",
+          "st": "96.00",
+          "ews": "99.75",
+          "tfws": "99.90"
+        },
+        "fees": {
+          "open": "90,000",
+          "obc": "45,000",
+          "sc": "5,000",
+          "st": "Free",
+          "ews": "45,000",
+          "tfws": "20,000"
+        }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": {
+          "open": "99.60",
+          "obc": "99.30",
+          "sc": "97.50",
+          "st": "94.00",
+          "ews": "99.40",
+          "tfws": "99.75"
+        },
+        "fees": {
+          "open": "90,000",
+          "obc": "45,000",
+          "sc": "5,000",
+          "st": "Free",
+          "ews": "45,000",
+          "tfws": "20,000"
+        }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": {
+          "open": "99.20",
+          "obc": "98.80"
+        },
+        "fees": {
+          "open": "90,000"
+        }
+      }
+    ]
+  },
+  "vjti": {
+    "id": "vjti",
+    "name": "Veermata Jijabai Technological Institute (VJTI), Matunga, Mumbai",
+    "district": "Mumbai City",
+    "stream": "PCM",
+    "establishedYear": 1887,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹85,000",
+    "campusSizeAcres": 16,
+    "overallRating": 4.7,
+    "website": "https://www.vjti.ac.in/",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": {
+          "open": "99.75",
+          "obc": "99.50",
+          "sc": "98.00",
+          "ews": "99.60"
+        },
+        "fees": {
+          "open": "85,000",
+          "obc": "42,500"
+        }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "60",
+        "mhtCetCutoffs": {
+          "open": "99.65",
+          "obc": "99.40"
+        },
+        "fees": {
+          "open": "85,000"
+        }
+      }
+    ]
+  },
+  "coep1": {
+    "id": "coep1",
+    "name": "Dr. Vithalrao Vikhe Patil College of Engineering, Ahmednagar",
+    "district": "AhilyaNagar",
+    "stream": "PCM",
+    "establishedYear": 1983,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,20,000",
+    "campusSizeAcres": 20,
+    "overallRating": 4.0,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "mhtCetCutoffs": { "open": "90.0", "obc": "88.0" },
+        "fees": { "open": "1,20,000", "obc": "60,000" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "mhtCetCutoffs": { "open": "85.0" },
+        "fees": { "open": "1,20,000" }
+      }
+    ]

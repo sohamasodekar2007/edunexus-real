@@ -1,4 +1,3 @@
-
 export interface Question {
   id: string;
   text: string;
@@ -146,15 +145,43 @@ export interface College {
   rating?: number; // e.g., 4.5 (out of 5)
   logoPlaceholder?: string; // e.g., first letter or initials for placeholder
   website?: string;
-  courses?: string[]; // A few popular courses for the card
-  // For detailed view later, to be populated by Gemini or other AI
-  branches?: Array<{
-    name: string;
-    intake?: number;
-    durationYears?: number;
-    mhtCetCutoff?: string; // e.g., "98.5 percentile" or "Rank: 1500"
-    jeeMainCutoff?: string; // e.g., "Rank: 20000"
-    neetCutoff?: string; // e.g., "Score: 600"
-    description?: string;
-  }>;
+  // courses array removed as per user request to remove this from cards
 }
+
+// New types for detailed college data from JSON
+export interface CategoryWiseData {
+  open?: string;
+  obc?: string;
+  sc?: string;
+  st?: string;
+  vjnt?: string; // VJ/NT
+  ews?: string;
+  tfws?: string;
+  other?: string;
+  [key: string]: string | undefined; // Allow other categories
+}
+
+export interface BranchDetail {
+  branchName: string;
+  mhtCetCutoffs?: CategoryWiseData;
+  jeeMainCutoffs?: CategoryWiseData; // Optional for now
+  neetCutoffs?: CategoryWiseData;    // Optional for now
+  fees?: CategoryWiseData; // Category-wise fees
+  intake?: string; // Optional
+}
+
+export interface CollegeDetailData {
+  id: string; // Should match the ID in mockColleges
+  name: string;
+  district: string;
+  stream: 'PCM' | 'PCB' | 'Both';
+  establishedYear?: number;
+  collegeType?: 'Government' | 'Private' | 'Autonomous' | 'Deemed' | 'University Department' | 'University';
+  overallAnnualFees?: string; // General fee for the card
+  campusSizeAcres?: number;
+  overallRating?: number;
+  website?: string;
+  branches: BranchDetail[];
+}
+
+export type CollegeData2025 = Record<string, CollegeDetailData>;
