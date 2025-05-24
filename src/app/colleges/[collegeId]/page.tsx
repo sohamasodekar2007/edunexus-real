@@ -74,7 +74,7 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
         </div>
       </div>
     );
-  }; // Crucial semicolon here
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 py-8">
@@ -147,10 +147,19 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
                           {branch.mhtCetCutoffs && (
                             renderCategoryTable(branch.mhtCetCutoffs, "MHT-CET Cutoffs", " %ile")
                           )}
+                          {branch.jeeMainCutoffs && (
+                            renderCategoryTable(branch.jeeMainCutoffs, "JEE Main Cutoffs", " Rank")
+                          )}
+                           {branch.neetCutoffs && (
+                            renderCategoryTable(branch.neetCutoffs, "NEET Cutoffs", " Score")
+                          )}
                           {branch.fees && (
                              renderCategoryTable(branch.fees, "Category-wise Fees", " INR")
                           )}
-                           {(!branch.mhtCetCutoffs || Object.keys(branch.mhtCetCutoffs).length === 0) && (!branch.fees || Object.keys(branch.fees).length === 0) && (
+                           {(!branch.mhtCetCutoffs || Object.keys(branch.mhtCetCutoffs).length === 0) && 
+                            (!branch.jeeMainCutoffs || Object.keys(branch.jeeMainCutoffs).length === 0) &&
+                            (!branch.neetCutoffs || Object.keys(branch.neetCutoffs).length === 0) &&
+                            (!branch.fees || Object.keys(branch.fees).length === 0) && (
                              <p className="text-sm text-muted-foreground italic md:col-span-2">No specific cutoff or fee data available for this branch.</p>
                            )}
                         </CardContent>
