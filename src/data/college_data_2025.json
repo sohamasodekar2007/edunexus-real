@@ -21,6 +21,14 @@
         "fees": { "open": "90,000 INR", "obc": "45,000 INR", "sc": "5,000 INR", "st": "Free", "vjnt": "Data N/A", "ews": "45,000 INR", "tfws": "20,000 INR" }
       },
       {
+        "branchName": "Information Technology",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "99.75 %ile", "obc": "99.60 %ile", "sc": "97.80 %ile", "st": "Data N/A", "vjnt": "Data N/A", "ews": "99.65 %ile", "tfws": "99.85 %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "45,000 INR", "sc": "5,000 INR", "st": "Free", "vjnt": "Data N/A", "ews": "45,000 INR", "tfws": "20,000 INR" }
+      },
+      {
         "branchName": "Electronics and Telecommunication Engineering",
         "intake": "120",
         "mhtCetCutoffs": { "open": "99.60 %ile", "obc": "99.30 %ile", "sc": "97.50 %ile", "st": "94.00 %ile", "vjnt": "Data N/A", "ews": "99.40 %ile", "tfws": "99.75 %ile" },
@@ -31,15 +39,15 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "99.20 %ile", "obc": "98.80 %ile", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "99.20 %ile", "obc": "98.80 %ile", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "99.00 %ile", "tfws": "99.50 %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "90,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College" }
+        "fees": { "open": "90,000 INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Data N/A", "ews": "Contact College INR", "tfws": "Contact College INR" }
       },
       {
         "branchName": "Civil Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "98.5 %ile", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -47,7 +55,7 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "99.0 %ile", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -55,7 +63,7 @@
       {
         "branchName": "Metallurgical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -63,15 +71,31 @@
       {
         "branchName": "Instrumentation and Control Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Manufacturing Science and Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Robotics and Artificial Intelligence",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
-  "vjti": {
-    "id": "vjti",
+  "3012": {
+    "id": "3012",
     "name": "Veermata Jijabai Technological Institute(VJTI), Matunga, Mumbai",
     "district": "Mumbai City",
     "stream": "PCM",
@@ -88,20 +112,28 @@
         "mhtCetCutoffs": { "open": "99.75 %ile", "obc": "99.50 %ile", "sc": "98.00 %ile", "st": "Data N/A", "vjnt": "Data N/A", "ews": "99.60 %ile", "tfws": "Data N/A" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "85,000 INR", "obc": "42,500 INR", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College" }
+        "fees": { "open": "85,000 INR", "obc": "42,500 INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Data N/A", "ews": "Contact College INR", "tfws": "Contact College INR" }
       },
       {
         "branchName": "Information Technology",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "99.65 %ile", "obc": "99.40 %ile", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "99.65 %ile", "obc": "99.40 %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "85,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College" }
+        "fees": { "open": "85,000 INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Data N/A", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "99.4 %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       },
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "98.8 %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "85,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -109,7 +141,7 @@
       {
         "branchName": "Civil Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "97.5 %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "85,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -117,7 +149,7 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "98.5 %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "85,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -125,10 +157,26 @@
       {
         "branchName": "Textile Technology",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "85,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Production Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -147,7 +195,7 @@
       {
         "branchName": "Computer Engineering",
         "intake": "180",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,50,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -155,7 +203,7 @@
       {
         "branchName": "Information Technology",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,50,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -163,23 +211,31 @@
       {
         "branchName": "Electronics Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,50,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       },
       {
-        "branchName": "AI and Data Science",
+        "branchName": "Artificial Intelligence and Data Science",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,50,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electronics and Communication Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       },
       {
         "branchName": "Mechanical Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,50,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -187,7 +243,7 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,50,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -195,7 +251,7 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,50,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -217,7 +273,7 @@
       {
         "branchName": "Computer Science and Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,00,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -225,7 +281,7 @@
       {
         "branchName": "Information Technology",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,00,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -233,7 +289,7 @@
       {
         "branchName": "Electronics Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,00,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -241,7 +297,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,00,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -249,7 +305,7 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,00,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -257,10 +313,18 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,00,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -279,7 +343,7 @@
       {
         "branchName": "Computer Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -287,7 +351,7 @@
       {
         "branchName": "Information Technology",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -295,7 +359,7 @@
       {
         "branchName": "Electronics and Telecommunication Engg",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -303,7 +367,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -311,10 +375,26 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -333,7 +413,7 @@
       {
         "branchName": "Chemical Engineering",
         "intake": "90",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "86,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -341,7 +421,7 @@
       {
         "branchName": "Pharmaceuticals Chemistry and Technology",
         "intake": "30",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "neetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "fees": { "open": "86,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -349,7 +429,7 @@
       {
         "branchName": "Polymer Engineering and Technology",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "86,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -357,10 +437,50 @@
       {
         "branchName": "Food Engineering and Technology",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "86,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Dyestuff Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Fibres and Textile Processing Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Oils, Oleochemicals and Surfactants Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Surface Coating Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "B.Pharmacy",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "neetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -377,33 +497,9 @@
     "website": "#",
     "branches": [
       {
-        "branchName": "Civil Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Mechanical Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electrical Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
         "branchName": "Computer Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -411,10 +507,50 @@
       {
         "branchName": "Information Technology",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -433,7 +569,7 @@
       {
         "branchName": "Computer Engineering",
         "intake": "180",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,40,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -441,7 +577,7 @@
       {
         "branchName": "Electronics and Telecommunication Engg",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,40,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -449,7 +585,7 @@
       {
         "branchName": "Information Technology",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,40,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -457,7 +593,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,40,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -465,7 +601,7 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,40,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -473,10 +609,18 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,40,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Artificial Intelligence",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -495,15 +639,23 @@
       {
         "branchName": "Computer Science and Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       },
       {
+        "branchName": "Information Technology",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
         "branchName": "Electronics and Telecommunication Engg",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -511,7 +663,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -519,7 +671,7 @@
       {
         "branchName": "Civil Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -527,10 +679,18 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -549,7 +709,7 @@
       {
         "branchName": "Computer Science and Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "30000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -557,18 +717,66 @@
       {
         "branchName": "Information Technology",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "30000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       },
       {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
         "branchName": "B.Pharmacy",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "neetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "fees": { "open": "30000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Chemical Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -587,15 +795,31 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       },
       {
+        "branchName": "Information Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -603,7 +827,7 @@
       {
         "branchName": "Civil Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -611,10 +835,18 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -633,7 +865,7 @@
       {
         "branchName": "Computer Science and Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,10,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -641,23 +873,7 @@
       {
         "branchName": "Information Technology",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "1,10,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Mechanical Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "1,10,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Civil Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,10,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -665,10 +881,42 @@
       {
         "branchName": "Electronics and Telecommunication Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,10,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "1,10,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "1,10,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -687,39 +935,7 @@
       {
         "branchName": "Computer Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Mechanical Engineering",
-        "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electronics and Telecommunication Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Civil Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electrical Engineering",
-        "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -727,10 +943,50 @@
       {
         "branchName": "Information Technology",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "1,20,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -749,15 +1005,7 @@
       {
         "branchName": "Computer Engineering",
         "intake": "180",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "1,25,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Mechanical Engineering",
-        "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,25,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -765,15 +1013,7 @@
       {
         "branchName": "Information Technology",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "1,25,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Civil Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,25,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -781,7 +1021,23 @@
       {
         "branchName": "Electronics and Telecommunication Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "1,25,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "1,25,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,25,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -789,10 +1045,18 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,25,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -811,23 +1075,7 @@
       {
         "branchName": "Computer Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "1,15,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Mechanical Engineering",
-        "intake": "120",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "1,15,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electronics and Telecommunication Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,15,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -835,7 +1083,23 @@
       {
         "branchName": "Information Technology",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "1,15,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "1,15,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,15,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -843,7 +1107,7 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,15,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -851,10 +1115,18 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "1,15,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -873,7 +1145,23 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "85,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electronics Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "85,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -881,15 +1169,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "85,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electronics Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "85,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -897,7 +1177,7 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "85,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -905,10 +1185,18 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "85,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -927,7 +1215,23 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -935,15 +1239,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electronics and Telecommunication Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -951,7 +1247,7 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -959,10 +1255,18 @@
       {
         "branchName": "Electrical Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "90,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -981,7 +1285,23 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "75,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "75,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -989,15 +1309,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "75,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electronics and Telecommunication Engineering",
-        "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "75,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1005,10 +1317,26 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "75,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -1027,7 +1355,23 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "70,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "70,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1035,15 +1379,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "70,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electronics and Telecommunication Engineering",
-        "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "70,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1051,10 +1387,26 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "70,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -1073,7 +1425,23 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1081,23 +1449,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electrical Engineering",
-        "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electronics and Telecommunication Engineering",
-        "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1105,10 +1457,34 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "22,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Instrumentation Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -1127,7 +1503,23 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "65,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "65,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1135,15 +1527,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "65,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electronics and Telecommunication Engineering",
-        "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "65,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1151,10 +1535,26 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "65,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -1173,7 +1573,23 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "95,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "95,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1181,15 +1597,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "95,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electronics and Telecommunication Engineering",
-        "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "95,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1197,10 +1605,26 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "95,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   },
@@ -1219,7 +1643,23 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "70,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "70,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1227,15 +1667,7 @@
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
-        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
-        "fees": { "open": "70,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
-      },
-      {
-        "branchName": "Electronics and Telecommunication Engineering",
-        "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "70,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
@@ -1243,10 +1675,26 @@
       {
         "branchName": "Civil Engineering",
         "intake": "Data N/A",
-        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
         "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
         "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
         "fees": { "open": "70,000 INR", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
+      },
+      {
+        "branchName": "Artificial Intelligence and Data Science",
+        "intake": "Data N/A",
+        "mhtCetCutoffs": { "open": "Data N/A %ile", "obc": "Data N/A %ile", "sc": "Data N/A %ile", "st": "Data N/A %ile", "vjnt": "Data N/A %ile", "ews": "Data N/A %ile", "tfws": "Data N/A %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Contact College INR", "obc": "Contact College INR", "sc": "Contact College INR", "st": "Contact College INR", "vjnt": "Contact College INR", "ews": "Contact College INR", "tfws": "Contact College INR" }
       }
     ]
   }
