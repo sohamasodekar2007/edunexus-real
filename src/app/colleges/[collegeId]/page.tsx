@@ -4,77 +4,77 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import collegeDataJson from '@/data/college_data_2025.json'; // Direct import
+import collegeDataJson from '@/data/college_data_2025.json';
 import type { CollegeDetailData, BranchDetail, CategoryWiseData, CollegeData2025 } from '@/types';
-import { ArrowLeft, Building, BookOpenText, BarChart3, IndianRupee, Percent } from 'lucide-react';
+import { ArrowLeft, Building, BookOpenText, BarChart3, IndianRupee, Percent, Ruler, Star, ExternalLink, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-// Helper function to render category data in a structured way
-const renderCategoryTable = (data: CategoryWiseData | undefined, title: string, unit: string = "") => {
-  if (!data || Object.keys(data).length === 0) {
-    return <p className="text-sm text-muted-foreground italic">No specific {title.toLowerCase()} data available.</p>;
-  }
-
-  const categories: Array<keyof CategoryWiseData> = ['open', 'obc', 'sc', 'st', 'vjnt', 'ews', 'tfws', 'other'];
-  const categoryLabels: Record<keyof CategoryWiseData, string> = {
-    open: 'Open',
-    obc: 'OBC',
-    sc: 'SC',
-    st: 'ST',
-    vjnt: 'VJ/NT',
-    ews: 'EWS',
-    tfws: 'TFWS',
-    other: 'Other/General'
-  };
-
-  return (
-    <div>
-      <h4 className="text-md font-semibold mt-3 mb-1.5 text-primary">{title}</h4>
-      <div className="overflow-x-auto rounded-md border">
-        <Table className="min-w-full">
-          <TableHeader className="bg-muted/50">
-            <TableRow>
-              <TableHead className="w-[100px] sm:w-[120px] text-xs sm:text-sm">Category</TableHead>
-              <TableHead className="text-right text-xs sm:text-sm">Value</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {categories.map(catKey => (
-              data[catKey] ? (
-                <TableRow key={catKey}>
-                  <TableCell className="font-medium text-xs sm:text-sm">{categoryLabels[catKey]}</TableCell>
-                  <TableCell className="text-right text-xs sm:text-sm">{data[catKey]}{unit}</TableCell>
-                </TableRow>
-              ) : null
-            ))}
-            {!categories.some(catKey => data[catKey]) && data.other && (
-                 <TableRow key="other_fallback">
-                    <TableCell className="font-medium text-xs sm:text-sm">{categoryLabels.other}</TableCell>
-                    <TableCell className="text-right text-xs sm:text-sm">{data.other}{unit}</TableCell>
-                 </TableRow>
-            )}
-             {!categories.some(catKey => data[catKey]) && !data.other && (
-                 <TableRow>
-                    <TableCell colSpan={2} className="text-center text-xs text-muted-foreground italic py-3">No specific data found for primary categories.</TableCell>
-                 </TableRow>
-             )}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
-  );
-};
-
-
 export default function CollegeDetailPage({ params }: { params: { collegeId: string } }) {
   const collegeId = decodeURIComponent(params.collegeId);
-  const allCollegeData = collegeDataJson as CollegeData2025; // Assert type for direct import
+  const allCollegeData = collegeDataJson as CollegeData2025;
   const details: CollegeDetailData | undefined = allCollegeData[collegeId];
 
   if (!details) {
     notFound(); // Or return a custom "Not Found" component
   }
+
+  const renderCategoryTable = (data: CategoryWiseData | undefined, title: string, unit: string = "") => {
+    if (!data || Object.keys(data).length === 0) {
+      return <p className="text-sm text-muted-foreground italic mt-1">No specific {title.toLowerCase()} data available.</p>;
+    }
+
+    const primaryCategories: Array<keyof CategoryWiseData> = ['open', 'obc', 'sc', 'st', 'vjnt', 'ews', 'tfws'];
+    const categoryLabels: Record<keyof CategoryWiseData, string> = {
+      open: 'Open',
+      obc: 'OBC',
+      sc: 'SC',
+      st: 'ST',
+      vjnt: 'VJ/NT',
+      ews: 'EWS',
+      tfws: 'TFWS',
+      other: 'Other/General'
+    };
+
+    const hasPrimaryData = primaryCategories.some(catKey => data[catKey] !== undefined && data[catKey] !== null && data[catKey] !== '');
+
+    return (
+      <div>
+        <h4 className="text-md font-semibold mt-3 mb-2 text-accent">{title}</h4>
+        <div className="rounded-md border">
+          <Table className="min-w-full text-xs sm:text-sm">
+            <TableHeader className="bg-muted/50">
+              <TableRow>
+                <TableHead className="w-[100px] sm:w-[120px]">Category</TableHead>
+                <TableHead className="text-right">Cutoff / Fee</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {primaryCategories.map(catKey => (
+                data[catKey] ? (
+                  <TableRow key={catKey} className="border-b-0 last:border-b-0">
+                    <TableCell className="font-medium py-1.5 sm:py-2">{categoryLabels[catKey]}</TableCell>
+                    <TableCell className="text-right py-1.5 sm:py-2">{data[catKey]}{unit}</TableCell>
+                  </TableRow>
+                ) : (
+                  <TableRow key={catKey} className="border-b-0 last:border-b-0">
+                    <TableCell className="font-medium py-1.5 sm:py-2">{categoryLabels[catKey]}</TableCell>
+                    <TableCell className="text-right py-1.5 sm:py-2 text-muted-foreground/70">N/A</TableCell>
+                  </TableRow>
+                )
+              ))}
+              {data.other && !hasPrimaryData && (
+                   <TableRow key="other_fallback" className="border-b-0 last:border-b-0">
+                      <TableCell className="font-medium py-1.5 sm:py-2">{categoryLabels.other}</TableCell>
+                      <TableCell className="text-right py-1.5 sm:py-2">{data.other}{unit}</TableCell>
+                   </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+    );
+  }; // Crucial semicolon here
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 py-8">
@@ -113,7 +113,7 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-4">
                   {details.overallAnnualFees && <div className="flex items-center p-3 bg-muted/40 rounded-md"><IndianRupee className="h-5 w-5 mr-2 text-green-600"/> Approx. Annual Fees: <span className="font-semibold ml-1">{details.overallAnnualFees}</span></div>}
                   {details.campusSizeAcres && <div className="flex items-center p-3 bg-muted/40 rounded-md"><Ruler className="h-5 w-5 mr-2 text-orange-600"/> Campus Size: <span className="font-semibold ml-1">{details.campusSizeAcres} Acres</span></div>}
-                  {details.overallRating && <div className="flex items-center p-3 bg-muted/40 rounded-md"><Star className="h-5 w-5 mr-2 text-yellow-500 fill-yellow-400"/> Rating: <span className="font-semibold ml-1">{details.overallRating}/5</span></div>}
+                  {details.overallRating && <div className="flex items-center p-3 bg-muted/40 rounded-md"><Star className="h-5 w-5 mr-2 text-yellow-500 fill-current"/> Rating: <span className="font-semibold ml-1">{details.overallRating}/5</span></div>}
               </div>
               {details.website && details.website !== '#' && (
                 <Button variant="outline" size="sm" asChild className="mb-4">
@@ -122,7 +122,6 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
                   </a>
                 </Button>
               )}
-              {/* Placeholder for a more detailed summary if you add it to JSON */}
               <p className="text-muted-foreground leading-relaxed">
                 Detailed information about branches, MHT-CET cutoffs, and category-wise fees is provided below.
                 This data is for AY 2025 and should be verified with official sources.
@@ -134,7 +133,7 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
                 <BarChart3 className="mr-2 h-6 w-6" /> Branches, Cutoffs & Fees (AY 2025)
               </h2>
               {details.branches && details.branches.length > 0 ? (
-                <ScrollArea className="max-h-[500px] lg:max-h-none -mx-1 pr-2"> {/* Negative margin to offset ScrollArea padding */}
+                <ScrollArea className="max-h-[500px] lg:max-h-none -mx-1 pr-2">
                   <div className="space-y-6">
                     {details.branches.map((branch, index) => (
                       <Card key={index} className="shadow-md border border-border/50 hover:shadow-lg transition-shadow bg-card/80 backdrop-blur-sm">
@@ -151,7 +150,7 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
                           {branch.fees && (
                              renderCategoryTable(branch.fees, "Category-wise Fees", " INR")
                           )}
-                           {(!branch.mhtCetCutoffs && !branch.fees) && (
+                           {(!branch.mhtCetCutoffs || Object.keys(branch.mhtCetCutoffs).length === 0) && (!branch.fees || Object.keys(branch.fees).length === 0) && (
                              <p className="text-sm text-muted-foreground italic md:col-span-2">No specific cutoff or fee data available for this branch.</p>
                            )}
                         </CardContent>
@@ -160,4 +159,12 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
                   </div>
                 </ScrollArea>
               ) : (
-                <p className="text-muted-foreground italic">No specific branch information found for this college in the provided data
+                <p className="text-muted-foreground italic">No specific branch information found for this college in the provided data.</p>
+              )}
+            </section>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
