@@ -15,28 +15,34 @@
       {
         "branchName": "Computer Engineering",
         "intake": "120",
-        "mhtCetCutoffs": {
-          "open": "99.85 %ile", "obc": "99.70 %ile", "sc": "98.50 %ile", "st": "96.00 %ile", "vjnt": "Data N/A", "ews": "99.75 %ile", "tfws": "99.90 %ile", "other": "Data N/A"
-        },
-        "fees": {
-          "open": "90,000 INR", "obc": "45,000 INR", "sc": "5,000 INR", "st": "Free", "vjnt": "Data N/A", "ews": "45,000 INR", "tfws": "20,000 INR", "other": "Data N/A"
-        }
+        "mhtCetCutoffs": { "open": "99.85 %ile", "obc": "99.70 %ile", "sc": "98.50 %ile", "st": "96.00 %ile", "vjnt": "Data N/A", "ews": "99.75 %ile", "tfws": "99.90 %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "45,000 INR", "sc": "5,000 INR", "st": "Free", "vjnt": "Data N/A", "ews": "45,000 INR", "tfws": "20,000 INR" }
       },
       {
         "branchName": "Electronics and Telecommunication Engineering",
         "intake": "120",
-        "mhtCetCutoffs": {
-          "open": "99.60 %ile", "obc": "99.30 %ile", "sc": "97.50 %ile", "st": "94.00 %ile", "vjnt": "Data N/A", "ews": "99.40 %ile", "tfws": "99.75 %ile", "other": "Data N/A"
-        },
-        "fees": {
-          "open": "90,000 INR", "obc": "45,000 INR", "sc": "5,000 INR", "st": "Free", "vjnt": "Data N/A", "ews": "45,000 INR", "tfws": "20,000 INR", "other": "Data N/A"
-        }
+        "mhtCetCutoffs": { "open": "99.60 %ile", "obc": "99.30 %ile", "sc": "97.50 %ile", "st": "94.00 %ile", "vjnt": "Data N/A", "ews": "99.40 %ile", "tfws": "99.75 %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "45,000 INR", "sc": "5,000 INR", "st": "Free", "vjnt": "Data N/A", "ews": "45,000 INR", "tfws": "20,000 INR" }
       },
       {
         "branchName": "Mechanical Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "99.20 %ile", "obc": "98.80 %ile", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A", "other": "Data N/A" },
-        "fees": { "open": "90,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College", "other": "Data N/A" }
+        "mhtCetCutoffs": { "open": "99.20 %ile", "obc": "98.80 %ile", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -55,14 +61,264 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "99.75 %ile", "obc": "99.50 %ile", "sc": "98.00 %ile", "st": "Data N/A", "vjnt": "Data N/A", "ews": "99.60 %ile", "tfws": "Data N/A", "other": "Data N/A" },
-        "fees": { "open": "85,000 INR", "obc": "42,500 INR", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College", "other": "Data N/A" }
+        "mhtCetCutoffs": { "open": "99.75 %ile", "obc": "99.50 %ile", "sc": "98.00 %ile", "st": "Data N/A", "vjnt": "Data N/A", "ews": "99.60 %ile", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "85,000 INR", "obc": "42,500 INR", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College" }
       },
       {
         "branchName": "Information Technology",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "99.65 %ile", "obc": "99.40 %ile", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A", "other": "Data N/A" },
-        "fees": { "open": "85,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College", "other": "Data N/A" }
+        "mhtCetCutoffs": { "open": "99.65 %ile", "obc": "99.40 %ile", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "85,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "1002": {
+    "id": "1002",
+    "name": "Government College of Engineering, Amravati",
+    "district": "Amravati",
+    "stream": "PCM",
+    "establishedYear": 1964,
+    "collegeType": "Government",
+    "overallAnnualFees": "₹20,000",
+    "campusSizeAcres": 114,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engg",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "1005": {
+    "id": "1005",
+    "name": "Sant Gadge Baba Amravati University,Amravati",
+    "district": "Amravati",
+    "stream": "Both",
+    "establishedYear": 1983,
+    "collegeType": "University Department",
+    "overallAnnualFees": "₹30000",
+    "campusSizeAcres": 470,
+    "overallRating": 4.3,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "B.Pharmacy",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "neetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "1012": {
+    "id": "1012",
+    "name": "Government College of Engineering,Yavatmal",
+    "district": "Yavatmal",
+    "stream": "PCM",
+    "establishedYear": 2004,
+    "collegeType": "Government",
+    "overallAnnualFees": "₹22,000",
+    "campusSizeAcres": 40,
+    "overallRating": 4.2,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "1101": {
+    "id": "1101",
+    "name": "Shri Sant Gajanan Maharaj College of Engineering,Shegaon",
+    "district": "Buldhana",
+    "stream": "PCM",
+    "establishedYear": 1983,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,20,000",
+    "campusSizeAcres": 75,
+    "overallRating": 4.6,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engg",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electrical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "1105": {
+    "id": "1105",
+    "name": "Prof. Ram Meghe Institute of Technology & Research, Amravati",
+    "district": "Amravati",
+    "stream": "PCM",
+    "establishedYear": 1983,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,10,000",
+    "campusSizeAcres": 20,
+    "overallRating": 4.3,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -81,13 +337,18 @@
       {
         "branchName": "Computer Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "90.0 %ile", "obc": "88.0 %ile", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A", "other": "Data N/A" },
-        "fees": { "open": "1,20,000 INR", "obc": "60,000 INR", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College", "other": "Data N/A" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       },
       {
         "branchName": "Mechanical Engineering",
-        "mhtCetCutoffs": { "open": "85.0 %ile", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A", "other": "Data N/A" },
-        "fees": { "open": "1,20,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College", "other": "Data N/A" }
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -106,14 +367,18 @@
       {
         "branchName": "Computer Engineering",
         "intake": "180",
-        "mhtCetCutoffs": { "open": "92-94 %ile", "obc": "90-92 %ile", "sc": "80-85 %ile", "st": "70-75 %ile", "vjnt": "Contact College", "ews": "91-93 %ile", "tfws": "95+ %ile", "other": "Contact College" },
-        "fees": { "open": "1,25,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       },
       {
-        "branchName": "Information Technology",
+        "branchName": "Mechanical Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "90-92 %ile", "obc": "88-90 %ile", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "1,25,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -131,15 +396,19 @@
     "branches": [
       {
         "branchName": "Computer Engineering",
-        "intake": "180",
-        "mhtCetCutoffs": { "open": "91-93 %ile", "obc": "89-91 %ile", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "1,15,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       },
       {
         "branchName": "Mechanical Engineering",
         "intake": "120",
-        "mhtCetCutoffs": { "open": "80-85 %ile", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "1,15,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -158,14 +427,18 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "75-80 %ile", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "85,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       },
       {
         "branchName": "Mechanical Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "65-70 %ile", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "85,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -182,10 +455,20 @@
     "website": "#",
     "branches": [
       {
-        "branchName": "Computer Science and Engineering",
-        "intake": "120",
-        "mhtCetCutoffs": { "open": "80-85 %ile", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "90,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -204,8 +487,10 @@
        {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "70-75 %ile", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "75,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -221,11 +506,13 @@
     "overallRating": 3.6,
     "website": "#",
     "branches": [
-      {
+       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "60-65 %ile", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "70,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -244,8 +531,18 @@
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "90-92 %ile", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "22,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -261,11 +558,13 @@
     "overallRating": 3.5,
     "website": "#",
     "branches": [
-       {
-        "branchName": "Mechanical Engineering",
+      {
+        "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "55-60 %ile", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "65,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -280,12 +579,14 @@
     "campusSizeAcres": 15,
     "overallRating": 4.0,
     "website": "#",
-     "branches": [
+    "branches": [
       {
         "branchName": "Computer Engineering",
-        "intake": "120",
-        "mhtCetCutoffs": { "open": "85-88 %ile", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "95,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   },
@@ -301,14 +602,1070 @@
     "overallRating": 3.7,
     "website": "#",
     "branches": [
+       {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "ict_mumbai": {
+    "id": "ict_mumbai",
+    "name": "Institute of Chemical Technology (ICT)",
+    "district": "Mumbai City",
+    "stream": "PCM",
+    "establishedYear": 1933,
+    "collegeType": "Deemed",
+    "overallAnnualFees": "₹86,000",
+    "campusSizeAcres": 16,
+    "overallRating": 4.6,
+    "website": "#",
+    "branches": [
+       {
+        "branchName": "Chemical Engineering",
+        "intake": "90",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Pharmaceuticals Chemistry and Technology",
+        "intake": "30",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "neetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "spce_andheri": {
+    "id": "spce_andheri",
+    "name": "Sardar Patel College of Engineering, Andheri",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 1962,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹90,000",
+    "campusSizeAcres": 40,
+    "overallRating": 4.6,
+    "website": "#",
+    "branches": [
+       {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "rcoem_nagpur": {
+    "id": "rcoem_nagpur",
+    "name": "Shri Ramdeobaba College of Engineering and Management, Nagpur",
+    "district": "Nagpur",
+    "stream": "PCM",
+    "establishedYear": 1984,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,50,000",
+    "campusSizeAcres": 20,
+    "overallRating": 4.7,
+    "website": "#",
+    "branches": [
+       {
+        "branchName": "Computer Engineering",
+        "intake": "180",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electronics Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "wce_sangli": {
+    "id": "wce_sangli",
+    "name": "Walchand College of Engineering, Sangli",
+    "district": "Sangli",
+    "stream": "PCM",
+    "establishedYear": 1947,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,00,000",
+    "campusSizeAcres": 90,
+    "overallRating": 4.7,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "ghrce_nagpur": {
+    "id": "ghrce_nagpur",
+    "name": "Ankush Shikshan Sansthas G.H.Raisoni College of Engineering, Nagpur",
+    "district": "Nagpur",
+    "stream": "PCM",
+    "establishedYear": 1996,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,40,000",
+    "campusSizeAcres": 25,
+    "overallRating": 4.6,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "180",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engg",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "kit_kolhapur": {
+    "id": "kit_kolhapur",
+    "name": "Kolhapur Institute of Technologys College of Engineering(Autonomous), Kolhapur",
+    "district": "Kolhapur",
+    "stream": "PCM",
+    "establishedYear": 1983,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,30,000",
+    "campusSizeAcres": 37,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "spit_mumbai": {
+    "id": "spit_mumbai",
+    "name": "Bhartiya Vidya Bhavans Sardar Patel Institute of Technology , Andheri, Mumbai",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 1995,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,70,000",
+    "campusSizeAcres": 5,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "180",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "lit_nagpur": {
+    "id": "lit_nagpur",
+    "name": "Laxminarayan Institute of Technology, Nagpur",
+    "district": "Nagpur",
+    "stream": "PCM",
+    "establishedYear": 1942,
+    "collegeType": "University Department",
+    "overallAnnualFees": "₹30,000",
+    "campusSizeAcres": 78,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Chemical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "ycce_nagpur": {
+    "id": "ycce_nagpur",
+    "name": "Yeshwantrao Chavan College of Engineering,Wanadongri, Nagpur",
+    "district": "Nagpur",
+    "stream": "PCM",
+    "establishedYear": 1984,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,45,000",
+    "campusSizeAcres": 20,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "sggs_nanded": {
+    "id": "sggs_nanded",
+    "name": "Shri Guru Gobind Singhji Institute of Engineering and Technology, Nanded",
+    "district": "Nanded",
+    "stream": "PCM",
+    "establishedYear": 1981,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹90,000",
+    "campusSizeAcres": 46,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "kkwieer_nashik": {
+    "id": "kkwieer_nashik",
+    "name": "K. K. Wagh Institute of Engineering Education and Research, Nashik",
+    "district": "Nashik",
+    "stream": "PCM",
+    "establishedYear": 1984,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,40,000",
+    "campusSizeAcres": 23,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "pict_pune": {
+    "id": "pict_pune",
+    "name": "Pune Institute of Computer Technology, Dhankavdi, Pune",
+    "district": "Pune",
+    "stream": "PCM",
+    "establishedYear": 1983,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,30,000",
+    "campusSizeAcres": 5,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "240",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "pccoe_pune": {
+    "id": "pccoe_pune",
+    "name": "Pimpri Chinchwad Education Trust, Pimpri Chinchwad College of Engineering, Pune",
+    "district": "Pune",
+    "stream": "PCM",
+    "establishedYear": 1999,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,50,000",
+    "campusSizeAcres": 25,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "180",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "rit_walwa": {
+    "id": "rit_walwa",
+    "name": "K. E. Societys Rajarambapu Institute of Technology, Walwa, Sangli",
+    "district": "Sangli",
+    "stream": "PCM",
+    "establishedYear": 1983,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,25,000",
+    "campusSizeAcres": 17,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "gce_karad": {
+    "id": "gce_karad",
+    "name": "Government College of Engineering, Karad",
+    "district": "Satara",
+    "stream": "PCM",
+    "establishedYear": 1960,
+    "collegeType": "Government",
+    "overallAnnualFees": "₹25,000",
+    "campusSizeAcres": 40,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
       {
         "branchName": "Computer Engineering",
         "intake": "60",
-        "mhtCetCutoffs": { "open": "65-70 %ile", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" },
-        "fees": { "open": "70,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Contact College", "ews": "Contact College", "tfws": "Contact College", "other": "Contact College" }
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "2008": {
+    "id": "2008",
+    "name": "Government College of Engineering, Chhatrapati Sambhajinagar",
+    "district": "Chh. Sambhaji Nagar",
+    "stream": "PCM",
+    "establishedYear": 1960,
+    "collegeType": "Government",
+    "overallAnnualFees": "₹25,000",
+    "campusSizeAcres": 22,
+    "overallRating": 4.4,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "rcpit_shirpur": {
+    "id": "rcpit_shirpur",
+    "name": "R. C. Patel Institute of Technology, Shirpur",
+    "district": "Dhule",
+    "stream": "PCM",
+    "establishedYear": 2001,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹130000",
+    "campusSizeAcres": 25,
+    "overallRating": 4.4,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "gcoej_jalgaon": {
+    "id": "gcoej_jalgaon",
+    "name": "Government College of Engineering, Jalgaon",
+    "district": "Jalgaon",
+    "stream": "PCM",
+    "establishedYear": 1996,
+    "collegeType": "Government",
+    "overallAnnualFees": "₹20,000",
+    "campusSizeAcres": 30,
+    "overallRating": 4.4,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "dkte_ichalkaranji": {
+    "id": "dkte_ichalkaranji",
+    "name": "Dattajirao Kadam Technical Education Societys Textile & Engineering Institute, Ichalkaranji.",
+    "district": "Kolhapur",
+    "stream": "PCM",
+    "establishedYear": 1982,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,20,000",
+    "campusSizeAcres": 20,
+    "overallRating": 4.4,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Textile Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      },
+      {
+        "branchName": "Computer Science and Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "djsce_mumbai": {
+    "id": "djsce_mumbai",
+    "name": "Shri Vile Parle Kelvani Mandals Dwarkadas J. Sanghvi College of Engineering, Vile Parle,Mumbai",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 1994,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,90,000",
+    "campusSizeAcres": 5,
+    "overallRating": 4.4,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "180",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "mitaoe_alandi": {
+    "id": "mitaoe_alandi",
+    "name": "MIT Academy of Engineering,Alandi, Pune",
+    "district": "Pune",
+    "stream": "PCM",
+    "establishedYear": 1999,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,90,000",
+    "campusSizeAcres": 13,
+    "overallRating": 4.4,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "ccoew_pune": {
+    "id": "ccoew_pune",
+    "name": "MKSSSs Cummins College of Engineering for Women, Karvenagar,Pune",
+    "district": "Pune",
+    "stream": "PCM",
+    "establishedYear": 1991,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,70,000",
+    "campusSizeAcres": 4,
+    "overallRating": 4.4,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "dbatu_lonere": {
+    "id": "dbatu_lonere",
+    "name": "Dr. Babasaheb Ambedkar Technological University, Lonere",
+    "district": "Raigad",
+    "stream": "PCM",
+    "establishedYear": 1989,
+    "collegeType": "University",
+    "overallAnnualFees": "₹60,000",
+    "campusSizeAcres": 500,
+    "overallRating": 4.4,
+    "website": "#",
+    "branches": [
+       {
+        "branchName": "Chemical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "wit_solapur": {
+    "id": "wit_solapur",
+    "name": "Walchand Institute of Technology, Solapur",
+    "district": "Solapur",
+    "stream": "PCM",
+    "establishedYear": 1983,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹1,10,000",
+    "campusSizeAcres": 30,
+    "overallRating": 4.4,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "gpa_ahmednagar": {
+    "id": "gpa_ahmednagar",
+    "name": "Government Polytechnic, Ahmednagar",
+    "district": "AhilyaNagar",
+    "stream": "PCM",
+    "establishedYear": 1960,
+    "collegeType": "Government",
+    "overallAnnualFees": "₹15,000",
+    "campusSizeAcres": 30,
+    "overallRating": 4.3,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "4004": {
+    "id": "4004",
+    "name": "Government College of Engineering, Chandrapur",
+    "district": "Chandrapur",
+    "stream": "PCM",
+    "establishedYear": 1996,
+    "collegeType": "Government",
+    "overallAnnualFees": "₹22,000",
+    "campusSizeAcres": 62,
+    "overallRating": 4.3,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "5003": {
+    "id": "5003",
+    "name": "University Institute of Chemical Technology, North Maharashtra University, Jalgaon",
+    "district": "Jalgaon",
+    "stream": "PCM",
+    "establishedYear": 1994,
+    "collegeType": "University Department",
+    "overallAnnualFees": "₹50,000",
+    "campusSizeAcres": 10,
+    "overallRating": 4.3,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Chemical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "6028": {
+    "id": "6028",
+    "name": "Department of Technology, Shivaji University, Kolhapur",
+    "district": "Kolhapur",
+    "stream": "PCM",
+    "establishedYear": 2006,
+    "collegeType": "University Department",
+    "overallAnnualFees": "₹70000",
+    "campusSizeAcres": 850,
+    "overallRating": 4.3,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Technology",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3012": {
+    "id": "3012",
+    "name": "Veermata Jijabai Technological Institute(VJTI), Matunga, Mumbai",
+    "district": "Mumbai City",
+    "stream": "PCM",
+    "establishedYear": 1887,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹85,000",
+    "campusSizeAcres": 16,
+    "overallRating": 4.7,
+    "website": "https://www.vjti.ac.in/",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "99.75 %ile", "obc": "99.50 %ile", "sc": "98.00 %ile", "st": "Data N/A", "vjnt": "Data N/A", "ews": "99.60 %ile", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "85,000 INR", "obc": "42,500 INR", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College" }
+      },
+      {
+        "branchName": "Information Technology",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "99.65 %ile", "obc": "99.40 %ile", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "85,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3014": {
+    "id": "3014",
+    "name": "Sardar Patel College of Engineering, Andheri",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 1962,
+    "collegeType": "Autonomous",
+    "overallAnnualFees": "₹90,000",
+    "campusSizeAcres": 40,
+    "overallRating": 4.6,
+    "website": "#",
+    "branches": [
+       {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3035": {
+    "id": "3035",
+    "name": "Usha Mittal Institute of Technology SNDT Womens University, Mumbai",
+    "district": "Mumbai City",
+    "stream": "PCM",
+    "establishedYear": 1997,
+    "collegeType": "University Department",
+    "overallAnnualFees": "₹70,000",
+    "campusSizeAcres": 5,
+    "overallRating": 4.0,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Science and Technology",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3135": {
+    "id": "3135",
+    "name": "Manjara Charitable Trusts Rajiv Gandhi Institute of Technology, Mumbai",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 1992,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,30,000",
+    "campusSizeAcres": 5,
+    "overallRating": 4.1,
+    "website": "#",
+    "branches": [
+       {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3139": {
+    "id": "3139",
+    "name": "Vidyalankar Institute of Technology,Wadala, Mumbai",
+    "district": "Mumbai City",
+    "stream": "PCM",
+    "establishedYear": 1999,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,40,000",
+    "campusSizeAcres": 11,
+    "overallRating": 4.2,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3148": {
+    "id": "3148",
+    "name": "Mahavir Education Trusts Shah & Anchor Kutchhi Engineering College, Mumbai",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 1985,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,50,000",
+    "campusSizeAcres": 4,
+    "overallRating": 4.0,
+    "website": "#",
+    "branches": [
+       {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3183": {
+    "id": "3183",
+    "name": "Anjuman-I-Islams M.H. Saboo Siddik College of Engineering, Byculla, Mumbai",
+    "district": "Mumbai City",
+    "stream": "PCM",
+    "establishedYear": 1984,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,20,000",
+    "campusSizeAcres": 2,
+    "overallRating": 3.9,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3184": {
+    "id": "3184",
+    "name": "Fr. Conceicao Rodrigues College of Engineering, Bandra,Mumbai",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 1984,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,70,000",
+    "campusSizeAcres": 5,
+    "overallRating": 4.2,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3188": {
+    "id": "3188",
+    "name": "Vasantdada Patil Pratishthans College Of Engineering and Visual Arts, Sion, Mumbai",
+    "district": "Mumbai City",
+    "stream": "PCM",
+    "establishedYear": 1990,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,40,000",
+    "campusSizeAcres": 4,
+    "overallRating": 4.0,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3201": {
+    "id": "3201",
+    "name": "Rizvi Education Societys Rizvi College of Engineering, Bandra,Mumbai",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 1998,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,55,000",
+    "campusSizeAcres": 3,
+    "overallRating": 3.9,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3203": {
+    "id": "3203",
+    "name": "Atharva College of Engineering,Malad(West),Mumbai",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 1999,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,60,000",
+    "campusSizeAcres": 6,
+    "overallRating": 4.0,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3208": {
+    "id": "3208",
+    "name": "Don Bosco Institute of Technology, Mumbai",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 2001,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,65,000",
+    "campusSizeAcres": 10,
+    "overallRating": 4.0,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3209": {
+    "id": "3209",
+    "name": "K J Somaiya Institute of Technology",
+    "district": "Mumbai City",
+    "stream": "PCM",
+    "establishedYear": 2001,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,80,000",
+    "campusSizeAcres": 2,
+    "overallRating": 4.3,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3214": {
+    "id": "3214",
+    "name": "Xavier Institute Of Engineering C/O Xavier Technical Institute,Mahim,Mumbai",
+    "district": "Mumbai City",
+    "stream": "PCM",
+    "establishedYear": 2005,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,70,000",
+    "campusSizeAcres": 3,
+    "overallRating": 4.1,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "3215": {
+    "id": "3215",
+    "name": "Bhartiya Vidya Bhavans Sardar Patel Institute of Technology , Andheri, Mumbai",
+    "district": "Mumbai Suburban",
+    "stream": "PCM",
+    "establishedYear": 1995,
+    "collegeType": "Private",
+    "overallAnnualFees": "₹1,70,000",
+    "campusSizeAcres": 5,
+    "overallRating": 4.5,
+    "website": "#",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "180",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
+      }
+    ]
+  },
+  "6006": {
+    "id": "6006",
+    "name": "COEP Technological University",
+    "district": "Pune",
+    "stream": "PCM",
+    "establishedYear": 1854,
+    "collegeType": "University Department",
+    "overallAnnualFees": "₹90,000",
+    "campusSizeAcres": 36,
+    "overallRating": 4.8,
+    "website": "https://www.coep.org.in/",
+    "branches": [
+      {
+        "branchName": "Computer Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "99.85 %ile", "obc": "99.70 %ile", "sc": "98.50 %ile", "st": "96.00 %ile", "vjnt": "Data N/A", "ews": "99.75 %ile", "tfws": "99.90 %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "45,000 INR", "sc": "5,000 INR", "st": "Free", "vjnt": "Data N/A", "ews": "45,000 INR", "tfws": "20,000 INR" }
+      },
+      {
+        "branchName": "Electronics and Telecommunication Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "99.60 %ile", "obc": "99.30 %ile", "sc": "97.50 %ile", "st": "94.00 %ile", "vjnt": "Data N/A", "ews": "99.40 %ile", "tfws": "99.75 %ile" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "45,000 INR", "sc": "5,000 INR", "st": "Free", "vjnt": "Data N/A", "ews": "45,000 INR", "tfws": "20,000 INR" }
+      },
+      {
+        "branchName": "Mechanical Engineering",
+        "intake": "120",
+        "mhtCetCutoffs": { "open": "99.20 %ile", "obc": "98.80 %ile", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "90,000 INR", "obc": "Contact College", "sc": "Contact College", "st": "Contact College", "vjnt": "Data N/A", "ews": "Contact College", "tfws": "Contact College" }
+      },
+      {
+        "branchName": "Civil Engineering",
+        "intake": "60",
+        "mhtCetCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "jeeMainCutoffs": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" },
+        "neetCutoffs": { "open": "N/A", "obc": "N/A", "sc": "N/A", "st": "N/A", "vjnt": "N/A", "ews": "N/A", "tfws": "N/A" },
+        "fees": { "open": "Data N/A", "obc": "Data N/A", "sc": "Data N/A", "st": "Data N/A", "vjnt": "Data N/A", "ews": "Data N/A", "tfws": "Data N/A" }
       }
     ]
   }
 }
-
-    
