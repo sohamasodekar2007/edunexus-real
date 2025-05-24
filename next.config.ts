@@ -4,10 +4,10 @@ import type {NextConfig} from 'next';
 const nextConfig: NextConfig = {
   /* config options here */
   typescript: {
-    ignoreBuildErrors: false, // Changed from true
+    ignoreBuildErrors: false, // Ensure this is false
   },
   eslint: {
-    ignoreDuringBuilds: false, // Changed from true
+    ignoreDuringBuilds: false, // Ensure this is false
   },
   images: {
     remotePatterns: [
@@ -21,10 +21,4 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '082d-103-127-166-105.ngrok-free.app',
         port: '',
-        pathname: '/api/files/**', // To match PocketBase file serving structure
-      },
-    ],
-  },
-};
-
-export default nextConfig;
+        pathname

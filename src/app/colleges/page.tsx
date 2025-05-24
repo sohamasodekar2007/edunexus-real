@@ -86,7 +86,7 @@ const mockColleges: College[] = [
 
   // Amravati
   { id: '1002', name: 'Government College of Engineering, Amravati', district: 'Amravati', stream: 'PCM', establishedYear: 1964, collegeType: 'Government', annualFees: '₹20,000', campusSizeAcres: 114, rating: 4.5, logoPlaceholder: getInitials('Government College of Engineering Amravati'), website: '#' },
-  { id: '1105', name: 'Prof. Ram Meghe Institute of Technology & Research, Amravati', district: 'Amravati', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 20, rating: 4.3, logoPlaceholder: getInitials('Prof. Ram Meghe Institute of Technology & Research'), website: '#' },
+  { id: '1105', name: 'Prof. Ram Meghe Institute of Technology & Research, Amravati', district: 'Amravati', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 20, rating: 4.3, logoPlaceholder: getInitials('Prof. Ram Meghe Institute of Technology & Research'), website: '#' }, // Note: Badnera is part of Amravati for district grouping
   { id: '1107', name: 'P. R. Pote (Patil) Education & Welfare Trusts Group of Institution(Integrated Campus), Amravati', district: 'Amravati', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹95,000', campusSizeAcres: 15, rating: 4.1, logoPlaceholder: getInitials('P. R. Pote (Patil) Education & Welfare Trusts Group of Institution'), website: '#' },
   { id: '1114', name: 'Sipna Shikshan Prasarak Mandal College of Engineering & Technology, Amravati', district: 'Amravati', stream: 'PCM', establishedYear: 1999, collegeType: 'Private', annualFees: '₹1,00,000', campusSizeAcres: 22, rating: 4.2, logoPlaceholder: getInitials('Sipna Shikshan Prasarak Mandal College of Engineering & Technology'), website: '#' },
   { id: 'ghr_amravati', name: 'G. H. Raisoni College of Engineering and Management, Amravati', district: 'Amravati', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹1,20,000', campusSizeAcres: 18, rating: 4.0, logoPlaceholder: getInitials("G H Raisoni Amravati"), website: '#' },
@@ -109,7 +109,7 @@ const mockColleges: College[] = [
   { id: '2282', name: 'Aditya Education Trusts Mitthulalji Sarada Polytechnic, Nalwandi Road, Beed', district: 'Beed', stream: 'PCM', establishedYear: 2007, collegeType: 'Private', annualFees: '₹40000', campusSizeAcres: 5, rating: 3.5, logoPlaceholder: getInitials('Mitthulalji Sarada Poly'), website: '#' },
 
   // Bhandara
-  { id: '4143', name: 'Sanmarg Shikshan Sanstha, Mandukarrao Pandav College of Engineering, Bhandara', district: 'Bhandara', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹70,000', campusSizeAcres: 10, rating: 3.7, logoPlaceholder: getInitials('Mandukarrao Pandav College of Engineering'), website: '#' },
+  { id: '4143', name: 'Sanmarg Shikshan Sanstha, Mandukarrao Pandav College of Engineering, Bhandara', district: 'Bhandara', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹70,000', campusSizeAcres: 10, rating: 3.7, logoPlaceholder: getInitials('Mandukarrao Pandav College of Engineering'), website: '#' }, // Madhukarrao changed to Mandukarrao based on previous data
   { id: '4302', name: 'Gondia Education Societys Manoharbhai Patel Institute Of Engineering & Technology, Shahapur, Bhandara', district: 'Bhandara', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹90,000', campusSizeAcres: 25, rating: 4.2, logoPlaceholder: getInitials('Manoharbhai Patel Institute Of Engineering & Technology Bhandara'), website: '#' },
   { id: '4679', name: 'Karanjekar College of Engineering & Management, Sakoli', district: 'Bhandara', stream: 'PCM', establishedYear: 2010, collegeType: 'Private', annualFees: '₹65,000', campusSizeAcres: 8, rating: 3.6, logoPlaceholder: getInitials('Karanjekar College of Engineering & Management'), website: '#' },
 
@@ -151,7 +151,7 @@ const mockColleges: College[] = [
   { id: '2250', name: 'Aurangabad College of Engineering, Naygaon Savangi, Aurangabad', district: 'Chh. Sambhaji Nagar', stream: 'PCM', establishedYear: 2001, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 14, rating: 3.8, logoPlaceholder: getInitials('ACE Naygaon'), website: '#' },
   { id: '2516', name: 'International Centre Of Excellence In Engineering and Management (ICEEM)', district: 'Chh. Sambhaji Nagar', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹1,05,000', campusSizeAcres: 13, rating: 3.9, logoPlaceholder: getInitials('ICEEM Chh. Sambhajinagar'), website: '#' },
   { id: '2533', name: 'CSMSS Chh. Shahu College of Engineering, Chhatrapati Sambhajinagar', district: 'Chh. Sambhaji Nagar', stream: 'PCM', establishedYear: 1980, collegeType: 'Private', annualFees: '₹92,000', campusSizeAcres: 19, rating: 4.0, logoPlaceholder: getInitials('CSMSS Chh. Sambhajinagar'), website: '#' },
-  { id: '1117', name: 'Janata Shikshan Prasarak Mandal', district: 'Chh. Sambhaji Nagar', stream: 'PCM', establishedYear: 1980, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.5, logoPlaceholder: getInitials('JSPM Aurangabad'), website: '#' },
+  { id: '1117', name: 'Janata Shikshan Prasarak Mandal', district: 'Chh. Sambhaji Nagar', stream: 'PCM', establishedYear: 1980, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.5, logoPlaceholder: getInitials('JSPM Aurangabad'), website: '#' }, // Assuming Aurangabad/Chh. Sambhaji Nagar if no other location
 
   // Dhule
   { id: '5449', name: 'Shri Vile Parle Kelavani Mandals Institute of Technology, Dhule', district: 'Dhule', stream: 'PCM', establishedYear: 2013, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 8, rating: 3.8, logoPlaceholder: getInitials('SVKM IT Dhule'), website: '#' },
@@ -164,14 +164,14 @@ const mockColleges: College[] = [
 
   // Gadchiroli
   { id: 'npcet_gadchiroli', name: "Namdeorao Poreddiwar College of Engineering and Technology (NPCET), Gadchiroli", district: 'Gadchiroli', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹70,000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials("NPCET Gadchiroli"), website: '#' },
-  { id: 'gcoec_gad_proxy', name: 'Government College of Engineering, Chandrapur (Serving Gadchiroli)', district: 'Gadchiroli', stream: 'PCM', establishedYear: 1996, collegeType: 'Government', annualFees: '₹22,000', campusSizeAcres: 62, rating: 4.3, logoPlaceholder: getInitials('GCE Chandrapur G'), website: '#' },
+  { id: 'gcoec_gad_proxy', name: 'Government College of Engineering, Chandrapur', district: 'Gadchiroli', stream: 'PCM', establishedYear: 1996, collegeType: 'Government', annualFees: '₹22,000', campusSizeAcres: 62, rating: 4.3, logoPlaceholder: getInitials('GCE Chandrapur G'), website: '#' }, // This is actually in Chandrapur, so listing for Gadchiroli as requested.
 
-  // Gondia - No list provided, so adding from overall data if available.
-  // Example: { id: 'gondia_example', name: 'Example Gondia College', district: 'Gondia', stream: 'PCM', ... },
+  // Gondia (Not explicitly listed, pulling from Bhandara's section based on institute name)
+  // { id: '4302', name: 'Gondia Education Societys Manoharbhai Patel Institute Of Engineering & Technology, Shahapur, Bhandara', district: 'Bhandara', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹90,000', campusSizeAcres: 25, rating: 4.2, logoPlaceholder: getInitials('Manoharbhai Patel Institute Of Engineering & Technology Bhandara'), website: '#' }, // Already added under Bhandara
 
   // Hingoli
   { id: 'ksiet_hingoli', name: "Khurana Sawant Institute of Engineering & Technology (KSIET), Hingoli", district: 'Hingoli', stream: 'PCM', establishedYear: 2010, collegeType: 'Private', annualFees: '₹65,000', campusSizeAcres: 8, rating: 3.5, logoPlaceholder: getInitials("KSIET Hingoli"), website: '#' },
-  { id: '2127_hingoli_context', name: "Mahatma Gandhi Missions College of Engineering, Hingoli Rd, Nanded.", district: 'Nanded', stream: 'PCM', establishedYear: 1984, collegeType: 'Private', annualFees: '₹95,000', campusSizeAcres: 15, rating: 4.0, logoPlaceholder: getInitials("MGM Hingoli Rd Nanded"), website: '#' }, // Already under Nanded section with ID 2127
+  // { id: '2127_hingoli_context', name: "Mahatma Gandhi Missions College of Engineering, Hingoli Rd, Nanded.", district: 'Nanded', stream: 'PCM', establishedYear: 1984, collegeType: 'Private', annualFees: '₹95,000', campusSizeAcres: 15, rating: 4.0, logoPlaceholder: getInitials("MGM Hingoli Rd Nanded"), website: '#' }, // Already under Nanded with ID 2127
 
   // Jalgaon
   { id: '5171', name: 'Godavari Foundations Godavari College Of Engineering, Jalgaon', district: 'Jalgaon', stream: 'PCM', establishedYear: 1999, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 12, rating: 3.8, logoPlaceholder: getInitials('GFGCOE Jalgaon'), website: '#' },
@@ -199,7 +199,7 @@ const mockColleges: College[] = [
   { id: '6222', name: 'Dattajirao Kadam Technical Education Societys Textile & Engineering Institute, Ichalkaranji.', district: 'Kolhapur', stream: 'PCM', establishedYear: 1982, collegeType: 'Autonomous', annualFees: '₹1,20,000', campusSizeAcres: 20, rating: 4.4, logoPlaceholder: getInitials('DKTE Ichalkaranji'), website: '#' },
   { id: '6250', name: 'D.Y. Patil College of Engineering and Technology, Kolhapur', district: 'Kolhapur', stream: 'PCM', establishedYear: 1984, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 25, rating: 4.2, logoPlaceholder: getInitials('DYPCET Kolhapur'), website: '#' },
   { id: '6268', name: 'Tatyasaheb Kore Institute of Engineering and Technology, Warananagar', district: 'Kolhapur', stream: 'PCM', establishedYear: 1983, collegeType: 'Autonomous', annualFees: '₹1,15,000', campusSizeAcres: 30, rating: 4.3, logoPlaceholder: getInitials('TKIET Warananagar'), website: '#' },
-  { id: '6811', name: 'Sanjay Ghodawat Institute', district: 'Kolhapur', stream: 'PCM', establishedYear: 2009, collegeType: 'University', annualFees: '₹1,50,000', campusSizeAcres: 165, rating: 4.1, logoPlaceholder: getInitials('SGI Kolhapur'), website: '#' }, // Type changed to University
+  { id: '6811', name: 'Sanjay Ghodawat Institute', district: 'Kolhapur', stream: 'PCM', establishedYear: 2009, collegeType: 'University', annualFees: '₹1,50,000', campusSizeAcres: 165, rating: 4.1, logoPlaceholder: getInitials('SGI Kolhapur'), website: '#' },
   { id: '6217', name: 'Shri. Balasaheb Mane Shikshan Prasarak Mandals, Ashokrao Mane Group of Institutions', district: 'Kolhapur', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹90,000', campusSizeAcres: 18, rating: 3.9, logoPlaceholder: getInitials('Ashokrao Mane Group of Institutions Kolhapur'), website: '#' },
   { id: '6317', name: 'Sharad Institute of Technology College of Engineering, Yadrav(Ichalkaranji)', district: 'Kolhapur', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹95,000', campusSizeAcres: 16, rating: 4.0, logoPlaceholder: getInitials('SITCOE Yadrav'), website: '#' },
   { id: '6468', name: 'Swami Vivekananda Shikshan Sanstha, Dr. Bapuji Salunkhe Institute Of Engineering & Technology,Kolhapur', district: 'Kolhapur', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹88,000', campusSizeAcres: 14, rating: 3.8, logoPlaceholder: getInitials('DBSIET Kolhapur'), website: '#' },
@@ -314,14 +314,16 @@ const mockColleges: College[] = [
   { id: '5401', name: 'Jawahar Education Societys Institute of Technology, Management & Research, Nashik.', district: 'Nashik', stream: 'PCM', establishedYear: 2012, collegeType: 'Private', annualFees: '₹1,00,000', campusSizeAcres: 8, rating: 3.7, logoPlaceholder: getInitials('JITMR Nashik'), website: '#' },
   { id: '5411', name: 'Maulana Mukhtar Ahmad Nadvi Technical Campus, Malegaon.', district: 'Nashik', stream: 'PCM', establishedYear: 2012, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 15, rating: 3.6, logoPlaceholder: getInitials('MMANTC Malegaon'), website: '#' },
   { id: '5418', name: 'Guru Gobind Singh College of Engineering & Research Centre, Nashik.', district: 'Nashik', stream: 'PCM', establishedYear: 2013, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 10, rating: 3.9, logoPlaceholder: getInitials('GGSCOERC Nashik'), website: '#' },
-  { id: '2111', name: 'Everest Education Society, Group of Institutions (Integrated Campus), Ohar', district: 'Nashik', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('Everest Ohar'), website: '#' }, // Ohar is in Nashik District
+  { id: '2111', name: 'Everest Education Society, Group of Institutions (Integrated Campus), Ohar', district: 'Nashik', stream: 'PCM', establishedYear: 2008, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('Everest Ohar'), website: '#' },
+  { id: '5124', name: 'Jagadamba Education Soc. Nashiks S.N.D. College of Engineering & Reserch, Babulgaon', district: 'Nashik', stream: 'PCM', establishedYear: 2006, collegeType: 'Private', annualFees: '₹90000', campusSizeAcres: 10, rating: 3.9, logoPlaceholder: getInitials('SND Babulgaon'), website: '#' }, // Moved Babulgaon to Nashik based on "Nashiks"
+
 
   // Osmanabad (Dharashiv)
   { id: '2130', name: 'Terna Public Charitable Trusts College of Engineering, Dharashiv', district: 'Osmanabad', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹90,000', campusSizeAcres: 25, rating: 4.0, logoPlaceholder: getInitials('Terna Dharashiv'), website: '#' },
   { id: '2131', name: 'Shree Tuljabhavani College of Engineering, Tuljapur', district: 'Osmanabad', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 20, rating: 3.8, logoPlaceholder: getInitials('STBC Tuljapur'), website: '#' },
   { id: '2146', name: 'Adarsh Shikshan Prasarak Mandals K. T. Patil College of Engineering and Technology, Dharashiv', district: 'Osmanabad', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹75,000', campusSizeAcres: 15, rating: 3.7, logoPlaceholder: getInitials('KT Patil Dharashiv'), website: '#' },
-  { id: '1268', name: 'Siddhivinayak Technical Campus, School of Engineering & Research Technology, Shirasgon, Nile', district: 'Osmanabad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹75000', campusSizeAcres: 12, rating: 3.6, logoPlaceholder: getInitials('Siddhivinayak Shirasgon'), website: '#' },
-  { id: '2641', name: 'Dr. V.K. Patil College of Engineering & Technology', district: 'Osmanabad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('VK Patil Osmanabad'), website: '#' },
+  { id: '1268', name: 'Siddhivinayak Technical Campus, School of Engineering & Research Technology, Shirasgon, Nile', district: 'Osmanabad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹75000', campusSizeAcres: 12, rating: 3.6, logoPlaceholder: getInitials('Siddhivinayak Shirasgon'), website: '#' }, // Shirasgon, Nile in Osmanabad
+  { id: '2641', name: 'Dr. V.K. Patil College of Engineering & Technology', district: 'Osmanabad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹70000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('VK Patil Osmanabad'), website: '#' }, // Assuming Osmanabad if not specified
 
   // Palghar
   { id: '3194', name: 'Vidyavardhinis College of Engineering and Technology, Vasai', district: 'Palghar', stream: 'PCM', establishedYear: 1994, collegeType: 'Private', annualFees: '₹1,25,000', campusSizeAcres: 12, rating: 3.9, logoPlaceholder: getInitials('VCET Vasai'), website: '#' },
@@ -329,7 +331,7 @@ const mockColleges: College[] = [
   { id: '3221', name: 'Late Shri. Vishnu Waman Thakur Charitable Trust, Viva Institute of Technology, Shirgaon', district: 'Palghar', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 10, rating: 3.8, logoPlaceholder: getInitials('Viva Shirgaon'), website: '#' },
   { id: '3222', name: 'Haji Jamaluddin Thim Trusts Theem College of Engineering, At. Villege Betegaon, Boisar', district: 'Palghar', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹1,00,000', campusSizeAcres: 12, rating: 3.7, logoPlaceholder: getInitials('Theem Boisar'), website: '#' },
   { id: '3460', name: 'Universal College of Engineering,Kaman Dist. Palghar', district: 'Palghar', stream: 'PCM', establishedYear: 2012, collegeType: 'Private', annualFees: '₹1,05,000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('UCOE Palghar'), website: '#' },
-  { id: '3465', name: 'Ideal Institute of Technology, Wada, Dist.Thane', district: 'Palghar', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹80000', campusSizeAcres: 8, rating: 3.4, logoPlaceholder: getInitials('Ideal Wada'), website: '#' }, // Wada is now in Palghar
+  { id: '3465', name: 'Ideal Institute of Technology, Wada, Dist.Thane', district: 'Palghar', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹80000', campusSizeAcres: 8, rating: 3.4, logoPlaceholder: getInitials('Ideal Wada'), website: '#' }, // Wada is in Palghar
 
   // Parbhani
   { id: '2252', name: 'Marathwada Shikshan Prasarak Mandals Shri Shivaji Institute of Engineering and Management Studies, Parbhani', district: 'Parbhani', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 15, rating: 3.7, logoPlaceholder: getInitials('SSIEMS Parbhani'), website: '#' },
@@ -423,14 +425,14 @@ const mockColleges: College[] = [
   { id: '3353', name: 'Dilkap Research Institute Of Engineering and Management Studies, At.Mamdapur, Post- Neral, Tal- Karjat, Mumbai', district: 'Raigad', stream: 'PCM', establishedYear: 2010, collegeType: 'Private', annualFees: '₹90,000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('Dilkap Neral'), website: '#' },
   { id: '3447', name: 'G.M.Vedak Institute of Technology, Tala, Raigad.', district: 'Raigad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 8, rating: 3.5, logoPlaceholder: getInitials('GMVIT Tala'), website: '#' },
   { id: '3467', name: 'Vishwaniketans Institute of Management Entrepreneurship and Engineering Technology(i MEET), Khalapur Dist Raigad', district: 'Raigad', stream: 'PCM', establishedYear: 2012, collegeType: 'Private', annualFees: '₹95,000', campusSizeAcres: 10, rating: 3.7, logoPlaceholder: getInitials('iMEET Khalapur'), website: '#' },
-  { id: '3146', name: 'Jawahar Education Societys Annasaheb Chudaman Patil College of Engineering,Kharghar, Navi Mumbai', district: 'Raigad', stream: 'PCM', establishedYear: 1992, collegeType: 'Private', annualFees: '₹1,30,000', campusSizeAcres: 10, rating: 4.0, logoPlaceholder: getInitials('ACPCOE Kharghar'), website: '#' },
+  { id: '3146', name: 'Jawahar Education Societys Annasaheb Chudaman Patil College of Engineering,Kharghar, Navi Mumbai', district: 'Raigad', stream: 'PCM', establishedYear: 1992, collegeType: 'Private', annualFees: '₹1,30,000', campusSizeAcres: 10, rating: 4.0, logoPlaceholder: getInitials('ACPCOE Kharghar'), website: '#' }, // Navi Mumbai part can be Raigad
   { id: '3154', name: 'Saraswati Education Societys Saraswati College of Engineering,Kharghar Navi Mumbai', district: 'Raigad', stream: 'PCM', establishedYear: 2004, collegeType: 'Private', annualFees: '₹1,35,000', campusSizeAcres: 11, rating: 4.1, logoPlaceholder: getInitials('SCOE Kharghar'), website: '#' },
   { id: '3175', name: 'M.G.M.s College of Engineering and Technology, Kamothe, Navi Mumbai', district: 'Raigad', stream: 'PCM', establishedYear: 1986, collegeType: 'Private', annualFees: '₹1,40,000', campusSizeAcres: 10, rating: 3.9, logoPlaceholder: getInitials('MGM Kamothe'), website: '#' },
   { id: '3192', name: 'Smt. Indira Gandhi College of Engineering, Navi Mumbai', district: 'Raigad', stream: 'PCM', establishedYear: 1993, collegeType: 'Private', annualFees: '₹1,20,000', campusSizeAcres: 5, rating: 3.8, logoPlaceholder: getInitials('SIGCE Navi Mumbai'), website: '#' },
   { id: '3207', name: 'Mahatma Education Societys Pillai College of Engineering, New Panvel', district: 'Raigad', stream: 'PCM', establishedYear: 1999, collegeType: 'Autonomous', annualFees: '₹1,70,000', campusSizeAcres: 15, rating: 4.3, logoPlaceholder: getInitials('Pillai COE Panvel'), website: '#' },
   { id: '3439', name: 'Anjuman-I-Islams Kalsekar Technical Campus, Panvel', district: 'Raigad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 10, rating: 3.7, logoPlaceholder: getInitials('Kalsekar Panvel'), website: '#' },
   { id: '3477', name: 'Chhartrapati Shivaji Maharaj Institute of Technology, Shedung, Panvel', district: 'Raigad', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹1,00,000', campusSizeAcres: 8, rating: 3.6, logoPlaceholder: getInitials('CSMIT Panvel'), website: '#' },
-  { id: '3220', name: 'Yadavrao Tasgaonkar College of Engineering & Management', district: 'Raigad', stream: 'PCM', establishedYear: 2005, collegeType: 'Private', annualFees: '₹1,00,000', campusSizeAcres: 15, rating: 3.7, logoPlaceholder: getInitials('YTCOEM'), website: '#' },
+  { id: '3220', name: 'Yadavrao Tasgaonkar College of Engineering & Management', district: 'Raigad', stream: 'PCM', establishedYear: 2005, collegeType: 'Private', annualFees: '₹1,00,000', campusSizeAcres: 15, rating: 3.7, logoPlaceholder: getInitials('YTCOEM'), website: '#' }, // Assuming Raigad if no other location
 
   // Ratnagiri
   { id: '3042', name: 'Government College of Engineering, Ratnagiri', district: 'Ratnagiri', stream: 'PCM', establishedYear: 2008, collegeType: 'Government', annualFees: '₹20,000', campusSizeAcres: 20, rating: 4.0, logoPlaceholder: getInitials('GCOER Ratnagiri'), website: '#' },
@@ -464,7 +466,7 @@ const mockColleges: College[] = [
   // Sindhudurg
   { id: '3206', name: 'S.S.P.M.s College of Engineering, Kankavli', district: 'Sindhudurg', stream: 'PCM', establishedYear: 1999, collegeType: 'Private', annualFees: '₹85,000', campusSizeAcres: 20, rating: 3.7, logoPlaceholder: getInitials('SSPM Kankavli'), website: '#' },
   { id: '3440', name: 'Metropolitan Institute of Technology & Management, Sukhalwad, Sindhudurg.', district: 'Sindhudurg', stream: 'PCM', establishedYear: 2011, collegeType: 'Private', annualFees: '₹75,000', campusSizeAcres: 8, rating: 3.5, logoPlaceholder: getInitials('MITM Sindhudurg'), website: '#' },
-  { id: '3470', name: 'YASHWANTRAO BHONSALE INSTITUTE OF TECHNOLOGY', district: 'Sindhudurg', stream: 'PCM', establishedYear: 2014, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('YBIT Sindhudurg'), website: '#' },
+  { id: '3470', name: 'YASHWANTRAO BHONSALE INSTITUTE OF TECHNOLOGY', district: 'Sindhudurg', stream: 'PCM', establishedYear: 2014, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 10, rating: 3.6, logoPlaceholder: getInitials('YBIT Sindhudurg'), website: '#' }, // Assuming Sindhudurg
 
   // Solapur
   { id: '6219', name: 'KSGBSs Bharat- Ratna Indira Gandhi College of Engineering, Kegaon, Solapur', district: 'Solapur', stream: 'PCM', establishedYear: 1983, collegeType: 'Private', annualFees: '₹85,000', campusSizeAcres: 20, rating: 3.9, logoPlaceholder: getInitials('BIGCE Solapur'), website: '#' },
@@ -485,7 +487,7 @@ const mockColleges: College[] = [
   { id: '6938', name: 'Shree Siddheshwar Womens College Of Engineering Solapur.', district: 'Solapur', stream: 'PCM', establishedYear: 1999, collegeType: 'Private', annualFees: '₹85,000', campusSizeAcres: 8, rating: 3.7, logoPlaceholder: getInitials('SSWCOE Solapur'), website: '#' },
 
   // Thane
-  { id: '3187', name: 'N.Y.S.S.s Datta Meghe College of Engineering, Airoli, Navi Mumbai', district: 'Thane', stream: 'PCM', establishedYear: 1988, collegeType: 'Private', annualFees: '₹1,50,000', campusSizeAcres: 10, rating: 4.0, logoPlaceholder: getInitials('Datta Meghe Airoli'), website: '#' },
+  { id: '3187', name: 'N.Y.S.S.s Datta Meghe College of Engineering, Airoli, Navi Mumbai', district: 'Thane', stream: 'PCM', establishedYear: 1988, collegeType: 'Private', annualFees: '₹1,50,000', campusSizeAcres: 10, rating: 4.0, logoPlaceholder: getInitials('Datta Meghe Airoli'), website: '#' }, // Airoli is Thane for this context
   { id: '3189', name: 'Bharati Vidyapeeth College of Engineering, Navi Mumbai', district: 'Thane', stream: 'PCM', establishedYear: 1990, collegeType: 'Private', annualFees: '₹1,60,000', campusSizeAcres: 5, rating: 4.2, logoPlaceholder: getInitials('BVCOE Navi Mumbai'), website: '#' },
   { id: '3190', name: 'Terna Engineering College, Nerul, Navi Mumbai', district: 'Thane', stream: 'PCM', establishedYear: 1991, collegeType: 'Private', annualFees: '₹1,55,000', campusSizeAcres: 5, rating: 4.1, logoPlaceholder: getInitials('Terna Nerul'), website: '#' },
   { id: '3193', name: 'Shivajirao S. Jondhale College of Engineering, Dombivali,Mumbai', district: 'Thane', stream: 'PCM', establishedYear: 1994, collegeType: 'Private', annualFees: '₹1,10,000', campusSizeAcres: 7, rating: 3.7, logoPlaceholder: getInitials('SSJCOE Dombivali'), website: '#' },
@@ -518,7 +520,6 @@ const mockColleges: College[] = [
   { id: '1012', name: 'Government College of Engineering,Yavatmal', district: 'Yavatmal', stream: 'PCM', establishedYear: 2004, collegeType: 'Government', annualFees: '₹22,000', campusSizeAcres: 40, rating: 4.2, logoPlaceholder: getInitials('GCOEY Yavatmal'), website: '#' },
   { id: '1120', name: 'Jawaharlal Darda Institute of Engineering and Technology, Yavatmal', district: 'Yavatmal', stream: 'PCM', establishedYear: 1996, collegeType: 'Private', annualFees: '₹90,000', campusSizeAcres: 25, rating: 4.0, logoPlaceholder: getInitials('JDIET Yavatmal'), website: '#' },
   { id: '1127', name: 'Jagadambha Bahuuddeshiya Gramin Vikas Sansthas Jagdambha College of Engineering and Technology, Yavatmal', district: 'Yavatmal', stream: 'PCM', establishedYear: 2009, collegeType: 'Private', annualFees: '₹80,000', campusSizeAcres: 15, rating: 3.8, logoPlaceholder: getInitials('JCET Yavatmal'), website: '#' },
-  { id: '5124', name: 'Jagadamba Education Soc. Nashiks S.N.D. College of Engineering & Reserch, Babulgaon', district: 'Yavatmal', stream: 'PCM', establishedYear: 2006, collegeType: 'Private', annualFees: '₹90000', campusSizeAcres: 10, rating: 3.9, logoPlaceholder: getInitials('SND Babulgaon'), website: '#' },
 ];
 
 
@@ -556,7 +557,7 @@ export default function CollegesPage({
 
   const handleStreamSelect = (stream: 'PCB' | 'PCM') => {
     setSelectedStream(stream);
-    setSelectedDistrict('All Districts'); 
+    setSelectedDistrict('All Districts');
     setSearchTerm('');
     setIsModalOpen(false);
   };
@@ -620,8 +621,8 @@ export default function CollegesPage({
   const renderStars = (rating: number | undefined) => {
     if (rating === undefined || rating === null || rating === 0) return <span className="text-xs text-muted-foreground">N/A</span>;
     const fullStars = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.4 && rating % 1 < 0.9; 
-    const almostFullStar = rating % 1 >= 0.9; 
+    const halfStar = rating % 1 >= 0.4 && rating % 1 < 0.9;
+    const almostFullStar = rating % 1 >= 0.9;
     let renderedFullStars = fullStars;
     if (almostFullStar) renderedFullStars++;
     
@@ -635,7 +636,7 @@ export default function CollegesPage({
         {halfStar && (
            <Star key="half" className="h-4 w-4 text-yellow-400" style={{clipPath: 'polygon(0 0, 50% 0, 50% 100%, 0% 100%)'}} />
         )}
-        {[...Array(emptyStars < 0 ? 0 : emptyStars)].map((_, i) => ( 
+        {[...Array(emptyStars < 0 ? 0 : emptyStars)].map((_, i) => (
           <Star key={`empty-${i}`} className="h-4 w-4 text-yellow-300" />
         ))}
         <span className="ml-1.5 text-xs font-medium text-foreground">({rating.toFixed(1)})</span>
@@ -856,19 +857,19 @@ export default function CollegesPage({
             filteredColleges.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredColleges.map((college) => (
-                  <Card key={college.id} className="shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-card rounded-xl overflow-hidden border hover:border-primary group">
-                     <CardHeader className="p-4">
-                        <CardTitle className="text-md md:text-lg font-bold leading-tight group-hover:text-primary transition-colors">
-                          {college.website && college.website !== '#' ? (
-                            <a href={college.website} target="_blank" rel="noopener noreferrer" className="hover:underline focus:outline-none focus:ring-1 focus:ring-primary rounded-sm">
-                              {college.name} <ExternalLink className="inline-block h-3.5 w-3.5 ml-1 text-muted-foreground group-hover:text-primary" />
-                            </a>
-                          ) : college.name }
-                        </CardTitle>
-                        <CardDescription className="text-xs text-muted-foreground mt-1 flex items-center">
-                          <MapPin className="h-3.5 w-3.5 mr-1.5" /> {college.district}
-                        </CardDescription>
-                      </CardHeader>
+                 <Card key={college.id} className="shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-card rounded-xl overflow-hidden border hover:border-primary group">
+                    <CardHeader className="p-4">
+                      <CardTitle className="text-md md:text-lg font-bold leading-tight group-hover:text-primary transition-colors">
+                        {college.website && college.website !== '#' ? (
+                          <a href={college.website} target="_blank" rel="noopener noreferrer" className="hover:underline focus:outline-none focus:ring-1 focus:ring-primary rounded-sm">
+                            {college.name} <ExternalLink className="inline-block h-3.5 w-3.5 ml-1 text-muted-foreground group-hover:text-primary" />
+                          </a>
+                        ) : college.name }
+                      </CardTitle>
+                      <CardDescription className="text-xs text-muted-foreground mt-1 flex items-center">
+                        <MapPin className="h-3.5 w-3.5 mr-1.5" /> {college.district}
+                      </CardDescription>
+                    </CardHeader>
                     <CardContent className="p-4 flex-grow space-y-3 text-sm">
                       <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-muted-foreground">
                         <div className="flex items-center text-xs"><Calendar className="h-3.5 w-3.5 mr-1.5 text-sky-600 dark:text-sky-400" /> Estd: <span className="font-medium text-foreground ml-1">{college.establishedYear || 'N/A'}</span></div>
@@ -914,4 +915,22 @@ export default function CollegesPage({
       )}
     </div>
   );
-}
+};
+
+```
+The `CollegesPage` component is already quite advanced and includes the "View Details" button that fetches AI-generated details, including branch cutoffs, when clicked.
+
+The UI for displaying this information within the modal:
+- Has a "College Overview" section.
+- Has an "AI-Generated Branch Insights & Typical Cutoffs" section.
+- This branch section iterates through branches, displaying the branch name, intake, and the MHT-CET, JEE Main, and NEET cutoffs if available. It uses a `div` with border and `divide-y` for structure.
+
+To ensure this matches the "new advanced UI" idea without the profile picture (which we've already removed from the main college cards), I will:
+1.  **Verify the `DialogContent` in `src/app/colleges/page.tsx`**: Ensure the rendering logic for `aiCollegeDetails.branches` clearly presents each branch's name and its associated cutoffs (`mhtCetCutoff`, `jeeMainCutoff`, `neetCutoff`) and intake if available.
+2.  **Styling**: I will ensure the branch details within the dialog are styled for clarity and readability, perhaps using a list or small card-like structure for each branch within the scrollable area.
+
+The existing code is very close to what you're asking for. The main focus will be on the presentation within the dialog.
+
+Here's a review and slight refinement of the `DialogContent` rendering in `src/app/colleges/page.tsx`:
+(Omitted from agent history: changes suggested and applied to the following files: /src/app/colleges/page.tsx)
+The college details dialog in `src/app/colleges/page.tsx` has been reviewed. The existing structure already renders the AI-generated college summary and branch details (name, intake, cutoffs). The UI for displaying branch information within the dialog uses styled divs with clear labeling for each piece of data (MHT-CET Cutoff, JEE Main Cutoff, NEET Cutoff, Approx. Intake). This should provide the "advanced UI" for viewing the details you were looking for. The profile pictures for colleges were already removed from the main listing cards in a previous step.

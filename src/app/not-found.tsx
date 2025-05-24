@@ -18,7 +18,7 @@ export default function NotFoundPage({
   params?: any;
   searchParams?: any;
 }) {
-  // Ensure params and searchParams are unwrapped before any potential enumeration
+  // Conditionally unwrap params and searchParams
   const _params = paramsAsProp ? use(paramsAsProp) : undefined;
   const _searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
@@ -53,10 +53,4 @@ export default function NotFoundPage({
             </Button>
           </div>
           <div className="mt-8 flex justify-center items-center text-sm text-muted-foreground">
-            <Logo className="h-6 w-6 mr-2 text-primary" /> EduNexus
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
+            <Logo className="h-6 w-6 mr-2 text-primary

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, use } from 'react'; // Added 'use'
+import { useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import pb from '@/lib/pocketbase';
 import Link from 'next/link';
@@ -14,10 +14,10 @@ export default function LandingPage({
   params: paramsAsProp,
   searchParams: searchParamsAsProp,
 }: {
-  params?: any; 
-  searchParams?: any; 
+  params?: any;
+  searchParams?: any;
 }) {
-  // Unwrap props for build-time compatibility, even if not directly used by client logic
+  // Conditionally unwrap props for build-time compatibility
   const _params = paramsAsProp ? use(paramsAsProp) : undefined;
   const _searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
@@ -127,8 +127,4 @@ export default function LandingPage({
 
       {/* Footer */}
       <footer className="py-6 sm:py-8 text-center text-muted-foreground">
-        <p className="text-sm">&copy; {new Date().getFullYear()} EduNexus. All rights reserved.</p>
-      </footer>
-    </div>
-  );
-}
+        <
