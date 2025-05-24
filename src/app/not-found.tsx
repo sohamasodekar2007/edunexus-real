@@ -5,14 +5,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Construction, Home } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import type { Metadata } from 'next';
-// Removed: import { use } from 'react';
+import { use } from 'react';
 
 export const metadata: Metadata = {
   title: 'EduNexus - Page Not Found',
 };
 
-export default function NotFoundPage() { // Removed params and searchParams from props
-  // Removed use(paramsAsProp) and use(searchParamsAsProp) calls
+export default function NotFoundPage({
+  params: paramsAsProp,
+  searchParams: searchParamsAsProp,
+}: {
+  params?: any;
+  searchParams?: any;
+}) {
+  // Ensure params and searchParams are unwrapped before any potential enumeration
+  const _params = paramsAsProp ? use(paramsAsProp) : undefined;
+  const _searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4 text-center">

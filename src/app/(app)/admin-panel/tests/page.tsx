@@ -16,8 +16,8 @@ export default function TestManagementPage({
   searchParams?: any; 
 }) {
   // Conditionally unwrap params and searchParams
-  const params = paramsAsProp ? use(paramsAsProp) : undefined;
-  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
+  const _params = paramsAsProp ? use(paramsAsProp) : undefined;
+  const _searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6">

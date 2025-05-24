@@ -17,8 +17,8 @@ export default function AdminDashboardPage({
   searchParams?: any;
 }) {
   // Conditionally unwrap params and searchParams
-  const params = paramsAsProp ? use(paramsAsProp) : undefined;
-  const searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
+  const _params = paramsAsProp ? use(paramsAsProp) : undefined;
+  const _searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   return (
     <div className="space-y-6">

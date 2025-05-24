@@ -12,8 +12,12 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { use } from 'react'; // Import use
 
+interface CollegePageParams {
+  collegeId: string;
+}
+
 export default function CollegeDetailPage({ params: paramsAsProp }: { params: any }) {
-  const params = use(paramsAsProp); // Unwrap params
+  const params = use(paramsAsProp) as CollegePageParams; // Unwrap and cast params
   const collegeId = decodeURIComponent(params.collegeId);
   const allCollegeData = collegeDataJson as CollegeData2025;
   const details: CollegeDetailData | undefined = allCollegeData[collegeId];
@@ -39,39 +43,34 @@ export default function CollegeDetailPage({ params: paramsAsProp }: { params: an
       return <p className="text-sm text-muted-foreground italic mt-1">No specific {title.toLowerCase()} data available.</p>;
     }
 
-    const categoriesWithData = primaryCategories.filter(catKey => {
-      const value = data[catKey];
-      return value !== undefined && value !== null && value !== '' && value !== 'Data N/A' && value !== 'N/A';
-    });
-
-    const hasOtherData = data.other !== undefined && data.other !== null && data.other !== '' && data.other !== 'Data N/A' && data.other !== 'N/A';
-
-    if (categoriesWithData.length === 0 && !hasOtherData) {
-        return <p className="text-sm text-muted-foreground italic mt-1">No specific {title.toLowerCase()} category data from AI.</p>;
+    const categoriesWithDataContent = primaryCategories
+      .map(catKey => {
+        const value = data[catKey];
+        if (value !== undefined && value !== null && value !== '' && value !== 'Data N/A' && value !== 'N/A') {
+          return { key: catKey, label: categoryLabels[catKey], value: `${value}${unit}` };
+        }
+        return { key: catKey, label: categoryLabels[catKey], value: 'N/A' }; // Show N/A if not present
+      })
+      .concat(
+        data.other && data.other !== 'Data N/A' && data.other !== 'N/A'
+          ? [{ key: 'other', label: categoryLabels.other, value: `${data.other}${unit}` }]
+          : []
+      );
+    
+    if (categoriesWithDataContent.every(item => item.value === 'N/A' || item.value === `N/A${unit}` )) {
+        return <p className="text-sm text-muted-foreground italic mt-1">No specific {title.toLowerCase()} category data available.</p>;
     }
 
     return (
       <div>
         <h4 className="text-md font-semibold mt-3 mb-1 text-accent">{title}</h4>
         <div className="rounded-md border text-xs sm:text-sm">
-          {categoriesWithData.map((catKey, index) => {
-            const value = data[catKey];
-            const displayValue = `${value}${unit}`;
-            const isLastVisibleCategory = index === categoriesWithData.length - 1 && !hasOtherData;
-
-            return (
-              <div key={catKey} className={cn("flex justify-between items-center p-1.5 sm:p-2", !isLastVisibleCategory ? "border-b border-border/30 border-dashed" : "")}>
-                <span className="font-medium text-muted-foreground">{categoryLabels[catKey]}:</span>
-                <span className={cn(value === "Data N/A" || value === "N/A" ? "text-muted-foreground/70" : "text-foreground font-semibold")}>{displayValue}</span>
-              </div>
-            );
-          })}
-          {hasOtherData && (
-             <div key="other_fallback" className="flex justify-between items-center p-1.5 sm:p-2">
-                <span className="font-medium text-muted-foreground">{categoryLabels.other}:</span>
-                <span className="text-foreground font-semibold">{data.other}{unit}</span>
-             </div>
-          )}
+          {categoriesWithDataContent.map((item, index) => (
+            <div key={item.key} className={cn("flex justify-between items-center p-1.5 sm:p-2", index < categoriesWithDataContent.length - 1 ? "border-b border-border/30 border-dashed" : "")}>
+              <span className="font-medium text-muted-foreground">{item.label}:</span>
+              <span className={cn(item.value === "N/A" || item.value === `N/A${unit}` ? "text-muted-foreground/70" : "text-foreground font-semibold")}>{item.value}</span>
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -79,9 +78,13 @@ export default function CollegeDetailPage({ params: paramsAsProp }: { params: an
 
   const hasAnyDisplayableData = (cutoffObject?: CategoryWiseData) => {
     if (!cutoffObject) return false;
-    const valuesToCheck = Object.values(cutoffObject);
-    return valuesToCheck.some(value => value && value !== "Data N/A" && value !== "N/A");
+    // Check if any category has a value that is not "Data N/A" or "N/A"
+    return primaryCategories.some(catKey => {
+        const value = cutoffObject[catKey];
+        return value && value !== "Data N/A" && value !== "N/A";
+    }) || (cutoffObject.other && cutoffObject.other !== "Data N/A" && cutoffObject.other !== "N/A");
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 py-8">
@@ -140,7 +143,7 @@ export default function CollegeDetailPage({ params: paramsAsProp }: { params: an
                 <BarChart3 className="mr-2 h-6 w-6" /> Branches, Cutoffs & Fees (AY 2025)
               </h2>
               {details.branches && details.branches.length > 0 ? (
-                <ScrollArea className="w-full"> {/* Removed max-h classes here */}
+                <ScrollArea className="w-full">
                   <div className="space-y-6">
                     {details.branches.map((branch, index) => (
                       <Card key={index} className="shadow-md border border-border/50 hover:shadow-lg transition-shadow bg-card/80 backdrop-blur-sm">
@@ -151,22 +154,22 @@ export default function CollegeDetailPage({ params: paramsAsProp }: { params: an
                           )}
                         </CardHeader>
                         <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                          {branch.mhtCetCutoffs && (
+                          {branch.mhtCetCutoffs && hasAnyDisplayableData(branch.mhtCetCutoffs) && (
                             renderCategoryTable(branch.mhtCetCutoffs, "MHT-CET Cutoffs", " %ile")
                           )}
-                          {branch.jeeMainCutoffs && (
+                          {branch.jeeMainCutoffs && hasAnyDisplayableData(branch.jeeMainCutoffs) && (
                             renderCategoryTable(branch.jeeMainCutoffs, "JEE Main Cutoffs", " Rank")
                           )}
-                           {branch.neetCutoffs && (
+                           {branch.neetCutoffs && hasAnyDisplayableData(branch.neetCutoffs) && (
                             renderCategoryTable(branch.neetCutoffs, "NEET Cutoffs", " Score")
                           )}
-                          {branch.fees && (
+                          {branch.fees && hasAnyDisplayableData(branch.fees) && (
                              renderCategoryTable(branch.fees, "Category-wise Fees", " INR")
                           )}
-                           {(!branch.mhtCetCutoffs || !hasAnyDisplayableData(branch.mhtCetCutoffs)) &&
-                            (!branch.jeeMainCutoffs || !hasAnyDisplayableData(branch.jeeMainCutoffs)) &&
-                            (!branch.neetCutoffs || !hasAnyDisplayableData(branch.neetCutoffs)) &&
-                            (!branch.fees || !hasAnyDisplayableData(branch.fees)) && (
+                           {!hasAnyDisplayableData(branch.mhtCetCutoffs) &&
+                            !hasAnyDisplayableData(branch.jeeMainCutoffs) &&
+                            !hasAnyDisplayableData(branch.neetCutoffs) &&
+                            !hasAnyDisplayableData(branch.fees) && (
                              <p className="text-sm text-muted-foreground italic md:col-span-2">No specific cutoff or fee data available for this branch.</p>
                            )}
                         </CardContent>
