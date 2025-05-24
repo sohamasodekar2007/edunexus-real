@@ -9,6 +9,7 @@ import type { CollegeDetailData, BranchDetail, CategoryWiseData, CollegeData2025
 import { ArrowLeft, Building, BookOpenText, BarChart3, IndianRupee, Percent, Ruler, Star, ExternalLink, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 export default function CollegeDetailPage({ params }: { params: { collegeId: string } }) {
   const collegeId = decodeURIComponent(params.collegeId);
@@ -25,7 +26,7 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
     }
 
     const primaryCategories: Array<keyof CategoryWiseData> = ['open', 'obc', 'sc', 'st', 'vjnt', 'ews', 'tfws'];
-    const categoryLabels: Record<keyof CategoryWiseData, string> = {
+    const categoryLabels: Record<keyof CategoryWiseData | string, string> = {
       open: 'Open',
       obc: 'OBC',
       sc: 'SC',
@@ -36,7 +37,12 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
       other: 'Other/General'
     };
 
-    const hasPrimaryData = primaryCategories.some(catKey => data[catKey] !== undefined && data[catKey] !== null && data[catKey] !== '');
+    const hasData = primaryCategories.some(catKey => data[catKey] !== undefined && data[catKey] !== null && data[catKey] !== '' && data[catKey] !== 'Data N/A' && data[catKey] !== 'N/A');
+    const hasOtherData = data.other !== undefined && data.other !== null && data.other !== '' && data.other !== 'Data N/A' && data.other !== 'N/A';
+
+    if (!hasData && !hasOtherData) {
+        return <p className="text-sm text-muted-foreground italic mt-1">No specific {title.toLowerCase()} category data available.</p>;
+    }
 
     return (
       <div>
@@ -45,26 +51,26 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
           <Table className="min-w-full text-xs sm:text-sm">
             <TableHeader className="bg-muted/50">
               <TableRow>
-                <TableHead className="w-[100px] sm:w-[120px]">Category</TableHead>
-                <TableHead className="text-right">Cutoff / Fee</TableHead>
+                <TableHead className="w-[100px] sm:w-[120px] font-medium">Category</TableHead>
+                <TableHead className="text-right font-medium">Cutoff / Fee</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {primaryCategories.map(catKey => (
-                data[catKey] ? (
-                  <TableRow key={catKey} className="border-b-0 last:border-b-0">
+              {primaryCategories.map((catKey, index) => (
+                (data[catKey] && data[catKey] !== "Data N/A" && data[catKey] !== "N/A") ? (
+                  <TableRow key={catKey} className={cn("border-b-0", index < primaryCategories.filter(pc => data[pc] && data[pc] !== "Data N/A" && data[pc] !== "N/A").length -1 || (hasOtherData && data.other && !primaryCategories.filter(pc => data[pc] && data[pc] !== "Data N/A" && data[pc] !== "N/A").includes('other')) ? "border-b border-border/30 border-dashed" : "")}>
                     <TableCell className="font-medium py-1.5 sm:py-2">{categoryLabels[catKey]}</TableCell>
                     <TableCell className="text-right py-1.5 sm:py-2">{data[catKey]}{unit}</TableCell>
                   </TableRow>
                 ) : (
-                  <TableRow key={catKey} className="border-b-0 last:border-b-0">
+                  <TableRow key={catKey} className={cn("border-b-0", index < primaryCategories.filter(pc => data[pc] && data[pc] !== "Data N/A" && data[pc] !== "N/A").length -1 || (hasOtherData && data.other && !primaryCategories.filter(pc => data[pc] && data[pc] !== "Data N/A" && data[pc] !== "N/A").includes('other')) ? "border-b border-border/30 border-dashed" : "")}>
                     <TableCell className="font-medium py-1.5 sm:py-2">{categoryLabels[catKey]}</TableCell>
                     <TableCell className="text-right py-1.5 sm:py-2 text-muted-foreground/70">N/A</TableCell>
                   </TableRow>
                 )
               ))}
-              {data.other && !hasPrimaryData && (
-                   <TableRow key="other_fallback" className="border-b-0 last:border-b-0">
+              {data.other && data.other !== "Data N/A" && data.other !== "N/A" && (
+                   <TableRow key="other_fallback" className="border-b-0">
                       <TableCell className="font-medium py-1.5 sm:py-2">{categoryLabels.other}</TableCell>
                       <TableCell className="text-right py-1.5 sm:py-2">{data.other}{unit}</TableCell>
                    </TableRow>
@@ -133,7 +139,7 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
                 <BarChart3 className="mr-2 h-6 w-6" /> Branches, Cutoffs & Fees (AY 2025)
               </h2>
               {details.branches && details.branches.length > 0 ? (
-                <ScrollArea className="max-h-[500px] lg:max-h-none -mx-1 pr-2">
+                <ScrollArea className="-mx-1 pr-2">
                   <div className="space-y-6">
                     {details.branches.map((branch, index) => (
                       <Card key={index} className="shadow-md border border-border/50 hover:shadow-lg transition-shadow bg-card/80 backdrop-blur-sm">
@@ -156,10 +162,10 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
                           {branch.fees && (
                              renderCategoryTable(branch.fees, "Category-wise Fees", " INR")
                           )}
-                           {(!branch.mhtCetCutoffs || Object.keys(branch.mhtCetCutoffs).length === 0) && 
-                            (!branch.jeeMainCutoffs || Object.keys(branch.jeeMainCutoffs).length === 0) &&
-                            (!branch.neetCutoffs || Object.keys(branch.neetCutoffs).length === 0) &&
-                            (!branch.fees || Object.keys(branch.fees).length === 0) && (
+                           {(!branch.mhtCetCutoffs || Object.keys(branch.mhtCetCutoffs).filter(k => data[k] && data[k] !== "Data N/A" && data[k] !== "N/A").length === 0) &&
+                            (!branch.jeeMainCutoffs || Object.keys(branch.jeeMainCutoffs).filter(k => data[k] && data[k] !== "Data N/A" && data[k] !== "N/A").length === 0) &&
+                            (!branch.neetCutoffs || Object.keys(branch.neetCutoffs).filter(k => data[k] && data[k] !== "Data N/A" && data[k] !== "N/A").length === 0) &&
+                            (!branch.fees || Object.keys(branch.fees).filter(k => data[k] && data[k] !== "Data N/A" && data[k] !== "N/A").length === 0) && (
                              <p className="text-sm text-muted-foreground italic md:col-span-2">No specific cutoff or fee data available for this branch.</p>
                            )}
                         </CardContent>
