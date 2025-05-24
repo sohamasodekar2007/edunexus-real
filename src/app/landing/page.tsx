@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, use } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import pb from '@/lib/pocketbase';
 import Link from 'next/link';
@@ -10,17 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Logo } from '@/components/icons';
 import { ArrowRight, Rocket, Target, Wand2, BarChartBig, ListChecks } from 'lucide-react';
 
-export default function LandingPage({
-  params: paramsAsProp,
-  searchParams: searchParamsAsProp,
-}: {
-  params?: any;
-  searchParams?: any;
-}) {
-  // Conditionally unwrap props for build-time compatibility
-  const _params = paramsAsProp ? use(paramsAsProp) : undefined;
-  const _searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
-
+export default function LandingPage() {
   const router = useRouter();
 
   useEffect(() => {
@@ -127,4 +117,16 @@ export default function LandingPage({
 
       {/* Footer */}
       <footer className="py-6 sm:py-8 text-center text-muted-foreground">
-        <
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <p className="text-sm">&copy; {new Date().getFullYear()} EduNexus. All rights reserved.</p>
+            <div className="flex mt-2 sm:mt-0 space-x-4">
+              <Link href="/terms" className="text-xs hover:underline">Terms of Service</Link>
+              <Link href="/privacy" className="text-xs hover:underline">Privacy Policy</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
