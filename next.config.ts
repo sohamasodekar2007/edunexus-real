@@ -21,4 +21,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '082d-103-127-166-105.ngrok-free.app',
         port: '',
-        pathname
+        pathname: '/**', // Added value and comma
+      }, // Added comma if there are more patterns, or ensure proper closing
+    ],
+  },
+};
+
+export default nextConfig;
