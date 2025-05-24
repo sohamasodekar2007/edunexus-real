@@ -14,13 +14,12 @@ export default function LandingPage({
   params: paramsAsProp,
   searchParams: searchParamsAsProp,
 }: {
-  params?: any; // Make optional and type as any
-  searchParams?: any; // Make optional and type as any
+  params?: any; 
+  searchParams?: any; 
 }) {
-  // Conditionally unwrap params and searchParams if Next.js passes them
-  // This helps satisfy build-time checks for page components, even if not directly used.
-  const _resolvedParams = paramsAsProp ? use(paramsAsProp) : undefined;
-  const _resolvedSearchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
+  // Unwrap props for build-time compatibility, even if not directly used by client logic
+  const _params = paramsAsProp ? use(paramsAsProp) : undefined;
+  const _searchParams = searchParamsAsProp ? use(searchParamsAsProp) : undefined;
 
   const router = useRouter();
 
