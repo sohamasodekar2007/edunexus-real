@@ -10,14 +10,16 @@ import { ArrowLeft, Building, BookOpenText, BarChart3, IndianRupee, Percent, Rul
 import Link from 'next/link';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { use } from 'react'; // Import use
 
-export default function CollegeDetailPage({ params }: { params: { collegeId: string } }) {
+export default function CollegeDetailPage({ params: paramsAsProp }: { params: any }) {
+  const params = use(paramsAsProp); // Unwrap params
   const collegeId = decodeURIComponent(params.collegeId);
   const allCollegeData = collegeDataJson as CollegeData2025;
   const details: CollegeDetailData | undefined = allCollegeData[collegeId];
 
   if (!details) {
-    notFound(); 
+    notFound();
   }
 
   const categoryLabels: Record<keyof CategoryWiseData | string, string> = {
@@ -32,54 +34,44 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
   };
   const primaryCategories: Array<keyof CategoryWiseData> = ['open', 'obc', 'sc', 'st', 'vjnt', 'ews', 'tfws'];
 
-
   const renderCategoryTable = (data: CategoryWiseData | undefined, title: string, unit: string = "") => {
     if (!data || Object.keys(data).length === 0) {
       return <p className="text-sm text-muted-foreground italic mt-1">No specific {title.toLowerCase()} data available.</p>;
     }
-    
-    const hasData = primaryCategories.some(catKey => data[catKey] !== undefined && data[catKey] !== null && data[catKey] !== '' && data[catKey] !== 'Data N/A' && data[catKey] !== 'N/A');
+
+    const categoriesWithData = primaryCategories.filter(catKey => {
+      const value = data[catKey];
+      return value !== undefined && value !== null && value !== '' && value !== 'Data N/A' && value !== 'N/A';
+    });
+
     const hasOtherData = data.other !== undefined && data.other !== null && data.other !== '' && data.other !== 'Data N/A' && data.other !== 'N/A';
 
-    if (!hasData && !hasOtherData) {
-        return <p className="text-sm text-muted-foreground italic mt-1">No specific {title.toLowerCase()} category data available.</p>;
+    if (categoriesWithData.length === 0 && !hasOtherData) {
+        return <p className="text-sm text-muted-foreground italic mt-1">No specific {title.toLowerCase()} category data from AI.</p>;
     }
 
     return (
       <div>
-        <h4 className="text-md font-semibold mt-3 mb-2 text-accent">{title}</h4>
-        <div className="rounded-md border">
-          <Table className="min-w-full text-xs sm:text-sm">
-            <TableHeader className="bg-muted/50">
-              <TableRow>
-                <TableHead className="w-[100px] sm:w-[120px] font-medium">Category</TableHead>
-                <TableHead className="text-right font-medium">Cutoff / Fee</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {primaryCategories.map((catKey, index) => {
-                const value = data[catKey];
-                const displayValue = (value && value !== "Data N/A" && value !== "N/A") ? `${value}${unit}` : "N/A";
-                // Determine if a border should be added
-                const categoriesWithData = primaryCategories.filter(pc => data[pc] && data[pc] !== "Data N/A" && data[pc] !== "N/A");
-                const isLastPrimaryWithData = categoriesWithData.indexOf(catKey) === categoriesWithData.length - 1;
-                const showBorder = categoriesWithData.includes(catKey) && (!isLastPrimaryWithData || (hasOtherData && data.other && data.other !== "Data N/A" && data.other !== "N/A"));
-                
-                return (
-                  <TableRow key={catKey} className={cn("border-b-0", showBorder ? "border-b border-border/30 border-dashed" : "")}>
-                    <TableCell className="font-medium py-1.5 sm:py-2">{categoryLabels[catKey]}</TableCell>
-                    <TableCell className={cn("text-right py-1.5 sm:py-2", displayValue === "N/A" ? "text-muted-foreground/70" : "")}>{displayValue}</TableCell>
-                  </TableRow>
-                );
-              })}
-              {data.other && data.other !== "Data N/A" && data.other !== "N/A" && (
-                   <TableRow key="other_fallback" className="border-b-0">
-                      <TableCell className="font-medium py-1.5 sm:py-2">{categoryLabels.other}</TableCell>
-                      <TableCell className="text-right py-1.5 sm:py-2">{data.other}{unit}</TableCell>
-                   </TableRow>
-              )}
-            </TableBody>
-          </Table>
+        <h4 className="text-md font-semibold mt-3 mb-1 text-accent">{title}</h4>
+        <div className="rounded-md border text-xs sm:text-sm">
+          {categoriesWithData.map((catKey, index) => {
+            const value = data[catKey];
+            const displayValue = `${value}${unit}`;
+            const isLastVisibleCategory = index === categoriesWithData.length - 1 && !hasOtherData;
+
+            return (
+              <div key={catKey} className={cn("flex justify-between items-center p-1.5 sm:p-2", !isLastVisibleCategory ? "border-b border-border/30 border-dashed" : "")}>
+                <span className="font-medium text-muted-foreground">{categoryLabels[catKey]}:</span>
+                <span className={cn(value === "Data N/A" || value === "N/A" ? "text-muted-foreground/70" : "text-foreground font-semibold")}>{displayValue}</span>
+              </div>
+            );
+          })}
+          {hasOtherData && (
+             <div key="other_fallback" className="flex justify-between items-center p-1.5 sm:p-2">
+                <span className="font-medium text-muted-foreground">{categoryLabels.other}:</span>
+                <span className="text-foreground font-semibold">{data.other}{unit}</span>
+             </div>
+          )}
         </div>
       </div>
     );
@@ -87,7 +79,8 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
 
   const hasAnyDisplayableData = (cutoffObject?: CategoryWiseData) => {
     if (!cutoffObject) return false;
-    return Object.values(cutoffObject).some(value => value && value !== "Data N/A" && value !== "N/A");
+    const valuesToCheck = Object.values(cutoffObject);
+    return valuesToCheck.some(value => value && value !== "Data N/A" && value !== "N/A");
   };
 
   return (
@@ -147,39 +140,40 @@ export default function CollegeDetailPage({ params }: { params: { collegeId: str
                 <BarChart3 className="mr-2 h-6 w-6" /> Branches, Cutoffs & Fees (AY 2025)
               </h2>
               {details.branches && details.branches.length > 0 ? (
-                <div className="space-y-6">
-                  {details.branches.map((branch, index) => (
-                    <Card key={index} className="shadow-md border border-border/50 hover:shadow-lg transition-shadow bg-card/80 backdrop-blur-sm">
-                      <CardHeader className="bg-muted/20 p-4 rounded-t-lg border-b">
-                        <CardTitle className="text-lg font-semibold text-primary">{branch.branchName}</CardTitle>
-                        {branch.intake && (
-                          <CardDescription className="text-xs">Approx. Intake: {branch.intake} seats</CardDescription>
-                        )}
-                      </CardHeader>
-                      <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                        {branch.mhtCetCutoffs && (
-                          renderCategoryTable(branch.mhtCetCutoffs, "MHT-CET Cutoffs", " %ile")
-                        )}
-                        {branch.jeeMainCutoffs && (
-                          renderCategoryTable(branch.jeeMainCutoffs, "JEE Main Cutoffs", " Rank")
-                        )}
-                         {branch.neetCutoffs && (
-                          renderCategoryTable(branch.neetCutoffs, "NEET Cutoffs", " Score")
-                        )}
-                        {branch.fees && (
-                           renderCategoryTable(branch.fees, "Category-wise Fees", " INR")
-                        )}
-                         {/* Show this message only if ALL cutoff/fee types have no displayable data */}
-                         {!hasAnyDisplayableData(branch.mhtCetCutoffs) &&
-                          !hasAnyDisplayableData(branch.jeeMainCutoffs) &&
-                          !hasAnyDisplayableData(branch.neetCutoffs) &&
-                          !hasAnyDisplayableData(branch.fees) && (
-                           <p className="text-sm text-muted-foreground italic md:col-span-2">No specific cutoff or fee data available for this branch.</p>
-                         )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                <ScrollArea className="w-full"> {/* Removed max-h classes here */}
+                  <div className="space-y-6">
+                    {details.branches.map((branch, index) => (
+                      <Card key={index} className="shadow-md border border-border/50 hover:shadow-lg transition-shadow bg-card/80 backdrop-blur-sm">
+                        <CardHeader className="bg-muted/20 p-4 rounded-t-lg border-b">
+                          <CardTitle className="text-lg font-semibold text-primary">{branch.branchName}</CardTitle>
+                          {branch.intake && (
+                            <CardDescription className="text-xs">Approx. Intake: {branch.intake} seats</CardDescription>
+                          )}
+                        </CardHeader>
+                        <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                          {branch.mhtCetCutoffs && (
+                            renderCategoryTable(branch.mhtCetCutoffs, "MHT-CET Cutoffs", " %ile")
+                          )}
+                          {branch.jeeMainCutoffs && (
+                            renderCategoryTable(branch.jeeMainCutoffs, "JEE Main Cutoffs", " Rank")
+                          )}
+                           {branch.neetCutoffs && (
+                            renderCategoryTable(branch.neetCutoffs, "NEET Cutoffs", " Score")
+                          )}
+                          {branch.fees && (
+                             renderCategoryTable(branch.fees, "Category-wise Fees", " INR")
+                          )}
+                           {(!branch.mhtCetCutoffs || !hasAnyDisplayableData(branch.mhtCetCutoffs)) &&
+                            (!branch.jeeMainCutoffs || !hasAnyDisplayableData(branch.jeeMainCutoffs)) &&
+                            (!branch.neetCutoffs || !hasAnyDisplayableData(branch.neetCutoffs)) &&
+                            (!branch.fees || !hasAnyDisplayableData(branch.fees)) && (
+                             <p className="text-sm text-muted-foreground italic md:col-span-2">No specific cutoff or fee data available for this branch.</p>
+                           )}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
               ) : (
                 <p className="text-muted-foreground italic">No specific branch information found for this college in the provided data.</p>
               )}
